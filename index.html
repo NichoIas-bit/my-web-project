@@ -1,35 +1,676 @@
-<!doctype html>
-<html lang="en">
-
+<!DOCTYPE html>
+<html lang="th">
 <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>HAPPY BIRTHDAY GAI</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet"
-        integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
-    <link rel="stylesheet" href="style.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Happy Birthday To Someone Special 💕</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts: Prompt & Mitr -->
+    <link href="https://fonts.googleapis.com/css2?family=Mitr:wght@300;400;500;600&family=Prompt:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=Sacramento&display=swap" rel="stylesheet">
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Canvas Confetti -->
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        roseGold: '#e8b4b8',
+                        softPink: '#fbe3e8',
+                        deepNavy: '#0f172a',
+                        dreamPurple: '#2d1b4e',
+                        warmGold: '#f6d365',
+                        accentPink: '#ff758c',
+                    },
+                    fontFamily: {
+                        prompt: ['Prompt', 'sans-serif'],
+                        mitr: ['Mitr', 'sans-serif'],
+                        handwriting: ['Sacramento', 'cursive'],
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            font-family: 'Prompt', sans-serif;
+            background: linear-gradient(135deg, #0f172a 0%, #2d1b4e 50%, #1a0b2e 100%);
+            color: #f8fafc;
+            overflow-x: hidden;
+            min-height: 100vh;
+        }
+
+        .stars-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-15px) rotate(3deg); }
+        }
+
+        @keyframes pulseGlow {
+            0%, 100% { box-shadow: 0 0 15px rgba(255, 117, 140, 0.4), 0 0 30px rgba(255, 117, 140, 0.2); }
+            50% { box-shadow: 0 0 30px rgba(255, 117, 140, 0.8), 0 0 50px rgba(255, 117, 140, 0.5); }
+        }
+
+        @keyframes flicker {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.8; transform: scale(0.95); }
+        }
+
+        .animate-float { animation: float 6s ease-in-out infinite; }
+        .pulse-glow { animation: pulseGlow 2.5s infinite; }
+        .flame { animation: flicker 0.6s infinite alternate; transform-origin: center bottom; }
+
+        /* Glassmorphism effects */
+        .glass-card {
+            background: rgba(255, 255, 255, 0.07);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.12);
+        }
+
+        .glass-card-hover {
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+        .glass-card-hover:hover {
+            transform: translateY(-8px) scale(1.02);
+            background: rgba(255, 255, 255, 0.12);
+            border-color: rgba(255, 117, 140, 0.4);
+            box-shadow: 0 20px 30px rgba(0, 0, 0, 0.3);
+        }
+
+        /* Candle styles */
+        .candle-flame {
+            width: 16px;
+            height: 26px;
+            background: linear-gradient(to top, #ff4e50, #f9d423);
+            border-radius: 50% 50% 20% 20%;
+            box-shadow: 0 0 20px #f9d423, 0 0 40px #ff4e50;
+            transition: all 0.5s ease;
+        }
+
+        .candle-flame.out {
+            opacity: 0;
+            transform: scale(0.1);
+        }
+
+        .smoke {
+            position: absolute;
+            width: 8px;
+            height: 20px;
+            background: rgba(200, 200, 200, 0.5);
+            border-radius: 50%;
+            filter: blur(4px);
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .smoke.active {
+            animation: smokeRise 2s forwards;
+        }
+
+        @keyframes smokeRise {
+            0% { opacity: 0.8; transform: translateY(0) scale(1); }
+            100% { opacity: 0; transform: translateY(-60px) scale(3); }
+        }
+
+        /* Custom scrollbar */
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #0f172a; }
+        ::-webkit-scrollbar-thumb { background: #3b0764; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #ff758c; }
+    </style>
 </head>
+<body class="relative text-slate-100 flex flex-col justify-between selection:bg-pink-500 selection:text-white">
 
-<body>
+    <canvas id="starsCanvas" class="stars-bg"></canvas>
 
-    <main class="birthday-container text-center">
-        <h1>Hello, Mr. Nattakorn</h1>
-        <h3>
-            Today, May 14, 2027, is
-            Mr. Nattakorn Dokmaiwai's birthday.
-        </h3>
-        <p>
-            There's something I want to
-        </p>
-        <button id="openButton" class="btn btn-primary">
-            Open
+    <!-- Background Music Audio (Web Audio Synthesized / Pure JS Ambient) -->
+    <div class="fixed top-5 right-5 z-50 flex items-center gap-2">
+        <button id="musicToggleBtn" onclick="toggleAudio()" class="glass-card px-4 py-2.5 rounded-full text-xs sm:text-sm font-medium flex items-center gap-2 hover:bg-white/20 transition-all border border-white/20 shadow-lg">
+            <i id="musicIcon" class="fas fa-music text-pink-400"></i>
+            <span id="musicText">เปิดเพลงบรรยากาศ 🎵</span>
         </button>
-    </main>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"
-        integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI"
-        crossorigin="anonymous"></script>
-    <script src="script.js"></script>
+    </div>
 
+    <!-- MAIN CONTAINER -->
+    <div class="container mx-auto px-4 py-8 max-w-4xl relative z-10 flex-grow flex flex-col justify-center">
+
+        <!-- ================= SCENE 1: WELCOME ENTRY ================= -->
+        <section id="scene-entry" class="min-h-[85vh] flex flex-col items-center justify-center text-center py-10 transition-all duration-700">
+            <div class="inline-block px-4 py-1.5 rounded-full glass-card text-pink-300 text-sm font-light mb-6 tracking-wide animate-pulse">
+                ✨ A Very Special Day For Someone Very Special ✨
+            </div>
+            
+            <h1 class="text-4xl sm:text-6xl md:text-7xl font-semibold mb-4 bg-clip-text text-transparent bg-gradient-to-r from-pink-300 via-rose-200 to-amber-200 leading-tight">
+                สุขสันต์วันเกิดนะ <br class="sm:hidden" />
+                <span class="font-bold text-pink-400 text-5xl sm:text-7xl md:text-8xl drop-shadow-[0_5px_15px_rgba(255,117,140,0.4)]">"กาย"</span>
+            </h1>
+
+            <p class="text-slate-300 text-base sm:text-xl font-light max-w-lg mb-10 leading-relaxed px-4">
+                คุณ ณัฐกร ดอกไม้ไผ่ <br/>
+                คนพิเศษที่ทำให้รอยยิ้มของทุกๆ วันมีความหมายมากกว่าเดิม...
+            </p>
+
+            <button onclick="goToScene('scene-cake')" class="pulse-glow bg-gradient-to-r from-pink-500 via-rose-500 to-purple-600 hover:from-pink-600 hover:to-purple-700 text-white font-medium text-lg sm:text-xl px-8 py-4 rounded-full transition-all duration-300 hover:scale-105 flex items-center gap-3 shadow-xl">
+                <span>เริ่มเรื่องราวของเรา</span>
+                <i class="fas fa-heart text-pink-200 animate-bounce"></i>
+            </button>
+        </section>
+
+        <!-- ================= SCENE 2: INTERACTIVE CAKE ================= -->
+        <section id="scene-cake" class="hidden min-h-[85vh] flex flex-col items-center justify-center text-center py-10 transition-all duration-700">
+            <div class="glass-card p-6 sm:p-10 rounded-3xl w-full max-w-xl shadow-2xl relative overflow-hidden border border-white/20">
+                <span class="text-xs font-light text-pink-300 uppercase tracking-widest block mb-2">Step 1: Make a Wish</span>
+                <h2 class="text-2xl sm:text-3xl font-semibold text-pink-200 mb-2">อธิษฐานแล้วเป่าเทียนกันนะ 🎂</h2>
+                <p class="text-xs sm:text-sm text-slate-300 mb-8 font-light">ขอให้ทุกความปรารถนาของคุณกายกลายเป็นจริงในวันนี้นะครับ</p>
+
+                <!-- Interactive CSS Birthday Cake -->
+                <div class="relative w-64 h-56 mx-auto my-6 flex flex-col items-center justify-end">
+                    <!-- Candle 1 -->
+                    <div class="absolute -top-6 flex flex-col items-center z-20">
+                        <div id="flame1" class="candle-flame flame mb-1"></div>
+                        <div id="smoke1" class="smoke"></div>
+                        <div class="w-3 h-12 bg-gradient-to-r from-pink-300 to-pink-400 rounded-t-sm shadow-md border-b border-pink-500"></div>
+                    </div>
+
+                    <!-- Cake Layer Top -->
+                    <div class="w-40 h-16 bg-gradient-to-r from-pink-300 via-rose-200 to-pink-300 rounded-t-2xl shadow-inner relative flex justify-around items-center border-b-4 border-pink-400 z-10">
+                        <!-- Cream Drips -->
+                        <div class="absolute -bottom-2 left-3 w-4 h-5 bg-white rounded-b-full"></div>
+                        <div class="absolute -bottom-3 left-10 w-5 h-6 bg-white rounded-b-full"></div>
+                        <div class="absolute -bottom-2 right-12 w-4 h-5 bg-white rounded-b-full"></div>
+                        <div class="absolute -bottom-3 right-4 w-5 h-6 bg-white rounded-b-full"></div>
+                        <span class="text-xs text-rose-400 font-bold opacity-60">🍓</span>
+                        <span class="text-xs text-rose-400 font-bold opacity-60">✨</span>
+                        <span class="text-xs text-rose-400 font-bold opacity-60">🍓</span>
+                    </div>
+
+                    <!-- Cake Layer Middle -->
+                    <div class="w-52 h-16 bg-gradient-to-r from-purple-300 via-pink-200 to-purple-300 relative flex justify-center items-center shadow-md border-b-4 border-purple-400 z-5">
+                        <div class="text-xs text-purple-700 font-medium tracking-widest bg-white/40 px-3 py-0.5 rounded-full">HAPPY BIRTHDAY GAI</div>
+                    </div>
+
+                    <!-- Cake Layer Bottom Base -->
+                    <div class="w-64 h-20 bg-gradient-to-r from-amber-100 via-amber-200 to-amber-100 rounded-b-2xl shadow-xl relative flex justify-around items-center border-t-2 border-amber-300">
+                        <div class="w-full h-2 bg-pink-400/30 absolute top-3"></div>
+                        <div class="w-full h-2 bg-pink-400/30 absolute bottom-3"></div>
+                    </div>
+
+                    <!-- Cake Plate -->
+                    <div class="w-72 h-4 bg-slate-200 rounded-full shadow-2xl border-b-2 border-slate-400 -mb-2"></div>
+                </div>
+
+                <!-- Blow Candles Control -->
+                <div class="mt-8 flex flex-col sm:flex-row gap-3 justify-center items-center">
+                    <button id="blowBtn" onclick="blowCandles()" class="bg-gradient-to-r from-pink-500 to-rose-500 hover:from-pink-600 hover:to-rose-600 text-white font-medium px-6 py-3 rounded-full transition-all duration-300 hover:scale-105 shadow-lg flex items-center gap-2">
+                        <i class="fas fa-wind"></i>
+                        <span>คลิกเพื่อเป่าเทียน 💨</span>
+                    </button>
+                </div>
+
+                <div id="candleBlownMsg" class="hidden mt-6 text-pink-300 font-medium animate-fade-in">
+                    🎉 สุขสันต์วันเกิดนะครับ! ไปเดินทางดูความทรงจำดีๆ กันต่อเลย ❤️
+                </div>
+            </div>
+
+            <button id="nextToTimelineBtn" onclick="goToScene('scene-timeline')" class="hidden mt-8 bg-white/10 hover:bg-white/20 text-white px-8 py-3 rounded-full transition-all border border-white/20 items-center gap-2">
+                <span>ไปที่ความทรงจำของเรา</span>
+                <i class="fas fa-arrow-right"></i>
+            </button>
+        </section>
+
+        <!-- ================= SCENE 3: MEMORY TIMELINE ================= -->
+        <section id="scene-timeline" class="hidden min-h-[85vh] py-12 transition-all duration-700">
+            <div class="text-center mb-12">
+                <span class="text-xs font-light text-pink-300 uppercase tracking-widest block mb-1">Our Journey & Memories</span>
+                <h2 class="text-3xl sm:text-4xl font-semibold bg-clip-text text-transparent bg-gradient-to-r from-pink-200 to-rose-300">
+                    เหตุผลที่ "กาย" คือคนพิเศษ 💫
+                </h2>
+                <p class="text-slate-300 text-sm mt-2 max-w-md mx-auto">ทุกๆ เรื่องราวเล็กๆ ที่ได้รู้จักกัน เป็นช่วงเวลาที่มีค่ามากๆ สำหรับเราเสมอ</p>
+            </div>
+
+            <!-- Memory Cards Grid -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <!-- Card 1 -->
+                <div class="glass-card glass-card-hover p-6 rounded-2xl relative overflow-hidden flex flex-col justify-between">
+                    <div>
+                        <div class="flex justify-between items-start mb-4">
+                            <span class="text-xs bg-pink-500/20 text-pink-300 px-3 py-1 rounded-full border border-pink-500/30">First Impression 🌸</span>
+                            <i class="fas fa-star text-amber-300 text-sm"></i>
+                        </div>
+                        <h3 class="text-xl font-medium text-pink-100 mb-2">ความประทับใจแรกเห็น</h3>
+                        <p class="text-slate-300 text-sm leading-relaxed font-light">
+                            จำได้ไหมตั้งแต่วันแรกๆ ที่ได้รู้จักกับกาย ความใจดี รอยยิ้ม และความเป็นกันเองของคุณกาย มันทำให้โลกรอบตัวดูอบอุ่นขึ้นมาทันทีเลย
+                        </p>
+                    </div>
+                    <div class="mt-6 pt-4 border-t border-white/10 text-xs text-pink-300/80 flex items-center justify-between">
+                        <span>"จุดเริ่มต้นของความรู้สึกดีๆ"</span>
+                        <i class="fas fa-heart text-pink-400"></i>
+                    </div>
+                </div>
+
+                <!-- Card 2 -->
+                <div class="glass-card glass-card-hover p-6 rounded-2xl relative overflow-hidden flex flex-col justify-between">
+                    <div>
+                        <div class="flex justify-between items-start mb-4">
+                            <span class="text-xs bg-purple-500/20 text-purple-300 px-3 py-1 rounded-full border border-purple-500/30">Your Warmth ☀️</span>
+                            <i class="fas fa-sun text-amber-300 text-sm"></i>
+                        </div>
+                        <h3 class="text-xl font-medium text-purple-100 mb-2">พลังบวกของกาย</h3>
+                        <p class="text-slate-300 text-sm leading-relaxed font-light">
+                            ไม่ว่าจะเจอเรื่องเหนื่อยๆ มา แค่ได้คุยกับกาย หรือเห็นกายมีความสุข มันก็พลอยทำให้เรายิ้มตามได้เสมอ กายคือ Safe Zone ที่ดีมากๆ เลยนะ
+                        </p>
+                    </div>
+                    <div class="mt-6 pt-4 border-t border-white/10 text-xs text-purple-300/80 flex items-center justify-between">
+                        <span>"ขอบคุณที่เป็นรอยยิ้มให้กัน"</span>
+                        <i class="fas fa-smile text-amber-300"></i>
+                    </div>
+                </div>
+
+                <!-- Card 3 -->
+                <div class="glass-card glass-card-hover p-6 rounded-2xl relative overflow-hidden flex flex-col justify-between">
+                    <div>
+                        <div class="flex justify-between items-start mb-4">
+                            <span class="text-xs bg-rose-500/20 text-rose-300 px-3 py-1 rounded-full border border-rose-500/30">Little Things ✨</span>
+                            <i class="fas fa-coffee text-amber-300 text-sm"></i>
+                        </div>
+                        <h3 class="text-xl font-medium text-rose-100 mb-2">ความใส่ใจในเรื่องเล็กๆ</h3>
+                        <p class="text-slate-300 text-sm leading-relaxed font-light">
+                            ทุกๆ บทสนทนา คำถามว่ากินข้าวหรือยัง เป็นอย่างไรบ้าง บทสนทนาธรรมดาๆ พวกนี้แหละคือช่วงเวลาที่เราชอบที่สุดในแต่ละวันเลย
+                        </p>
+                    </div>
+                    <div class="mt-6 pt-4 border-t border-white/10 text-xs text-rose-300/80 flex items-center justify-between">
+                        <span>"ช่วงเวลาธรรมดาที่แสนพิเศษ"</span>
+                        <i class="fas fa-mug-hot text-amber-200"></i>
+                    </div>
+                </div>
+
+                <!-- Card 4 -->
+                <div class="glass-card glass-card-hover p-6 rounded-2xl relative overflow-hidden flex flex-col justify-between">
+                    <div>
+                        <div class="flex justify-between items-start mb-4">
+                            <span class="text-xs bg-amber-500/20 text-amber-300 px-3 py-1 rounded-full border border-amber-500/30">The Future 🌙</span>
+                            <i class="fas fa-moon text-amber-300 text-sm"></i>
+                        </div>
+                        <h3 class="text-xl font-medium text-amber-100 mb-2">ก้าวต่อไปข้างหน้า</h3>
+                        <p class="text-slate-300 text-sm leading-relaxed font-light">
+                            วันเกิดปีนี้ หวังว่ากายจะเติบโตอย่างมีความสุข และไม่ว่าจะเจอเรื่องอะไร อยากให้รู้วิธีเคียงข้างและมีเราคอยซัพพอร์ตอยู่ตรงนี้เสมอนะ
+                        </p>
+                    </div>
+                    <div class="mt-6 pt-4 border-t border-white/10 text-xs text-amber-300/80 flex items-center justify-between">
+                        <span>"อยากอยู่ยินดีกับทุกความสำเร็จ"</span>
+                        <i class="fas fa-sparkles text-amber-300"></i>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Timeline Bottom Button -->
+            <div class="text-center mt-12">
+                <button onclick="goToScene('scene-letter')" class="pulse-glow bg-gradient-to-r from-pink-500 to-purple-600 hover:from-pink-600 hover:to-purple-700 text-white font-medium text-lg px-8 py-3.5 rounded-full transition-all duration-300 hover:scale-105 inline-flex items-center gap-3 shadow-xl">
+                    <span>เปิดจดหมายลับถึงกาย ✉️</span>
+                </button>
+            </div>
+        </section>
+
+        <!-- ================= SCENE 4: HEARTFELT LETTER ================= -->
+        <section id="scene-letter" class="hidden min-h-[85vh] flex flex-col items-center justify-center py-10 transition-all duration-700">
+            <div class="text-center mb-6">
+                <span class="text-xs font-light text-pink-300 uppercase tracking-widest block mb-1">Secret Confession</span>
+                <h2 class="text-3xl font-semibold text-pink-200">จดหมายถึงคนพิเศษ 💌</h2>
+            </div>
+
+            <!-- Envelope / Letter Box Container -->
+            <div id="envelopeContainer" class="w-full max-w-xl cursor-pointer" onclick="openLetter()">
+                <div class="glass-card p-8 sm:p-12 rounded-3xl text-center border border-pink-400/30 shadow-2xl hover:border-pink-400/60 transition-all group">
+                    <div class="w-20 h-20 bg-pink-500/20 rounded-full flex items-center justify-center mx-auto mb-6 text-pink-300 text-3xl group-hover:scale-110 transition-transform">
+                        <i class="fas fa-envelope-open-text animate-pulse"></i>
+                    </div>
+                    <h3 class="text-xl font-medium text-slate-200 mb-2">มีข้อความพิเศษอยากจะบอก...</h3>
+                    <p class="text-sm text-slate-400 font-light mb-6">แตะที่ซองจดหมายเพื่อเปิดอ่านความในใจนะกาย</p>
+                    <span class="inline-block bg-pink-500 hover:bg-pink-600 text-white text-xs px-5 py-2.5 rounded-full transition-colors shadow-md">
+                        เปิดจดหมาย ✨
+                    </span>
+                </div>
+            </div>
+
+            <!-- Letter Content (Hidden Modal/Card view) -->
+            <div id="letterContent" class="hidden w-full max-w-xl glass-card p-8 sm:p-10 rounded-3xl border border-pink-300/40 shadow-2xl relative overflow-hidden animate-fade-in">
+                <div class="absolute -top-10 -right-10 w-32 h-32 bg-pink-500/10 rounded-full blur-2xl pointer-events-none"></div>
+                
+                <div class="text-right text-xs text-pink-300/80 mb-4 font-light">
+                    14 พฤษภาคม 2027 🌸
+                </div>
+
+                <div class="space-y-4 text-slate-200 text-sm sm:text-base leading-relaxed font-light">
+                    <p class="font-medium text-pink-200 text-lg">ถึง คุณณัฐกร (กาย)...</p>
+                    
+                    <p>
+                        สุขสันต์วันเกิดนะครับ! 🎉 ขอให้ปีนี้เป็นปีที่ใจดีกับกายมากๆ มีแต่รอยยิ้ม ความสุข สุขภาพแข็งแรง และสมหวังในทุกๆ เรื่องที่ตั้งใจไว้นะ
+                    </p>
+
+                    <p>
+                        อยากให้กายรู้ว่า การได้มีกายเข้ามาในชีวิต คือหนึ่งในเรื่องราวที่ดีที่สุดของเราเลย ขอบคุณสำหรับความหวังดี รอยยิ้ม และทุกๆ ช่วงเวลาที่เราได้แบ่งปันร่วมกันตลอดมานะ
+                    </p>
+
+                    <p class="text-pink-200 font-normal italic bg-pink-500/10 p-4 rounded-xl border-l-2 border-pink-400">
+                        "เราไม่อยากเป็นแค่คนที่มาร่วมยินดีในวันเกิดธรรมดา แต่อยากเป็นคนที่คอยเคียงข้าง คอยซัพพอร์ต และได้สร้างความทรงจำดีๆ ร่วมกับกายในอนาคตต่อไปเรื่อยๆ เลยนะ..."
+                    </p>
+
+                    <p>
+                        ขอให้กายเป็นกายที่น่ารัก อบอุ่น และมีความสุขแบบนี้เสมอ ขอบคุณที่เกิดมาเป็นความสดใสให้กับเรานะ❤️
+                    </p>
+
+                    <div class="pt-6 text-right font-mitr text-pink-300 font-medium">
+                        - จากคนพิเศษที่อยากดูแลกายเสมอ -
+                    </div>
+                </div>
+
+                <div class="mt-8 text-center pt-4 border-t border-white/10">
+                    <button onclick="goToScene('scene-future')" class="bg-gradient-to-r from-pink-500 to-rose-500 text-white font-medium px-8 py-3 rounded-full hover:scale-105 transition-all shadow-lg text-sm flex items-center gap-2 mx-auto">
+                        <span>ของขวัญชิ้นสุดท้าย🎁</span>
+                        <i class="fas fa-gift"></i>
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- ================= SCENE 5: FUTURE & GIFT PHOTOBOOTH ================= -->
+        <section id="scene-future" class="hidden min-h-[85vh] flex flex-col items-center justify-center text-center py-10 transition-all duration-700">
+            <div class="text-center mb-8">
+                <span class="text-xs font-light text-pink-300 uppercase tracking-widest block mb-1">Our Special Future</span>
+                <h2 class="text-3xl sm:text-4xl font-semibold bg-clip-text text-transparent bg-gradient-to-r from-pink-200 via-rose-200 to-purple-200">
+                    Polaroid Moment ✨
+                </h2>
+                <p class="text-slate-300 text-sm mt-2">ภาพความทรงจำสำหรับวันเกิดปีนี้</p>
+            </div>
+
+            <!-- Polaroid Card Simulation -->
+            <div class="bg-white text-slate-800 p-4 pb-6 rounded-lg shadow-2xl max-w-xs sm:max-w-sm w-full transform rotate-1 hover:rotate-0 transition-transform duration-500 my-4 border border-slate-200">
+                <!-- Image Container with Canvas / Decorative SVG -->
+                <div class="w-full h-64 bg-slate-900 rounded relative overflow-hidden flex flex-col items-center justify-center p-4 text-center">
+                    <div class="absolute inset-0 bg-gradient-to-br from-pink-900/40 via-purple-900/40 to-slate-900"></div>
+                    
+                    <div class="relative z-10 space-y-3">
+                        <div class="w-16 h-16 bg-pink-500/20 rounded-full flex items-center justify-center mx-auto text-pink-300 text-2xl border border-pink-400/30">
+                            <i class="fas fa-heart text-pink-400 animate-pulse"></i>
+                        </div>
+                        <div class="text-white font-medium text-lg">Happy Birthday GAI</div>
+                        <div class="text-xs text-pink-200 font-light">"You are the best part of my day."</div>
+                    </div>
+
+                    <!-- Heart particle decoration -->
+                    <div class="absolute bottom-2 right-2 text-pink-400/40 text-4xl">
+                        <i class="fas fa-sparkles"></i>
+                    </div>
+                </div>
+
+                <div class="mt-4 text-center font-handwriting text-2xl text-slate-700">
+                    May 14, 2027 • With You
+                </div>
+            </div>
+
+            <!-- Heart Shower Trigger Button -->
+            <div class="mt-8 flex flex-col sm:flex-row gap-4 justify-center items-center">
+                <button onclick="triggerHeartShower()" class="pulse-glow bg-gradient-to-r from-pink-500 to-purple-600 hover:from-pink-600 hover:to-purple-700 text-white font-medium px-8 py-3.5 rounded-full transition-all duration-300 hover:scale-105 shadow-xl flex items-center gap-2">
+                    <i class="fas fa-heart text-pink-200"></i>
+                    <span>กดรับฝนหัวใจความรัก 💖</span>
+                </button>
+
+                <button onclick="copyBirthdayWish()" class="bg-white/10 hover:bg-white/20 text-white font-medium px-6 py-3.5 rounded-full transition-all border border-white/20 flex items-center gap-2">
+                    <i class="fas fa-copy text-pink-300"></i>
+                    <span id="copyBtnText">คัดลอกคำอวยพร</span>
+                </button>
+            </div>
+
+            <p class="text-xs text-slate-400 mt-8 font-light">
+                ขอบคุณนะกายที่ทำให้โลกนี้น่าอยู่ขึ้นเสมอ Happy Birthday ครับ! 🎂✨
+            </p>
+        </section>
+
+    </div>
+
+    <script>
+        // Custom Audio Synthesizer (No external mp3 needed - plays soothing ambient chord)
+        let audioCtx = null;
+        let isPlayingAudio = false;
+        let masterGain = null;
+
+        function initAudio() {
+            if (!audioCtx) {
+                const AudioContext = window.AudioContext || window.webkitAudioContext;
+                audioCtx = new AudioContext();
+                masterGain = audioCtx.createGain();
+                masterGain.gain.value = 0.15;
+                masterGain.connect(audioCtx.destination);
+            }
+        }
+
+        function toggleAudio() {
+            initAudio();
+            const icon = document.getElementById('musicIcon');
+            const text = document.getElementById('musicText');
+
+            if (audioCtx.state === 'suspended') {
+                audioCtx.resume();
+            }
+
+            if (!isPlayingAudio) {
+                playAmbientMusic();
+                isPlayingAudio = true;
+                icon.className = "fas fa-pause text-pink-400";
+                text.innerText = "พักเสียงเพลง 🎵";
+            } else {
+                if (masterGain) masterGain.gain.setTargetAtTime(0, audioCtx.currentTime, 0.5);
+                isPlayingAudio = false;
+                icon.className = "fas fa-music text-pink-400";
+                text.innerText = "เปิดเพลงบรรยากาศ 🎵";
+            }
+        }
+
+        function playAmbientMusic() {
+            if (!audioCtx) return;
+            masterGain.gain.setTargetAtTime(0.12, audioCtx.currentTime, 0.5);
+
+            // Pentatonic scale notes (C Major / A Minor warm ambient chords)
+            const frequencies = [261.63, 329.63, 392.00, 523.25, 659.25]; // C4, E4, G4, C5, E5
+
+            function playWarmNote() {
+                if (!isPlayingAudio) return;
+                const osc = audioCtx.createOscillator();
+                const noteGain = audioCtx.createGain();
+
+                const freq = frequencies[Math.floor(Math.random() * frequencies.length)];
+                osc.type = 'sine';
+                osc.frequency.setValueAtTime(freq, audioCtx.currentTime);
+
+                noteGain.gain.setValueAtTime(0, audioCtx.currentTime);
+                noteGain.gain.linearRampToValueAtTime(0.08, audioCtx.currentTime + 1.5);
+                noteGain.gain.exponentialRampToValueAtTime(0.0001, audioCtx.currentTime + 5.0);
+
+                osc.connect(noteGain);
+                noteGain.connect(masterGain);
+
+                osc.start();
+                osc.stop(audioCtx.currentTime + 5.2);
+
+                setTimeout(playWarmNote, Math.random() * 2000 + 1500);
+            }
+
+            playWarmNote();
+            playWarmNote();
+        }
+
+        // Scene Navigation Logic
+        function goToScene(sceneId) {
+            const scenes = ['scene-entry', 'scene-cake', 'scene-timeline', 'scene-letter', 'scene-future'];
+            scenes.forEach(id => {
+                const el = document.getElementById(id);
+                if (id === sceneId) {
+                    el.classList.remove('hidden');
+                    window.scrollTo({ top: 0, behavior: 'smooth' });
+                } else {
+                    el.classList.add('hidden');
+                }
+            });
+
+            if (sceneId === 'scene-cake') {
+                triggerSoftSparkles();
+            }
+        }
+
+        // Candle Blowing Logic
+        function blowCandles() {
+            const flame = document.getElementById('flame1');
+            const smoke = document.getElementById('smoke1');
+            const blownMsg = document.getElementById('candleBlownMsg');
+            const nextBtn = document.getElementById('nextToTimelineBtn');
+            const blowBtn = document.getElementById('blowBtn');
+
+            flame.classList.add('out');
+            smoke.classList.add('active');
+
+            // Trigger celebration confetti
+            confetti({
+                particleCount: 120,
+                spread: 80,
+                origin: { y: 0.6 },
+                colors: ['#ff758c', '#ff7eb3', '#f7d794', '#ffffff']
+            });
+
+            blowBtn.classList.add('hidden');
+            blownMsg.classList.remove('hidden');
+            nextBtn.classList.remove('hidden');
+            nextBtn.classList.add('flex');
+        }
+
+        // Open Letter Logic
+        function openLetter() {
+            const container = document.getElementById('envelopeContainer');
+            const content = document.getElementById('letterContent');
+
+            container.classList.add('hidden');
+            content.classList.remove('hidden');
+
+            confetti({
+                particleCount: 50,
+                spread: 60,
+                origin: { y: 0.5 },
+                colors: ['#ff758c', '#e8b4b8']
+            });
+        }
+
+        // Heart Shower / Confetti Effect
+        function triggerHeartShower() {
+            const duration = 3 * 1000;
+            const animationEnd = Date.now() + duration;
+
+            (function frame() {
+                const timeLeft = animationEnd - Date.now();
+                if (timeLeft <= 0) return;
+
+                confetti({
+                    particleCount: 3,
+                    angle: 60,
+                    spread: 55,
+                    origin: { x: 0 },
+                    colors: ['#ff758c', '#ff4e50', '#ffffff']
+                });
+                confetti({
+                    particleCount: 3,
+                    angle: 120,
+                    spread: 55,
+                    origin: { x: 1 },
+                    colors: ['#ff758c', '#f9d423', '#e8b4b8']
+                });
+
+                requestAnimationFrame(frame);
+            }());
+        }
+
+        function triggerSoftSparkles() {
+            confetti({
+                particleCount: 30,
+                spread: 100,
+                origin: { y: 0.4 },
+                colors: ['#f6d365', '#fda085', '#ffffff']
+            });
+        }
+
+        // Copy Wish to Clipboard
+        function copyBirthdayWish() {
+            const wishText = "สุขสันต์วันเกิดนะกาย! 🎂 ขอให้ปีนี้กายมีความสุขมากๆ มีรอยยิ้มสดใสในทุกๆ วัน ขอบคุณที่เป็นความสดใสในชีวิตเรานะ❤️";
+            
+            const tempInput = document.createElement("textarea");
+            tempInput.value = wishText;
+            document.body.appendChild(tempInput);
+            tempInput.select();
+            document.execCommand("copy");
+            document.body.removeChild(tempInput);
+
+            const copyBtnText = document.getElementById('copyBtnText');
+            copyBtnText.innerText = "คัดลอกคำอวยพรเรียบร้อย! ✨";
+            setTimeout(() => {
+                copyBtnText.innerText = "คัดลอกคำอวยพร";
+            }, 2500);
+        }
+
+        const canvas = document.getElementById('starsCanvas');
+        const ctx = canvas.getContext('2d');
+        let stars = [];
+
+        function resizeCanvas() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+            initStars();
+        }
+
+        function initStars() {
+            stars = [];
+            const count = Math.floor((canvas.width * canvas.height) / 8000);
+            for (let i = 0; i < count; i++) {
+                stars.push({
+                    x: Math.random() * canvas.width,
+                    y: Math.random() * canvas.height,
+                    radius: Math.random() * 1.5 + 0.5,
+                    alpha: Math.random(),
+                    speed: Math.random() * 0.015 + 0.005
+                });
+            }
+        }
+
+        function drawStars() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            stars.forEach(star => {
+                star.alpha += star.speed;
+                if (star.alpha > 1 || star.alpha < 0) {
+                    star.speed = -star.speed;
+                }
+                ctx.beginPath();
+                ctx.arc(star.x, star.y, star.radius, 0, Math.PI * 2);
+                ctx.fillStyle = `rgba(255, 235, 240, ${Math.abs(star.alpha)})`;
+                ctx.fill();
+            });
+            requestAnimationFrame(drawStars);
+        }
+
+        window.addEventListener('resize', resizeCanvas);
+
+        window.onload = function() {
+            resizeCanvas();
+            drawStars();
+        };
+    </script>
 </body>
-
 </html>
