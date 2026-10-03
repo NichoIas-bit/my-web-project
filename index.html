@@ -8,9 +8,7 @@
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- Google Fonts: Prompt & Mitr -->
-    <link
-        href="https://fonts.googleapis.com/css2?family=Mitr:wght@300;400;500;600&family=Prompt:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=Sacramento&display=swap"
-        rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Mitr:wght@300;400;500;600&family=Prompt:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=Sacramento&display=swap" rel="stylesheet">
     <!-- FontAwesome Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <!-- Canvas Confetti -->
@@ -57,48 +55,24 @@
         }
 
         @keyframes float {
-            0%, 100% {
-                transform: translateY(0px) rotate(0deg);
-            }
-            50% {
-                transform: translateY(-15px) rotate(3deg);
-            }
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-15px) rotate(3deg); }
         }
 
         @keyframes pulseGlow {
-            0%, 100% {
-                box-shadow: 0 0 15px rgba(255, 117, 140, 0.4), 0 0 30px rgba(255, 117, 140, 0.2);
-            }
-            50% {
-                box-shadow: 0 0 30px rgba(255, 117, 140, 0.8), 0 0 50px rgba(255, 117, 140, 0.5);
-            }
+            0%, 100% { box-shadow: 0 0 15px rgba(255, 117, 140, 0.4), 0 0 30px rgba(255, 117, 140, 0.2); }
+            50% { box-shadow: 0 0 30px rgba(255, 117, 140, 0.8), 0 0 50px rgba(255, 117, 140, 0.5); }
         }
 
         @keyframes flicker {
-            0%, 100% {
-                opacity: 1;
-                transform: scale(1);
-            }
-            50% {
-                opacity: 0.8;
-                transform: scale(0.95);
-            }
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.8; transform: scale(0.95); }
         }
 
-        .animate-float {
-            animation: float 6s ease-in-out infinite;
-        }
+        .animate-float { animation: float 6s ease-in-out infinite; }
+        .pulse-glow { animation: pulseGlow 2.5s infinite; }
+        .flame { animation: flicker 0.6s infinite alternate; transform-origin: center bottom; }
 
-        .pulse-glow {
-            animation: pulseGlow 2.5s infinite;
-        }
-
-        .flame {
-            animation: flicker 0.6s infinite alternate;
-            transform-origin: center bottom;
-        }
-
-        /* Glassmorphism effects */
         .glass-card {
             background: rgba(255, 255, 255, 0.07);
             backdrop-filter: blur(16px);
@@ -106,18 +80,6 @@
             border: 1px solid rgba(255, 255, 255, 0.12);
         }
 
-        .glass-card-hover {
-            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-        }
-
-        .glass-card-hover:hover {
-            transform: translateY(-8px) scale(1.02);
-            background: rgba(255, 255, 255, 0.12);
-            border-color: rgba(255, 117, 140, 0.4);
-            box-shadow: 0 20px 30px rgba(0, 0, 0, 0.3);
-        }
-
-        /* Candle styles */
         .candle-flame {
             width: 16px;
             height: 26px;
@@ -143,50 +105,43 @@
             pointer-events: none;
         }
 
-        .smoke.active {
-            animation: smokeRise 2s forwards;
-        }
+        .smoke.active { animation: smokeRise 2s forwards; }
 
         @keyframes smokeRise {
-            0% {
-                opacity: 0.8;
-                transform: translateY(0) scale(1);
-            }
-            100% {
-                opacity: 0;
-                transform: translateY(-60px) scale(3);
-            }
+            0% { opacity: 0.8; transform: translateY(0) scale(1); }
+            100% { opacity: 0; transform: translateY(-60px) scale(3); }
         }
 
-        /* Custom scrollbar */
-        ::-webkit-scrollbar {
-            width: 8px;
-        }
-
-        ::-webkit-scrollbar-track {
-            background: #0f172a;
-        }
-
-        ::-webkit-scrollbar-thumb {
-            background: #3b0764;
-            border-radius: 4px;
-        }
-
-        ::-webkit-scrollbar-thumb:hover {
-            background: #ff758c;
-        }
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #0f172a; }
+        ::-webkit-scrollbar-thumb { background: #3b0764; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #ff758c; }
     </style>
 </head>
 
 <body class="relative text-slate-100 flex flex-col justify-between selection:bg-pink-500 selection:text-white">
 
-    <!-- แท็กเล่นไฟล์เพลง MP3 (ใส่ลิงก์ หรือ Path ไฟล์เพลงตรง src) -->
-    <audio id="bgMusic" loop src="Dandelions┃EPIC VERSION - Extended - Alex Owly.mp3"></audio>
+    <!-- แท็กเล่นไฟล์เพลง MP3 -->
+    <audio id="bgMusic" loop src="music.mp3"></audio>
 
     <canvas id="starsCanvas" class="stars-bg"></canvas>
 
+    <!-- ================= START OVERLAY ================= -->
+    <div id="startOverlay" class="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/90 backdrop-blur-md transition-opacity duration-500">
+        <div class="glass-card p-8 sm:p-10 rounded-3xl text-center max-w-md mx-4 shadow-2xl border border-pink-500/30">
+            <div class="w-20 h-20 bg-pink-500/20 rounded-full flex items-center justify-center mx-auto mb-6 text-pink-300 text-3xl animate-bounce">
+                <i class="fas fa-gift"></i>
+            </div>
+            <h2 class="text-2xl sm:text-3xl font-bold text-pink-200 mb-3">มีของขวัญส่งถึงคุณ ✨</h2>
+            <p class="text-slate-300 text-sm mb-8 font-light">กดปุ่มด้านล่างเพื่อเปิดการ์ดวันเกิดและเสียงเพลงบรรยากาศสุดพิเศษ</p>
+            <button onclick="startExperience()" class="pulse-glow bg-gradient-to-r from-pink-500 to-purple-600 hover:from-pink-600 hover:to-purple-700 text-white font-medium text-lg px-8 py-4 rounded-full transition-all duration-300 hover:scale-105 shadow-xl w-full flex items-center justify-center gap-2">
+                <span>เปิดการ์ดวันเกิด 🎁</span>
+            </button>
+        </div>
+    </div>
+
     <!-- Background Music Toggle Button -->
-    <div class="fixed top-5 right-5 z-50 flex items-center gap-2">
+    <div class="fixed top-5 right-5 z-40 flex items-center gap-2">
         <button id="musicToggleBtn" onclick="toggleAudio()"
             class="glass-card px-4 py-2.5 rounded-full text-xs sm:text-sm font-medium flex items-center gap-2 hover:bg-white/20 transition-all border border-white/20 shadow-lg">
             <i id="musicIcon" class="fas fa-music text-pink-400"></i>
@@ -200,17 +155,13 @@
         <!-- ================= SCENE 1: WELCOME ENTRY ================= -->
         <section id="scene-entry"
             class="min-h-[85vh] flex flex-col items-center justify-center text-center py-10 transition-all duration-700">
-            <div
-                class="inline-block px-4 py-1.5 rounded-full glass-card text-pink-300 text-sm font-light mb-6 tracking-wide animate-pulse">
+            <div class="inline-block px-4 py-1.5 rounded-full glass-card text-pink-300 text-sm font-light mb-6 tracking-wide animate-pulse">
                 ✨ A Very Special Day For Mr. Nattakorn Dokmaiwai ✨
             </div>
 
-            <h1
-                class="text-4xl sm:text-6xl md:text-7xl font-semibold mb-4 bg-clip-text text-transparent bg-gradient-to-r from-pink-300 via-rose-200 to-amber-200 leading-tight">
+            <h1 class="text-4xl sm:text-6xl md:text-7xl font-semibold mb-4 bg-clip-text text-transparent bg-gradient-to-r from-pink-300 via-rose-200 to-amber-200 leading-tight">
                 Happy Birthday <br class="sm:hidden" /><br>
-                <span
-                    class="font-bold text-pink-300 text-5xl sm:text-7xl md:text-8xl drop-shadow-[0_5px_15px_rgba(255,117,140,0.4)]">"Mr.
-                    Nattakorn Dokmaiwai"</span>
+                <span class="font-bold text-pink-300 text-5xl sm:text-7xl md:text-8xl drop-shadow-[0_5px_15px_rgba(255,117,140,0.4)]">"Mr. Nattakorn Dokmaiwai"</span>
             </h1>
 
             <p class="text-slate-300 text-base sm:text-xl font-light max-w-lg mb-10 leading-relaxed px-4">
@@ -228,26 +179,19 @@
         <!-- ================= SCENE 2: CAKE & WISH ================= -->
         <section id="scene-cake"
             class="d-none hidden min-h-[85vh] flex flex-col items-center justify-center text-center py-10 transition-all duration-700">
-            <div
-                class="glass-card p-6 sm:p-10 rounded-3xl w-full max-w-xl shadow-2xl relative overflow-hidden border border-white/20">
+            <div class="glass-card p-6 sm:p-10 rounded-3xl w-full max-w-xl shadow-2xl relative overflow-hidden border border-white/20">
                 <h2 class="text-2xl sm:text-3xl font-semibold text-pink-200 mb-2">อธิษฐานแล้วเป่าเทียนกันนะ 🎂</h2>
-                <p class="text-xs sm:text-sm text-slate-300 mb-8 font-light">
-                    ขอให้ทุกความปรารถนากลายเป็นจริงในวันนี้นะครับ</p>
+                <p class="text-xs sm:text-sm text-slate-300 mb-8 font-light">ขอให้ทุกความปรารถนากลายเป็นจริงในวันนี้นะครับ</p>
 
                 <!-- Interactive CSS Birthday Cake -->
                 <div class="relative w-64 h-56 mx-auto my-6 flex flex-col items-center justify-end">
-                    <!-- Candle 1 -->
                     <div class="absolute -top-6 flex flex-col items-center z-20">
                         <div id="flame1" class="candle-flame flame mb-1"></div>
                         <div id="smoke1" class="smoke"></div>
-                        <div
-                            class="w-3 h-12 bg-gradient-to-r from-pink-300 to-pink-400 rounded-t-sm shadow-md border-b border-pink-500">
-                        </div>
+                        <div class="w-3 h-12 bg-gradient-to-r from-pink-300 to-pink-400 rounded-t-sm shadow-md border-b border-pink-500"></div>
                     </div>
 
-                    <!-- Cake Layer Top -->
-                    <div
-                        class="w-40 h-16 bg-gradient-to-r from-pink-300 via-rose-200 to-pink-300 rounded-t-2xl shadow-inner relative flex justify-around items-center border-b-4 border-pink-400 z-10">
+                    <div class="w-40 h-16 bg-gradient-to-r from-pink-300 via-rose-200 to-pink-300 rounded-t-2xl shadow-inner relative flex justify-around items-center border-b-4 border-pink-400 z-10">
                         <div class="absolute -bottom-2 left-3 w-4 h-5 bg-white rounded-b-full"></div>
                         <div class="absolute -bottom-3 left-10 w-5 h-6 bg-white rounded-b-full"></div>
                         <div class="absolute -bottom-2 right-12 w-4 h-5 bg-white rounded-b-full"></div>
@@ -257,26 +201,18 @@
                         <span class="text-xs text-rose-400 font-bold opacity-60">🍓</span>
                     </div>
 
-                    <!-- Cake Layer Middle -->
-                    <div
-                        class="w-52 h-16 bg-gradient-to-r from-purple-300 via-pink-200 to-purple-300 relative flex justify-center items-center shadow-md border-b-4 border-purple-400 z-5">
-                        <div
-                            class="text-xs text-purple-700 font-medium tracking-widest bg-white/40 px-3 py-0.5 rounded-full">
-                            HAPPY BIRTHDAY GAI</div>
+                    <div class="w-52 h-16 bg-gradient-to-r from-purple-300 via-pink-200 to-purple-300 relative flex justify-center items-center shadow-md border-b-4 border-purple-400 z-5">
+                        <div class="text-xs text-purple-700 font-medium tracking-widest bg-white/40 px-3 py-0.5 rounded-full">HAPPY BIRTHDAY GAI</div>
                     </div>
 
-                    <!-- Cake Layer Bottom Base -->
-                    <div
-                        class="w-64 h-20 bg-gradient-to-r from-amber-100 via-amber-200 to-amber-100 rounded-b-2xl shadow-xl relative flex justify-around items-center border-t-2 border-amber-300">
+                    <div class="w-64 h-20 bg-gradient-to-r from-amber-100 via-amber-200 to-amber-100 rounded-b-2xl shadow-xl relative flex justify-around items-center border-t-2 border-amber-300">
                         <div class="w-full h-2 bg-pink-400/30 absolute top-3"></div>
                         <div class="w-full h-2 bg-pink-400/30 absolute bottom-3"></div>
                     </div>
 
-                    <!-- Cake Plate -->
                     <div class="w-72 h-4 bg-slate-200 rounded-full shadow-2xl border-b-2 border-slate-400 -mb-2"></div>
                 </div>
 
-                <!-- Blow Candles Control -->
                 <div class="mt-8 flex flex-col sm:flex-row gap-3 justify-center items-center">
                     <button id="blowBtn" onclick="blowCandles()"
                         class="bg-gradient-to-r from-pink-500 to-rose-500 hover:from-pink-600 hover:to-rose-600 text-white font-medium px-6 py-3 rounded-full transition-all duration-300 hover:scale-105 shadow-lg flex items-center gap-2">
@@ -290,7 +226,6 @@
                 </div>
             </div>
 
-            <!-- ปุ่มเปลี่ยนฉากไปหน้าจดหมาย -->
             <button id="nextToTimelineBtn" onclick="goToScene('scene-letter')"
                 class="d-none hidden mt-8 bg-white/10 hover:bg-white/20 text-white px-8 py-3 rounded-full transition-all border border-white/20 items-center gap-2">
                 <span>อ่านจดหมายพิเศษ 💌</span>
@@ -305,32 +240,28 @@
                 <h2 class="text-3xl font-semibold text-pink-200">จดหมายถึงเจ้าของวันเกิด 💌</h2>
             </div>
 
-            <!-- Envelope / Letter Box Container -->
             <div id="envelopeContainer" class="w-full max-w-xl cursor-pointer" onclick="openLetter()">
-                <div
-                    class="glass-card p-8 sm:p-12 rounded-3xl text-center border border-pink-400/30 shadow-2xl hover:border-pink-400/60 transition-all group">
-                    <div
-                        class="w-20 h-20 bg-pink-500/20 rounded-full flex items-center justify-center mx-auto mb-6 text-pink-300 text-3xl group-hover:scale-110 transition-transform">
+                <div class="glass-card p-8 sm:p-12 rounded-3xl text-center border border-pink-400/30 shadow-2xl hover:border-pink-400/60 transition-all group">
+                    <div class="w-20 h-20 bg-pink-500/20 rounded-full flex items-center justify-center mx-auto mb-6 text-pink-300 text-3xl group-hover:scale-110 transition-transform">
                         <i class="fas fa-envelope-open-text animate-pulse"></i>
                     </div>
                     <h3 class="text-xl font-medium text-slate-200 mb-2">มีข้อความพิเศษอยากจะบอก...</h3>
                     <p class="text-sm text-slate-400 font-light mb-6">กดที่ซองจดหมายเพื่ออ่านข้อความพิเศษได้เลย</p>
-                    <span
-                        class="inline-block bg-pink-500 hover:bg-pink-600 text-white text-xs px-5 py-2.5 rounded-full transition-colors shadow-md">
+                    <span class="inline-block bg-pink-500 hover:bg-pink-600 text-white text-xs px-5 py-2.5 rounded-full transition-colors shadow-md">
                         เปิดจดหมาย ✨
                     </span>
                 </div>
             </div>
 
-            <!-- Letter Content -->
             <div id="letterContent"
                 class="d-none hidden w-full max-w-xl glass-card p-8 sm:p-10 rounded-3xl border border-pink-300/40 shadow-2xl relative overflow-hidden animate-fade-in">
-                <div
-                    class="absolute -top-10 -right-10 w-32 h-32 bg-pink-500/10 rounded-full blur-2xl pointer-events-none">
-                </div>
+                <div class="absolute -top-10 -right-10 w-32 h-32 bg-pink-500/10 rounded-full blur-2xl pointer-events-none"></div>
 
-                <div class="text-right text-xs text-pink-300/80 mb-4 font-light">
-                    14 พฤษภาคม 2027 🌸
+                <div class="text-right text-xs text-pink-300/80 mb-4 font-light">14 พฤษภาคม 2027 🌸</div>
+
+                <!-- 🖼️ [จุดใส่รูปที่ 1] รูปภาพด้านบนข้อความจดหมาย -->
+                <div class="mb-6 overflow-hidden rounded-2xl border border-pink-300/30 shadow-lg max-h-64">
+                    <img src="letter-photo.jpg" alt="รูปภาพประกอบจดหมาย" class="w-full h-full object-cover">
                 </div>
 
                 <div class="space-y-4 text-slate-200 text-sm sm:text-base leading-relaxed font-light">
@@ -341,13 +272,9 @@
                         และสมหวังในทุกๆ เรื่องที่ตั้งใจไว้นะ
                     </p>
 
-                    <p>
-                        อยากขอขอบคุณไกด์สำหรับช่วงเวลา3ปีที่ผ่านมา ถือว่าเป็นช่วงเวลาที่สนุกมากๆ 
-                    </p>
+                    <p>อยากขอขอบคุณไกด์สำหรับช่วงเวลา3ปีที่ผ่านมา ถือว่าเป็นช่วงเวลาที่สนุกมากๆ</p>
 
-                    <p>
-                        ขอให้ไกด์ เจอแต่เรื่องดีๆ โชคเข้าข้างไม่ว่าจะเรื่องอะไร แล้วก็หัดแดกข้าวซะบ้างไอสัส หยอกๆนะไม่รู้จะพิมพ์ไรดี
-                    </p>
+                    <p>ขอให้ไกด์ เจอแต่เรื่องดีๆ โชคเข้าข้างไม่ว่าจะเรื่องอะไร แล้วก็หัดแดกข้าวซะบ้างไอสัส หยอกๆนะไม่รู้จะพิมพ์ไรดี</p>
 
                     <div class="pt-6 text-right font-mitr text-pink-300 font-medium">
                         - จากหมีกริซลีตัวนึงที่นั่งเอ๋ออๆอยู่ -
@@ -368,37 +295,19 @@
         <section id="scene-future"
             class="hidden min-h-[85vh] flex flex-col items-center justify-center text-center py-10 transition-all duration-700">
             <div class="text-center mb-8">
-                <span class="text-xs font-light text-pink-300 uppercase tracking-widest block mb-1">Our Special
-                    Future</span>
-                <h2
-                    class="text-3xl sm:text-4xl font-semibold bg-clip-text text-transparent bg-gradient-to-r from-pink-200 via-rose-200 to-purple-200">
+                <span class="text-xs font-light text-pink-300 uppercase tracking-widest block mb-1">Our Special Future</span>
+                <h2 class="text-3xl sm:text-4xl font-semibold bg-clip-text text-transparent bg-gradient-to-r from-pink-200 via-rose-200 to-purple-200">
                     Polaroid Moment ✨
                 </h2>
                 <p class="text-slate-300 text-sm mt-2">ภาพความทรงจำสำหรับวันเกิดปีนี้</p>
             </div>
 
             <!-- Polaroid Card Simulation -->
-            <div
-                class="bg-white text-slate-800 p-4 pb-6 rounded-lg shadow-2xl max-w-xs sm:max-w-sm w-full transform rotate-1 hover:rotate-0 transition-transform duration-500 my-4 border border-slate-200">
-                <!-- Image Container with Canvas / Decorative SVG -->
-                <div
-                    class="w-full h-64 bg-slate-900 rounded relative overflow-hidden flex flex-col items-center justify-center p-4 text-center">
-                    <div class="absolute inset-0 bg-gradient-to-br from-pink-900/40 via-purple-900/40 to-slate-900">
-                    </div>
-
-                    <div class="relative z-10 space-y-3">
-                        <div
-                            class="w-16 h-16 bg-pink-500/20 rounded-full flex items-center justify-center mx-auto text-pink-300 text-2xl border border-pink-400/30">
-                            <i class="fas fa-heart text-pink-400 animate-pulse"></i>
-                        </div>
-                        <div class="text-white font-medium text-lg">Happy Birthday GAI</div>
-                        <div class="text-xs text-pink-200 font-light">"You are the best part of my day."</div>
-                    </div>
-
-                    <!-- Heart particle decoration -->
-                    <div class="absolute bottom-2 right-2 text-pink-400/40 text-4xl">
-                        <i class="fas fa-sparkles"></i>
-                    </div>
+            <div class="bg-white text-slate-800 p-4 pb-6 rounded-lg shadow-2xl max-w-xs sm:max-w-sm w-full transform rotate-1 hover:rotate-0 transition-transform duration-500 my-4 border border-slate-200">
+                
+                <!-- 🖼️ [จุดใส่รูปที่ 2] รูปภาพในกรอบโพลารอยด์ -->
+                <div class="w-full h-64 bg-slate-900 rounded relative overflow-hidden">
+                    <img src="GAI (2).jpg" alt="รูปโพลารอยด์" class="w-full h-full object-cover">
                 </div>
 
                 <div class="mt-4 text-center font-handwriting text-2xl text-slate-700">
@@ -406,7 +315,6 @@
                 </div>
             </div>
 
-            <!-- Heart Shower Trigger Button -->
             <div class="mt-8 flex flex-col sm:flex-row gap-4 justify-center items-center">
                 <button onclick="triggerHeartShower()"
                     class="pulse-glow bg-gradient-to-r from-pink-500 to-purple-600 hover:from-pink-600 hover:to-purple-700 text-white font-medium px-8 py-3.5 rounded-full transition-all duration-300 hover:scale-105 shadow-xl flex items-center gap-2">
@@ -422,7 +330,7 @@
             </div>
 
             <p class="text-xs text-slate-400 mt-8 font-light">
-                ขอบคุณนะกายที่ทำให้โลกนี้น่าอยู่ขึ้นเสมอ Happy Birthday ครับ! 🎂✨
+                Happy Birthday ครับ! 🎂✨
             </p>
         </section>
 
@@ -431,23 +339,24 @@
     <script>
         let isPlayingAudio = false;
 
-        // สั่งให้เล่นเพลงทันทีที่มีการคลิกหรือสัมผัสหน้าจอครั้งแรก (ปลดล็อก Autoplay Policy ของเว็บเบราว์เซอร์)
-        function startAutoPlay() {
+        function startExperience() {
             const audio = document.getElementById('bgMusic');
-            if (audio && !isPlayingAudio) {
+            const overlay = document.getElementById('startOverlay');
+
+            overlay.style.opacity = '0';
+            setTimeout(() => {
+                overlay.style.display = 'none';
+            }, 500);
+
+            if (audio) {
                 audio.play().then(() => {
                     isPlayingAudio = true;
                     updateMusicUI(true);
                 }).catch(err => {
-                    console.log("Autoplay blocked, waiting for user interaction.");
+                    console.log("Audio play failed: ", err);
                 });
             }
         }
-
-        // เพิ่ม Event Listeners เพื่อให้คลิกตรงไหนของเว็บ เพลงก็เล่นทันที
-        window.addEventListener('click', startAutoPlay, { once: true });
-        window.addEventListener('touchstart', startAutoPlay, { once: true });
-        window.addEventListener('keydown', startAutoPlay, { once: true });
 
         function toggleAudio() {
             const audio = document.getElementById('bgMusic');
@@ -476,7 +385,6 @@
             }
         }
 
-        // Scene Navigation Logic
         function goToScene(sceneId) {
             document.querySelectorAll('section').forEach(sec => {
                 sec.classList.add('d-none', 'hidden');
@@ -488,7 +396,6 @@
             }
         }
 
-        // Candle Blowing Logic
         function blowCandles() {
             const flame = document.getElementById('flame1');
             const smoke = document.getElementById('smoke1');
@@ -512,7 +419,6 @@
             nextBtn.classList.add('flex');
         }
 
-        // Open Letter Logic
         function openLetter() {
             const container = document.getElementById('envelopeContainer');
             const content = document.getElementById('letterContent');
@@ -528,7 +434,6 @@
             });
         }
 
-        // Heart Shower / Confetti Effect
         function triggerHeartShower() {
             const duration = 3 * 1000;
             const animationEnd = Date.now() + duration;
@@ -556,7 +461,6 @@
             }());
         }
 
-        // Copy Wish to Clipboard
         function copyBirthdayWish() {
             const wishText = "สุขสันต์วันเกิดไกด์! 🎂 ขอให้ปีนี้ไกด์มีความสุขมากๆ มีรอยยิ้มสดใสในทุกๆ วัน❤️";
 
