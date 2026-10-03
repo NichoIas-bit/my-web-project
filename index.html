@@ -57,37 +57,28 @@
         }
 
         @keyframes float {
-
-            0%,
-            100% {
+            0%, 100% {
                 transform: translateY(0px) rotate(0deg);
             }
-
             50% {
                 transform: translateY(-15px) rotate(3deg);
             }
         }
 
         @keyframes pulseGlow {
-
-            0%,
-            100% {
+            0%, 100% {
                 box-shadow: 0 0 15px rgba(255, 117, 140, 0.4), 0 0 30px rgba(255, 117, 140, 0.2);
             }
-
             50% {
                 box-shadow: 0 0 30px rgba(255, 117, 140, 0.8), 0 0 50px rgba(255, 117, 140, 0.5);
             }
         }
 
         @keyframes flicker {
-
-            0%,
-            100% {
+            0%, 100% {
                 opacity: 1;
                 transform: scale(1);
             }
-
             50% {
                 opacity: 0.8;
                 transform: scale(0.95);
@@ -161,7 +152,6 @@
                 opacity: 0.8;
                 transform: translateY(0) scale(1);
             }
-
             100% {
                 opacity: 0;
                 transform: translateY(-60px) scale(3);
@@ -190,9 +180,12 @@
 
 <body class="relative text-slate-100 flex flex-col justify-between selection:bg-pink-500 selection:text-white">
 
+    <!-- แท็กเล่นไฟล์เพลง MP3 (ใส่ลิงก์ หรือ Path ไฟล์เพลงตรง src) -->
+    <audio id="bgMusic" loop src="Dandelions┃EPIC VERSION - Extended - Alex Owly.mp3"></audio>
+
     <canvas id="starsCanvas" class="stars-bg"></canvas>
 
-    <!-- Background Music Audio (Web Audio Synthesized / Pure JS Ambient) -->
+    <!-- Background Music Toggle Button -->
     <div class="fixed top-5 right-5 z-50 flex items-center gap-2">
         <button id="musicToggleBtn" onclick="toggleAudio()"
             class="glass-card px-4 py-2.5 rounded-full text-xs sm:text-sm font-medium flex items-center gap-2 hover:bg-white/20 transition-all border border-white/20 shadow-lg">
@@ -255,7 +248,6 @@
                     <!-- Cake Layer Top -->
                     <div
                         class="w-40 h-16 bg-gradient-to-r from-pink-300 via-rose-200 to-pink-300 rounded-t-2xl shadow-inner relative flex justify-around items-center border-b-4 border-pink-400 z-10">
-                        <!-- Cream Drips -->
                         <div class="absolute -bottom-2 left-3 w-4 h-5 bg-white rounded-b-full"></div>
                         <div class="absolute -bottom-3 left-10 w-5 h-6 bg-white rounded-b-full"></div>
                         <div class="absolute -bottom-2 right-12 w-4 h-5 bg-white rounded-b-full"></div>
@@ -354,11 +346,11 @@
                     </p>
 
                     <p>
-                        ขอให้ไกด์ เจอแต่เรื่องดีๆ โชคเข้าข้างไม่ว่าจะเรื่องอะไร แล้วก็หัดแดกข้าวซะบ้างไอสัส หยอกๆนะไม่รู้จะพิมพ์ไรดี
+                        ขอให้ไกด์ เจอแต่เรื่องดีๆ โชคเข้าข้างไม่ว่าจะเรื่องอะไร แล้วก็หัดแดกข้าวซะบ้างไอสัส หยอกๆนะไม่รู้จะพิมพ์ไรดี
                     </p>
 
                     <div class="pt-6 text-right font-mitr text-pink-300 font-medium">
-                        - จากหมีกริซลีตัวนึงที่นั่งเอ๋ออๆอยู่ -
+                        - จากหมีกริซลีตัวนึงที่นั่งเอ๋ออๆอยู่ -
                     </div>
                 </div>
 
@@ -437,84 +429,59 @@
     </div>
 
     <script>
-        // Custom Audio Synthesizer (No external mp3 needed - plays soothing ambient chord)
-        let audioCtx = null;
         let isPlayingAudio = false;
-        let masterGain = null;
 
-        function initAudio() {
-            if (!audioCtx) {
-                const AudioContext = window.AudioContext || window.webkitAudioContext;
-                audioCtx = new AudioContext();
-                masterGain = audioCtx.createGain();
-                masterGain.gain.value = 0.15;
-                masterGain.connect(audioCtx.destination);
+        // สั่งให้เล่นเพลงทันทีที่มีการคลิกหรือสัมผัสหน้าจอครั้งแรก (ปลดล็อก Autoplay Policy ของเว็บเบราว์เซอร์)
+        function startAutoPlay() {
+            const audio = document.getElementById('bgMusic');
+            if (audio && !isPlayingAudio) {
+                audio.play().then(() => {
+                    isPlayingAudio = true;
+                    updateMusicUI(true);
+                }).catch(err => {
+                    console.log("Autoplay blocked, waiting for user interaction.");
+                });
             }
         }
 
+        // เพิ่ม Event Listeners เพื่อให้คลิกตรงไหนของเว็บ เพลงก็เล่นทันที
+        window.addEventListener('click', startAutoPlay, { once: true });
+        window.addEventListener('touchstart', startAutoPlay, { once: true });
+        window.addEventListener('keydown', startAutoPlay, { once: true });
+
         function toggleAudio() {
-            initAudio();
+            const audio = document.getElementById('bgMusic');
+
+            if (!isPlayingAudio) {
+                audio.play();
+                isPlayingAudio = true;
+                updateMusicUI(true);
+            } else {
+                audio.pause();
+                isPlayingAudio = false;
+                updateMusicUI(false);
+            }
+        }
+
+        function updateMusicUI(playing) {
             const icon = document.getElementById('musicIcon');
             const text = document.getElementById('musicText');
 
-            if (audioCtx.state === 'suspended') {
-                audioCtx.resume();
-            }
-
-            if (!isPlayingAudio) {
-                playAmbientMusic();
-                isPlayingAudio = true;
+            if (playing) {
                 icon.className = "fas fa-pause text-pink-400";
                 text.innerText = "พักเสียงเพลง 🎵";
             } else {
-                if (masterGain) masterGain.gain.setTargetAtTime(0, audioCtx.currentTime, 0.5);
-                isPlayingAudio = false;
                 icon.className = "fas fa-music text-pink-400";
                 text.innerText = "เปิดเพลงบรรยากาศ 🎵";
             }
         }
 
-        function playAmbientMusic() {
-            if (!audioCtx) return;
-            masterGain.gain.setTargetAtTime(0.12, audioCtx.currentTime, 0.5);
-
-            // Pentatonic scale notes (C Major / A Minor warm ambient chords)
-            const frequencies = [261.63, 329.63, 392.00, 523.25, 659.25]; // C4, E4, G4, C5, E5
-
-            function playWarmNote() {
-                if (!isPlayingAudio) return;
-                const osc = audioCtx.createOscillator();
-                const noteGain = audioCtx.createGain();
-
-                const freq = frequencies[Math.floor(Math.random() * frequencies.length)];
-                osc.type = 'sine';
-                osc.frequency.setValueAtTime(freq, audioCtx.currentTime);
-
-                noteGain.gain.setValueAtTime(0, audioCtx.currentTime);
-                noteGain.gain.linearRampToValueAtTime(0.08, audioCtx.currentTime + 1.5);
-                noteGain.gain.exponentialRampToValueAtTime(0.0001, audioCtx.currentTime + 5.0);
-
-                osc.connect(noteGain);
-                noteGain.connect(masterGain);
-
-                osc.start();
-                osc.stop(audioCtx.currentTime + 5.2);
-
-                setTimeout(playWarmNote, Math.random() * 2000 + 1500);
-            }
-
-            playWarmNote();
-            playWarmNote();
-        }
-
         // Scene Navigation Logic
         function goToScene(sceneId) {
-            // ซ่อนทุก section
             document.querySelectorAll('section').forEach(sec => {
                 sec.classList.add('d-none', 'hidden');
             });
 
-            // แสดง section ที่เลือก
             const targetScene = document.getElementById(sceneId);
             if (targetScene) {
                 targetScene.classList.remove('d-none', 'hidden');
@@ -532,7 +499,6 @@
             flame.classList.add('out');
             smoke.classList.add('active');
 
-            // Trigger celebration confetti
             confetti({
                 particleCount: 120,
                 spread: 80,
@@ -588,15 +554,6 @@
 
                 requestAnimationFrame(frame);
             }());
-        }
-
-        function triggerSoftSparkles() {
-            confetti({
-                particleCount: 30,
-                spread: 100,
-                origin: { y: 0.4 },
-                colors: ['#f6d365', '#fda085', '#ffffff']
-            });
         }
 
         // Copy Wish to Clipboard
