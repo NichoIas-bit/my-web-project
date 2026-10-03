@@ -170,7 +170,8 @@
         </section>
 
         <!-- ================= SCENE 2: INTERACTIVE CAKE ================= -->
-        <section id="scene-cake" class="hidden min-h-[85vh] flex flex-col items-center justify-center text-center py-10 transition-all duration-700">
+        <!-- ================= SCENE 2: CAKE & WISH ================= -->
+        <section id="scene-cake" class="d-none hidden min-h-[85vh] flex flex-col items-center justify-center text-center py-10 transition-all duration-700">
             <div class="glass-card p-6 sm:p-10 rounded-3xl w-full max-w-xl shadow-2xl relative overflow-hidden border border-white/20">
                 <h2 class="text-2xl sm:text-3xl font-semibold text-pink-200 mb-2">อธิษฐานแล้วเป่าเทียนกันนะ 🎂</h2>
                 <p class="text-xs sm:text-sm text-slate-300 mb-8 font-light">ขอให้ทุกความปรารถนากลายเป็นจริงในวันนี้นะครับ</p>
@@ -219,19 +220,20 @@
                     </button>
                 </div>
 
-                <div id="candleBlownMsg" class="hidden mt-6 text-pink-300 font-medium animate-fade-in">
+                <div id="candleBlownMsg" class="d-none hidden mt-6 text-pink-300 font-medium animate-fade-in">
                     🎉 สุขสันต์วันเกิดนะครับ! ❤️
                 </div>
             </div>
 
-            <button id="nextToTimelineBtn" onclick="goToScene('scene-letter')" class="hidden mt-8 bg-white/10 hover:bg-white/20 text-white px-8 py-3 rounded-full transition-all border border-white/20 items-center gap-2">
-                <span>ไปที่ความทรงจำของเรา</span>
+            <!-- ปุ่มเปลี่ยนฉากไปหน้าจดหมาย -->
+            <button id="nextToTimelineBtn" onclick="goToScene('scene-letter')" class="d-none hidden mt-8 bg-white/10 hover:bg-white/20 text-white px-8 py-3 rounded-full transition-all border border-white/20 items-center gap-2">
+                <span>อ่านจดหมายพิเศษ 💌</span>
                 <i class="fas fa-arrow-right"></i>
             </button>
         </section>
 
         <!-- ================= SCENE 4: HEARTFELT LETTER ================= -->
-        <section id="scene-letter" class="hidden min-h-[85vh] flex flex-col items-center justify-center py-10 transition-all duration-700">
+        <section id="scene-letter" class="d-none hidden min-h-[85vh] flex flex-col items-center justify-center py-10 transition-all duration-700">
             <div class="text-center mb-6">
                 <h2 class="text-3xl font-semibold text-pink-200">จดหมายถึงเจ้าของวันเกิด 💌</h2>
             </div>
@@ -250,8 +252,8 @@
                 </div>
             </div>
 
-            <!-- Letter Content (Hidden Modal/Card view) -->
-            <div id="letterContent" class="hidden w-full max-w-xl glass-card p-8 sm:p-10 rounded-3xl border border-pink-300/40 shadow-2xl relative overflow-hidden animate-fade-in">
+            <!-- Letter Content -->
+            <div id="letterContent" class="d-none hidden w-full max-w-xl glass-card p-8 sm:p-10 rounded-3xl border border-pink-300/40 shadow-2xl relative overflow-hidden animate-fade-in">
                 <div class="absolute -top-10 -right-10 w-32 h-32 bg-pink-500/10 rounded-full blur-2xl pointer-events-none"></div>
                 
                 <div class="text-right text-xs text-pink-300/80 mb-4 font-light">
@@ -259,10 +261,10 @@
                 </div>
 
                 <div class="space-y-4 text-slate-200 text-sm sm:text-base leading-relaxed font-light">
-                    <p class="font-medium text-pink-200 text-lg">ถึง คุณณัฐกรณ์ (ไกด์)...</p>
+                    <p class="font-medium text-pink-200 text-lg">ถึง คุณณัฐกรณ์ (กาย)...</p>
                     
                     <p>
-                        สุขสันต์วันเกิดนะครับ! 🎉 ขอให้ปีนี้เป็นปีที่ใจดีกับไกด์มากๆ มีแต่รอยยิ้ม ความสุข สุขภาพแข็งแรง และสมหวังในทุกๆ เรื่องที่ตั้งใจไว้นะ
+                        สุขสันต์วันเกิดนะครับ! 🎉 ขอให้ปีนี้เป็นปีที่ใจดีกับกายมากๆ มีแต่รอยยิ้ม ความสุข สุขภาพแข็งแรง และสมหวังในทุกๆ เรื่องที่ตั้งใจไว้นะ
                     </p>
 
                     <p>
