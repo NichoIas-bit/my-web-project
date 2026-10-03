@@ -155,7 +155,7 @@
             
             <h1 class="text-4xl sm:text-6xl md:text-7xl font-semibold mb-4 bg-clip-text text-transparent bg-gradient-to-r from-pink-300 via-rose-200 to-amber-200 leading-tight">
                 Happy Birthday <br class="sm:hidden" /><br>
-                <span class="font-bold text-pink-400 text-5xl sm:text-7xl md:text-8xl drop-shadow-[0_5px_15px_rgba(255,117,140,0.4)]">"Mr. Nattakorn Dokmaiwai"</span>
+                <span class="font-bold text-pink-300 text-5xl sm:text-7xl md:text-8xl drop-shadow-[0_5px_15px_rgba(255,117,140,0.4)]">"Mr. Nattakorn Dokmaiwai"</span>
             </h1>
 
             <p class="text-slate-300 text-base sm:text-xl font-light max-w-lg mb-10 leading-relaxed px-4">
@@ -172,9 +172,8 @@
         <!-- ================= SCENE 2: INTERACTIVE CAKE ================= -->
         <section id="scene-cake" class="hidden min-h-[85vh] flex flex-col items-center justify-center text-center py-10 transition-all duration-700">
             <div class="glass-card p-6 sm:p-10 rounded-3xl w-full max-w-xl shadow-2xl relative overflow-hidden border border-white/20">
-                <span class="text-xs font-light text-pink-300 uppercase tracking-widest block mb-2">Step 1: Make a Wish</span>
                 <h2 class="text-2xl sm:text-3xl font-semibold text-pink-200 mb-2">อธิษฐานแล้วเป่าเทียนกันนะ 🎂</h2>
-                <p class="text-xs sm:text-sm text-slate-300 mb-8 font-light">ขอให้ทุกความปรารถนาของคุณกายกลายเป็นจริงในวันนี้นะครับ</p>
+                <p class="text-xs sm:text-sm text-slate-300 mb-8 font-light">ขอให้ทุกความปรารถนากลายเป็นจริงในวันนี้นะครับ</p>
 
                 <!-- Interactive CSS Birthday Cake -->
                 <div class="relative w-64 h-56 mx-auto my-6 flex flex-col items-center justify-end">
@@ -216,119 +215,25 @@
                 <div class="mt-8 flex flex-col sm:flex-row gap-3 justify-center items-center">
                     <button id="blowBtn" onclick="blowCandles()" class="bg-gradient-to-r from-pink-500 to-rose-500 hover:from-pink-600 hover:to-rose-600 text-white font-medium px-6 py-3 rounded-full transition-all duration-300 hover:scale-105 shadow-lg flex items-center gap-2">
                         <i class="fas fa-wind"></i>
-                        <span>คลิกเพื่อเป่าเทียน 💨</span>
+                        <span>เป่าเทียน 💨</span>
                     </button>
                 </div>
 
                 <div id="candleBlownMsg" class="hidden mt-6 text-pink-300 font-medium animate-fade-in">
-                    🎉 สุขสันต์วันเกิดนะครับ! ไปเดินทางดูความทรงจำดีๆ กันต่อเลย ❤️
+                    🎉 สุขสันต์วันเกิดนะครับ! ❤️
                 </div>
             </div>
 
-            <button id="nextToTimelineBtn" onclick="goToScene('scene-timeline')" class="hidden mt-8 bg-white/10 hover:bg-white/20 text-white px-8 py-3 rounded-full transition-all border border-white/20 items-center gap-2">
+            <button id="nextToTimelineBtn" onclick="goToScene('scene-letter')" class="hidden mt-8 bg-white/10 hover:bg-white/20 text-white px-8 py-3 rounded-full transition-all border border-white/20 items-center gap-2">
                 <span>ไปที่ความทรงจำของเรา</span>
                 <i class="fas fa-arrow-right"></i>
             </button>
         </section>
 
-        <!-- ================= SCENE 3: MEMORY TIMELINE ================= -->
-        <section id="scene-timeline" class="hidden min-h-[85vh] py-12 transition-all duration-700">
-            <div class="text-center mb-12">
-                <span class="text-xs font-light text-pink-300 uppercase tracking-widest block mb-1">Our Journey & Memories</span>
-                <h2 class="text-3xl sm:text-4xl font-semibold bg-clip-text text-transparent bg-gradient-to-r from-pink-200 to-rose-300">
-                    เหตุผลที่ "กาย" คือคนพิเศษ 💫
-                </h2>
-                <p class="text-slate-300 text-sm mt-2 max-w-md mx-auto">ทุกๆ เรื่องราวเล็กๆ ที่ได้รู้จักกัน เป็นช่วงเวลาที่มีค่ามากๆ สำหรับเราเสมอ</p>
-            </div>
-
-            <!-- Memory Cards Grid -->
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <!-- Card 1 -->
-                <div class="glass-card glass-card-hover p-6 rounded-2xl relative overflow-hidden flex flex-col justify-between">
-                    <div>
-                        <div class="flex justify-between items-start mb-4">
-                            <span class="text-xs bg-pink-500/20 text-pink-300 px-3 py-1 rounded-full border border-pink-500/30">First Impression 🌸</span>
-                            <i class="fas fa-star text-amber-300 text-sm"></i>
-                        </div>
-                        <h3 class="text-xl font-medium text-pink-100 mb-2">ความประทับใจแรกเห็น</h3>
-                        <p class="text-slate-300 text-sm leading-relaxed font-light">
-                            จำได้ไหมตั้งแต่วันแรกๆ ที่ได้รู้จักกับกาย ความใจดี รอยยิ้ม และความเป็นกันเองของคุณกาย มันทำให้โลกรอบตัวดูอบอุ่นขึ้นมาทันทีเลย
-                        </p>
-                    </div>
-                    <div class="mt-6 pt-4 border-t border-white/10 text-xs text-pink-300/80 flex items-center justify-between">
-                        <span>"จุดเริ่มต้นของความรู้สึกดีๆ"</span>
-                        <i class="fas fa-heart text-pink-400"></i>
-                    </div>
-                </div>
-
-                <!-- Card 2 -->
-                <div class="glass-card glass-card-hover p-6 rounded-2xl relative overflow-hidden flex flex-col justify-between">
-                    <div>
-                        <div class="flex justify-between items-start mb-4">
-                            <span class="text-xs bg-purple-500/20 text-purple-300 px-3 py-1 rounded-full border border-purple-500/30">Your Warmth ☀️</span>
-                            <i class="fas fa-sun text-amber-300 text-sm"></i>
-                        </div>
-                        <h3 class="text-xl font-medium text-purple-100 mb-2">พลังบวกของกาย</h3>
-                        <p class="text-slate-300 text-sm leading-relaxed font-light">
-                            ไม่ว่าจะเจอเรื่องเหนื่อยๆ มา แค่ได้คุยกับกาย หรือเห็นกายมีความสุข มันก็พลอยทำให้เรายิ้มตามได้เสมอ กายคือ Safe Zone ที่ดีมากๆ เลยนะ
-                        </p>
-                    </div>
-                    <div class="mt-6 pt-4 border-t border-white/10 text-xs text-purple-300/80 flex items-center justify-between">
-                        <span>"ขอบคุณที่เป็นรอยยิ้มให้กัน"</span>
-                        <i class="fas fa-smile text-amber-300"></i>
-                    </div>
-                </div>
-
-                <!-- Card 3 -->
-                <div class="glass-card glass-card-hover p-6 rounded-2xl relative overflow-hidden flex flex-col justify-between">
-                    <div>
-                        <div class="flex justify-between items-start mb-4">
-                            <span class="text-xs bg-rose-500/20 text-rose-300 px-3 py-1 rounded-full border border-rose-500/30">Little Things ✨</span>
-                            <i class="fas fa-coffee text-amber-300 text-sm"></i>
-                        </div>
-                        <h3 class="text-xl font-medium text-rose-100 mb-2">ความใส่ใจในเรื่องเล็กๆ</h3>
-                        <p class="text-slate-300 text-sm leading-relaxed font-light">
-                            ทุกๆ บทสนทนา คำถามว่ากินข้าวหรือยัง เป็นอย่างไรบ้าง บทสนทนาธรรมดาๆ พวกนี้แหละคือช่วงเวลาที่เราชอบที่สุดในแต่ละวันเลย
-                        </p>
-                    </div>
-                    <div class="mt-6 pt-4 border-t border-white/10 text-xs text-rose-300/80 flex items-center justify-between">
-                        <span>"ช่วงเวลาธรรมดาที่แสนพิเศษ"</span>
-                        <i class="fas fa-mug-hot text-amber-200"></i>
-                    </div>
-                </div>
-
-                <!-- Card 4 -->
-                <div class="glass-card glass-card-hover p-6 rounded-2xl relative overflow-hidden flex flex-col justify-between">
-                    <div>
-                        <div class="flex justify-between items-start mb-4">
-                            <span class="text-xs bg-amber-500/20 text-amber-300 px-3 py-1 rounded-full border border-amber-500/30">The Future 🌙</span>
-                            <i class="fas fa-moon text-amber-300 text-sm"></i>
-                        </div>
-                        <h3 class="text-xl font-medium text-amber-100 mb-2">ก้าวต่อไปข้างหน้า</h3>
-                        <p class="text-slate-300 text-sm leading-relaxed font-light">
-                            วันเกิดปีนี้ หวังว่ากายจะเติบโตอย่างมีความสุข และไม่ว่าจะเจอเรื่องอะไร อยากให้รู้วิธีเคียงข้างและมีเราคอยซัพพอร์ตอยู่ตรงนี้เสมอนะ
-                        </p>
-                    </div>
-                    <div class="mt-6 pt-4 border-t border-white/10 text-xs text-amber-300/80 flex items-center justify-between">
-                        <span>"อยากอยู่ยินดีกับทุกความสำเร็จ"</span>
-                        <i class="fas fa-sparkles text-amber-300"></i>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Timeline Bottom Button -->
-            <div class="text-center mt-12">
-                <button onclick="goToScene('scene-letter')" class="pulse-glow bg-gradient-to-r from-pink-500 to-purple-600 hover:from-pink-600 hover:to-purple-700 text-white font-medium text-lg px-8 py-3.5 rounded-full transition-all duration-300 hover:scale-105 inline-flex items-center gap-3 shadow-xl">
-                    <span>เปิดจดหมายลับถึงกาย ✉️</span>
-                </button>
-            </div>
-        </section>
-
         <!-- ================= SCENE 4: HEARTFELT LETTER ================= -->
         <section id="scene-letter" class="hidden min-h-[85vh] flex flex-col items-center justify-center py-10 transition-all duration-700">
             <div class="text-center mb-6">
-                <span class="text-xs font-light text-pink-300 uppercase tracking-widest block mb-1">Secret Confession</span>
-                <h2 class="text-3xl font-semibold text-pink-200">จดหมายถึงคนพิเศษ 💌</h2>
+                <h2 class="text-3xl font-semibold text-pink-200">จดหมายถึงเจ้าของวันเกิด 💌</h2>
             </div>
 
             <!-- Envelope / Letter Box Container -->
@@ -338,7 +243,7 @@
                         <i class="fas fa-envelope-open-text animate-pulse"></i>
                     </div>
                     <h3 class="text-xl font-medium text-slate-200 mb-2">มีข้อความพิเศษอยากจะบอก...</h3>
-                    <p class="text-sm text-slate-400 font-light mb-6">แตะที่ซองจดหมายเพื่อเปิดอ่านความในใจนะกาย</p>
+                    <p class="text-sm text-slate-400 font-light mb-6">กดที่ซองจดหมายเพื่ออ่านข้อความพิเศษได้เลย</p>
                     <span class="inline-block bg-pink-500 hover:bg-pink-600 text-white text-xs px-5 py-2.5 rounded-full transition-colors shadow-md">
                         เปิดจดหมาย ✨
                     </span>
@@ -354,10 +259,10 @@
                 </div>
 
                 <div class="space-y-4 text-slate-200 text-sm sm:text-base leading-relaxed font-light">
-                    <p class="font-medium text-pink-200 text-lg">ถึง คุณณัฐกร (กาย)...</p>
+                    <p class="font-medium text-pink-200 text-lg">ถึง คุณณัฐกรณ์ (ไกด์)...</p>
                     
                     <p>
-                        สุขสันต์วันเกิดนะครับ! 🎉 ขอให้ปีนี้เป็นปีที่ใจดีกับกายมากๆ มีแต่รอยยิ้ม ความสุข สุขภาพแข็งแรง และสมหวังในทุกๆ เรื่องที่ตั้งใจไว้นะ
+                        สุขสันต์วันเกิดนะครับ! 🎉 ขอให้ปีนี้เป็นปีที่ใจดีกับไกด์มากๆ มีแต่รอยยิ้ม ความสุข สุขภาพแข็งแรง และสมหวังในทุกๆ เรื่องที่ตั้งใจไว้นะ
                     </p>
 
                     <p>
