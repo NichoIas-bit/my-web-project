@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html lang="th">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -9,7 +8,7 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-
+    
     <!-- Three.js 3D Engine & OrbitControls & Canvas Confetti -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
@@ -62,7 +61,6 @@
         }
     </style>
 </head>
-
 <body class="relative select-none">
 
     <!-- WebGL 3D Canvas Container -->
@@ -72,8 +70,7 @@
     <div id="ui-layer" class="relative z-20 w-full h-screen pointer-events-none">
 
         <!-- หน้าเปิดตัว (Opening Overlay) -->
-        <div id="startOverlay"
-            class="pointer-events-auto fixed inset-0 z-50 flex items-center justify-center bg-slate-950/90 backdrop-blur-md transition-opacity duration-500">
+        <div id="startOverlay" class="pointer-events-auto fixed inset-0 z-50 flex items-center justify-center bg-slate-950/90 backdrop-blur-md transition-opacity duration-500">
             <div class="glass-panel p-8 sm:p-10 rounded-3xl text-center max-w-md mx-4 shadow-2xl">
                 <div class="relative w-24 h-24 mx-auto mb-6 flex items-center justify-center">
                     <div class="absolute inset-0 rounded-full bg-pink-500/20 animate-ping"></div>
@@ -82,25 +79,21 @@
                 <h1 class="text-3xl font-bold text-pink-200 mb-2 glow-text">Happy Birthday</h1>
                 <h2 class="text-xl font-medium text-purple-300 mb-4">Mr. Nattakorn Dokmaiwai</h2>
                 <p class="text-slate-300 text-xs sm:text-sm mb-8 font-light">กดเพื่อเปิดท่องจักรวาลเค้กวันเกิด 3D ✨</p>
-
-                <button onclick="start3DExperience()"
-                    class="bg-gradient-to-r from-pink-500 to-purple-600 hover:from-pink-600 hover:to-purple-700 text-white font-medium text-base sm:text-lg px-8 py-3.5 rounded-full transition-all duration-300 hover:scale-105 shadow-xl w-full flex items-center justify-center gap-2 cursor-pointer">
+                
+                <button onclick="start3DExperience()" class="bg-gradient-to-r from-pink-500 to-purple-600 hover:from-pink-600 hover:to-purple-700 text-white font-medium text-base sm:text-lg px-8 py-3.5 rounded-full transition-all duration-300 hover:scale-105 shadow-xl w-full flex items-center justify-center gap-2 cursor-pointer">
                     <span>MAKE A WISH 🎂✨</span>
                 </button>
             </div>
         </div>
 
         <!-- แถบเมนูด้านบน -->
-        <div id="topBar"
-            class="hidden pointer-events-auto fixed top-5 left-5 right-5 flex justify-between items-center z-40">
-            <div
-                class="glass-panel px-4 py-2 rounded-full text-xs sm:text-sm font-medium text-pink-200 flex items-center gap-2">
+        <div id="topBar" class="hidden pointer-events-auto fixed top-5 left-5 right-5 flex justify-between items-center z-40">
+            <div class="glass-panel px-4 py-2 rounded-full text-xs sm:text-sm font-medium text-pink-200 flex items-center gap-2">
                 <i class="fas fa-sparkles text-amber-300"></i>
                 <span>GAI'S BIRTHDAY CAKE 3D</span>
             </div>
 
-            <button id="musicBtn" onclick="toggleAudio()"
-                class="glass-panel px-4 py-2 rounded-full text-xs sm:text-sm font-medium text-pink-200 hover:bg-pink-500/30 transition-all flex items-center gap-2 cursor-pointer">
+            <button id="musicBtn" onclick="toggleAudio()" class="glass-panel px-4 py-2 rounded-full text-xs sm:text-sm font-medium text-pink-200 hover:bg-pink-500/30 transition-all flex items-center gap-2 cursor-pointer">
                 <i id="musicIcon" class="fas fa-music text-pink-400"></i>
                 <span id="musicText">เปิดเพลง 🎵</span>
             </button>
@@ -108,64 +101,39 @@
 
         <!-- ไอคอนลอยหมุนวนในอวกาศ 3D (3D Orbit Labels) -->
         <div id="labels-container" class="hidden pointer-events-auto">
-            <div id="node-letter" onclick="openModal('modal-letter')"
-                class="floating-node glass-panel px-3.5 py-2 rounded-full text-xs text-pink-200 flex items-center gap-2 border border-pink-400/50">
+            <div id="node-letter" onclick="openModal('modal-letter')" class="floating-node glass-panel px-3.5 py-2 rounded-full text-xs text-pink-200 flex items-center gap-2 border border-pink-400/50">
                 <span>จดหมายถึงเจ้าของวันเกิด</span>
             </div>
-            <div id="node-wish" onclick="openModal('modal-wish')"
-                class="floating-node glass-panel px-3.5 py-2 rounded-full text-xs text-amber-200 flex items-center gap-2 border border-amber-400/50">
+            <div id="node-wish" onclick="openModal('modal-wish')" class="floating-node glass-panel px-3.5 py-2 rounded-full text-xs text-amber-200 flex items-center gap-2 border border-amber-400/50">
                 <span>เป่าเทียนอธิษฐาน</span>
             </div>
-            <div id="node-gift" onclick="openModal('modal-gift')"
-                class="floating-node glass-panel px-3.5 py-2 rounded-full text-xs text-purple-200 flex items-center gap-2 border border-purple-400/50">
+            <div id="node-gift" onclick="openModal('modal-gift')" class="floating-node glass-panel px-3.5 py-2 rounded-full text-xs text-purple-200 flex items-center gap-2 border border-purple-400/50">
                 <span>กล่องของขวัญ</span>
             </div>
-            <div id="node-gallery" onclick="openModal('modal-gallery')"
-                class="floating-node glass-panel px-3.5 py-2 rounded-full text-xs text-rose-200 flex items-center gap-2 border border-rose-400/50">
+            <div id="node-gallery" onclick="openModal('modal-gallery')" class="floating-node glass-panel px-3.5 py-2 rounded-full text-xs text-rose-200 flex items-center gap-2 border border-rose-400/50">
                 <span>ของขวัญชิ้นพิเศษและคำอวยพร</span>
             </div>
-            <!-- Tag 1: เปลี่ยนจาก HAPPY BIRTHDAY เป็น GIF -->
-            <div id="node-tag1" class="floating-node pointer-events-none">
-                <img src="mimi and neko.gif" alt="GIF 1"
-                    class="w-12 h-12 md:w-16 md:h-16 object-contain filter drop-shadow-[0_0_8px_rgba(255,105,180,0.8)]">
-            </div>
-
-            <!-- Tag 2: เปลี่ยนจาก ALWAYS U เป็น GIF -->
-            <div id="node-tag2" class="floating-node pointer-events-none">
-                <img src="cute-birthday.gif" class="w-16 h-16 object-contain mix-blend-multiply">
-            </div>
-
-            <!-- Tag 3: เปลี่ยนจาก MAKE A WISH 🎂 เป็น GIF -->
-            <div id="node-tag2" class="floating-node pointer-events-none">
-                <img src="tontonfriends-happy-birthday.gif" class="w-16 h-16 object-contain mix-blend-multiply">
-            </div>
-
-            <!-- Tag 4: เปลี่ยนจาก ONLY U เป็น GIF -->
-            <div id="node-tag2" class="floating-node pointer-events-none">
-                <img src="tobi-tonton-friends.gif" class="w-16 h-16 object-contain mix-blend-multiply">
-            </div>
+            <div id="node-tag1" class="floating-node text-[10px] text-pink-300/80 font-mono tracking-widest pointer-events-none">HAPPY BIRTHDAY</div>
+            <div id="node-tag2" class="floating-node text-[10px] text-purple-300/80 font-mono tracking-widest pointer-events-none">ALWAYS U</div>
+            <div id="node-tag3" class="floating-node text-[10px] text-amber-200/80 font-mono tracking-widest pointer-events-none">MAKE A WISH 🎂</div>
+            <div id="node-tag4" class="floating-node text-[10px] text-rose-300/80 font-mono tracking-widest pointer-events-none">ONLY U</div>
         </div>
 
         <!-- แถบเมนูด้านล่าง -->
-        <div id="bottomBar"
-            class="hidden pointer-events-auto fixed bottom-6 left-1/2 -translate-x-1/2 flex items-center gap-2 sm:gap-3 z-40 bg-slate-950/80 backdrop-blur-md p-2 rounded-full border border-pink-500/40 shadow-2xl">
-            <button onclick="openModal('modal-letter')"
-                class="glass-panel px-4 py-2.5 rounded-full text-xs font-medium text-pink-200 hover:bg-pink-500/30 transition-all flex items-center gap-1.5 cursor-pointer">
+        <div id="bottomBar" class="hidden pointer-events-auto fixed bottom-6 left-1/2 -translate-x-1/2 flex items-center gap-2 sm:gap-3 z-40 bg-slate-950/80 backdrop-blur-md p-2 rounded-full border border-pink-500/40 shadow-2xl">
+            <button onclick="openModal('modal-letter')" class="glass-panel px-4 py-2.5 rounded-full text-xs font-medium text-pink-200 hover:bg-pink-500/30 transition-all flex items-center gap-1.5 cursor-pointer">
                 <i class="fas fa-envelope"></i>
                 <span>จดหมาย</span>
             </button>
-            <button onclick="openModal('modal-wish')"
-                class="glass-panel px-4 py-2.5 rounded-full text-xs font-medium text-amber-200 hover:bg-amber-500/30 transition-all flex items-center gap-1.5 cursor-pointer">
+            <button onclick="openModal('modal-wish')" class="glass-panel px-4 py-2.5 rounded-full text-xs font-medium text-amber-200 hover:bg-amber-500/30 transition-all flex items-center gap-1.5 cursor-pointer">
                 <i class="fas fa-cake-candles"></i>
                 <span>เป่าเทียน</span>
             </button>
-            <button onclick="openModal('modal-gift')"
-                class="glass-panel px-4 py-2.5 rounded-full text-xs font-medium text-purple-200 hover:bg-purple-500/30 transition-all flex items-center gap-1.5 cursor-pointer">
+            <button onclick="openModal('modal-gift')" class="glass-panel px-4 py-2.5 rounded-full text-xs font-medium text-purple-200 hover:bg-purple-500/30 transition-all flex items-center gap-1.5 cursor-pointer">
                 <i class="fas fa-gift"></i>
                 <span>ของขวัญ</span>
             </button>
-            <button onclick="openModal('modal-gallery')"
-                class="glass-panel px-4 py-2.5 rounded-full text-xs font-medium text-rose-200 hover:bg-rose-500/30 transition-all flex items-center gap-1.5 cursor-pointer">
+            <button onclick="openModal('modal-gallery')" class="glass-panel px-4 py-2.5 rounded-full text-xs font-medium text-rose-200 hover:bg-rose-500/30 transition-all flex items-center gap-1.5 cursor-pointer">
                 <i class="fas fa-images"></i>
                 <span>รูปถ่าย</span>
             </button>
@@ -175,13 +143,10 @@
 
     <!-- MODAL POPUPS (หน้าต่างป๊อปอัป) -->
     <!-- Modal 1: Letter -->
-    <div id="modal-letter"
-        class="modal-wrapper pointer-events-auto fixed inset-0 z-50 items-center justify-center p-4 bg-black/75 backdrop-blur-md hidden">
-        <div
-            class="glass-panel w-full max-w-md p-6 sm:p-8 rounded-3xl relative text-slate-100 max-h-[85vh] overflow-y-auto shadow-2xl">
-            <button onclick="closeModal('modal-letter')"
-                class="absolute top-4 right-4 text-slate-400 hover:text-white w-8 h-8 flex items-center justify-center rounded-full bg-white/10 cursor-pointer">✕</button>
-
+    <div id="modal-letter" class="modal-wrapper pointer-events-auto fixed inset-0 z-50 items-center justify-center p-4 bg-black/75 backdrop-blur-md hidden">
+        <div class="glass-panel w-full max-w-md p-6 sm:p-8 rounded-3xl relative text-slate-100 max-h-[85vh] overflow-y-auto shadow-2xl">
+            <button onclick="closeModal('modal-letter')" class="absolute top-4 right-4 text-slate-400 hover:text-white w-8 h-8 flex items-center justify-center rounded-full bg-white/10 cursor-pointer">✕</button>
+            
             <div class="text-center mb-4">
                 <span class="text-2xl">💌</span>
                 <h3 class="text-xl font-bold text-pink-200 mt-1">จดหมายถึงเจ้าของวันเกิด</h3>
@@ -189,14 +154,12 @@
             </div>
 
             <div class="mb-4 overflow-hidden rounded-xl border border-pink-400/30">
-                <img src="GAI (2).jpg" alt="Photo" class="w-full h-48 object-cover"
-                    onerror="this.onerror=null; this.src='https://picsum.photos/400/250';">
+                <img src="GAI (2).jpg" alt="Photo" class="w-full h-48 object-cover" onerror="this.onerror=null; this.src='https://picsum.photos/400/250';">
             </div>
 
             <div class="space-y-3 text-xs sm:text-sm text-slate-200 leading-relaxed font-light">
                 <p class="font-medium text-pink-300 text-base">ถึง คุณณัฐกรณ์ (ไกด์)...</p>
-                <p>สุขสันต์วันเกิดนะครับ! 🎉 ขอให้ปีนี้เป็นปีที่ใจดีกับไกด์มากๆ มีแต่รอยยิ้ม ความสุข สุขภาพแข็งแรง
-                    และสมหวังในทุกๆ เรื่องที่ตั้งใจไว้นะ</p>
+                <p>สุขสันต์วันเกิดนะครับ! 🎉 ขอให้ปีนี้เป็นปีที่ใจดีกับไกด์มากๆ มีแต่รอยยิ้ม ความสุข สุขภาพแข็งแรง และสมหวังในทุกๆ เรื่องที่ตั้งใจไว้นะ</p>
                 <p>อยากขอขอบคุณไกด์สำหรับช่วงเวลา 3 ปีที่ผ่านมา ถือว่าเป็นช่วงเวลาที่สนุกและมีคุณค่ามากๆ</p>
                 <p>ขอให้เจอแต่เรื่องดีๆ โชคเข้าข้างไม่ว่าจะทำอะไร แล้วก็หัดกินข้าวซะบ้างนะ! 😂</p>
                 <div class="pt-4 text-right text-pink-300 font-medium text-xs">
@@ -207,79 +170,65 @@
     </div>
 
     <!-- Modal 2: Blow Candle & Make a Wish (แทนที่เวลา) -->
-    <div id="modal-wish"
-        class="modal-wrapper pointer-events-auto fixed inset-0 z-50 items-center justify-center p-4 bg-black/75 backdrop-blur-md hidden">
+    <div id="modal-wish" class="modal-wrapper pointer-events-auto fixed inset-0 z-50 items-center justify-center p-4 bg-black/75 backdrop-blur-md hidden">
         <div class="glass-panel w-full max-w-md p-6 rounded-3xl relative text-center text-slate-100 shadow-2xl">
-            <button onclick="closeModal('modal-wish')"
-                class="absolute top-4 right-4 text-slate-400 hover:text-white w-8 h-8 flex items-center justify-center rounded-full bg-white/10 cursor-pointer">✕</button>
-
+            <button onclick="closeModal('modal-wish')" class="absolute top-4 right-4 text-slate-400 hover:text-white w-8 h-8 flex items-center justify-center rounded-full bg-white/10 cursor-pointer">✕</button>
+            
             <span class="text-4xl animate-bounce inline-block my-2">🕯️</span>
             <h3 class="text-xl font-bold text-amber-200 mt-1">อธิษฐานและเป่าเทียนวันเกิด</h3>
             <p class="text-xs text-slate-300 mb-6 font-light">ตั้งจิตอธิษฐานในใจ แล้วกดปุ่มเป่าเทียนได้เลยนะ ✨</p>
 
-            <button onclick="blowCandleEffect()"
-                class="bg-gradient-to-r from-amber-500 to-pink-500 hover:from-amber-600 hover:to-pink-600 text-white font-medium text-sm px-6 py-3 rounded-full transition-all duration-300 hover:scale-105 shadow-lg w-full mb-4 cursor-pointer flex items-center justify-center gap-2">
+            <button onclick="blowCandleEffect()" class="bg-gradient-to-r from-amber-500 to-pink-500 hover:from-amber-600 hover:to-pink-600 text-white font-medium text-sm px-6 py-3 rounded-full transition-all duration-300 hover:scale-105 shadow-lg w-full mb-4 cursor-pointer flex items-center justify-center gap-2">
                 <i class="fas fa-wind"></i>
                 <span>เป่าเทียนวันเกิด 🎂💨</span>
             </button>
 
-            <div id="wish-success-msg"
-                class="hidden bg-amber-900/40 p-4 rounded-2xl border border-amber-400/50 text-xs text-amber-200 leading-relaxed animate-fade-in">
+            <div id="wish-success-msg" class="hidden bg-amber-900/40 p-4 rounded-2xl border border-amber-400/50 text-xs text-amber-200 leading-relaxed animate-fade-in">
                 🎉 ขอให้คำอธิษฐานของไกด์เป็นจริงทุกประการ! มีแต่ความสุข รอยยิ้ม และความโชคดีตลอดทั้งปีนะ! ✨❤️
             </div>
         </div>
     </div>
 
     <!-- Modal 3: Surprise Gift Box (แทนที่การ์ดทำนาย) -->
-    <div id="modal-gift"
-        class="modal-wrapper pointer-events-auto fixed inset-0 z-50 items-center justify-center p-4 bg-black/75 backdrop-blur-md hidden">
+    <div id="modal-gift" class="modal-wrapper pointer-events-auto fixed inset-0 z-50 items-center justify-center p-4 bg-black/75 backdrop-blur-md hidden">
         <div class="glass-panel w-full max-w-md p-6 rounded-3xl relative text-center text-slate-100 shadow-2xl">
-            <button onclick="closeModal('modal-gift')"
-                class="absolute top-4 right-4 text-slate-400 hover:text-white w-8 h-8 flex items-center justify-center rounded-full bg-white/10 cursor-pointer">✕</button>
+            <button onclick="closeModal('modal-gift')" class="absolute top-4 right-4 text-slate-400 hover:text-white w-8 h-8 flex items-center justify-center rounded-full bg-white/10 cursor-pointer">✕</button>
 
             <span class="text-3xl">🎁</span>
             <h3 class="text-xl font-bold text-purple-200 mt-2">กล่องของขวัญพิเศษ</h3>
             <p class="text-xs text-slate-300 mb-6 font-light">เลือกเปิดกล่องของขวัญ 1 ใบ เพื่อรับคูปองความสุข</p>
 
             <div class="grid grid-cols-3 gap-3 mb-6">
-                <button onclick="openGift(1)"
-                    class="p-4 rounded-2xl bg-gradient-to-br from-purple-800 to-pink-900 border border-purple-400/40 hover:scale-105 transition-transform text-center cursor-pointer shadow-lg">
+                <button onclick="openGift(1)" class="p-4 rounded-2xl bg-gradient-to-br from-purple-800 to-pink-900 border border-purple-400/40 hover:scale-105 transition-transform text-center cursor-pointer shadow-lg">
                     <span class="text-2xl block mb-1">🧋</span>
                     <span class="text-[10px] text-purple-200 font-medium">กล่องที่ 1</span>
                 </button>
-                <button onclick="openGift(2)"
-                    class="p-4 rounded-2xl bg-gradient-to-br from-purple-800 to-pink-900 border border-purple-400/40 hover:scale-105 transition-transform text-center cursor-pointer shadow-lg">
+                <button onclick="openGift(2)" class="p-4 rounded-2xl bg-gradient-to-br from-purple-800 to-pink-900 border border-purple-400/40 hover:scale-105 transition-transform text-center cursor-pointer shadow-lg">
                     <span class="text-2xl block mb-1">🎟️</span>
                     <span class="text-[10px] text-purple-200 font-medium">กล่องที่ 2</span>
                 </button>
-                <button onclick="openGift(3)"
-                    class="p-4 rounded-2xl bg-gradient-to-br from-purple-800 to-pink-900 border border-purple-400/40 hover:scale-105 transition-transform text-center cursor-pointer shadow-lg">
+                <button onclick="openGift(3)" class="p-4 rounded-2xl bg-gradient-to-br from-purple-800 to-pink-900 border border-purple-400/40 hover:scale-105 transition-transform text-center cursor-pointer shadow-lg">
                     <span class="text-2xl block mb-1">❤️</span>
                     <span class="text-[10px] text-purple-200 font-medium">กล่องที่ 3</span>
                 </button>
             </div>
 
-            <div id="gift-result"
-                class="hidden bg-purple-950/80 p-4 rounded-2xl border border-purple-400/50 text-xs text-purple-200 leading-relaxed font-light">
+            <div id="gift-result" class="hidden bg-purple-950/80 p-4 rounded-2xl border border-purple-400/50 text-xs text-purple-200 leading-relaxed font-light">
             </div>
         </div>
     </div>
 
     <!-- Modal 4: Photo Gallery -->
-    <div id="modal-gallery"
-        class="modal-wrapper pointer-events-auto fixed inset-0 z-50 items-center justify-center p-4 bg-black/75 backdrop-blur-md hidden">
+    <div id="modal-gallery" class="modal-wrapper pointer-events-auto fixed inset-0 z-50 items-center justify-center p-4 bg-black/75 backdrop-blur-md hidden">
         <div class="glass-panel w-full max-w-md p-6 rounded-3xl relative text-center text-slate-100 shadow-2xl">
-            <button onclick="closeModal('modal-gallery')"
-                class="absolute top-4 right-4 text-slate-400 hover:text-white w-8 h-8 flex items-center justify-center rounded-full bg-white/10 cursor-pointer">✕</button>
+            <button onclick="closeModal('modal-gallery')" class="absolute top-4 right-4 text-slate-400 hover:text-white w-8 h-8 flex items-center justify-center rounded-full bg-white/10 cursor-pointer">✕</button>
 
             <span class="text-3xl">📸</span>
             <h3 class="text-xl font-bold text-rose-200 mt-2">อัลบั้มโพลารอยด์ความทรงจำ</h3>
             <p class="text-xs text-slate-300 mb-4 font-light">Moments With You</p>
 
-            <div
-                class="bg-white p-3 rounded-xl shadow-2xl text-slate-800 transform hover:rotate-0 transition-transform duration-300 rotate-1 my-2">
-                <img src="GAI.jpg" alt="Polaroid" class="w-full h-56 object-cover rounded"
-                    onerror="this.onerror=null; this.src='https://picsum.photos/400/300';">
+            <div class="bg-white p-3 rounded-xl shadow-2xl text-slate-800 transform hover:rotate-0 transition-transform duration-300 rotate-1 my-2">
+                <img src="GAI.jpg" alt="Polaroid" class="w-full h-56 object-cover rounded" onerror="this.onerror=null; this.src='https://picsum.photos/400/300';">
                 <div class="mt-3 text-center text-sm font-semibold tracking-wider text-slate-700">
                     HAPPY BIRTHDAY GAI ❤️
                 </div>
@@ -302,7 +251,7 @@
             { id: 'node-wish', radius: 15, angle: Math.PI * 0.5, speed: 0.005, y: -1 },
             { id: 'node-gift', radius: 15, angle: Math.PI, speed: 0.005, y: 1 },
             { id: 'node-gallery', radius: 15, angle: Math.PI * 1.5, speed: 0.005, y: -1 },
-
+            
             { id: 'node-tag1', radius: 22, angle: 0.8, speed: 0.003, y: 3 },
             { id: 'node-tag2', radius: 20, angle: 2.3, speed: 0.003, y: -2 },
             { id: 'node-tag3', radius: 25, angle: 3.8, speed: 0.003, y: 2 },
@@ -564,14 +513,14 @@
                         colors: ['#ff758c', '#a855f7', '#f6d365', '#fbbf24']
                     });
                 }
-            } catch (e) { }
+            } catch(e) {}
 
             const music = document.getElementById('bgMusic');
             if (music) {
                 music.play().then(() => {
                     isAudioPlaying = true;
                     document.getElementById('musicText').innerText = "พักเสียง 🎵";
-                }).catch(() => { });
+                }).catch(() => {});
             }
         }
 
@@ -617,7 +566,7 @@
                         colors: ['#fbbf24', '#ff758c', '#38bdf8', '#a855f7']
                     });
                 }
-            } catch (e) { }
+            } catch(e) {}
         }
 
         // เอฟเฟกต์สุ่มเปิดกล่องของขวัญ
@@ -639,7 +588,7 @@
                         origin: { y: 0.6 }
                     });
                 }
-            } catch (e) { }
+            } catch(e) {}
         }
 
         window.onload = function () {
@@ -648,5 +597,4 @@
         };
     </script>
 </body>
-
 </html>
