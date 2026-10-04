@@ -78,7 +78,7 @@
                 </div>
                 <h1 class="text-3xl font-bold text-pink-200 mb-2 glow-text">Happy Birthday</h1>
                 <h2 class="text-xl font-medium text-purple-300 mb-4">Mr. Nattakorn Dokmaiwai</h2>
-                <p class="text-slate-300 text-xs sm:text-sm mb-8 font-light">กดเพื่อเปิดท่องจักรวาลเค้กวันเกิด 3D ✨</p>
+                <p class="text-slate-300 text-xs sm:text-sm mb-8 font-light">กดเพื่อเปิดไป ..... ✨</p>
                 
                 <button onclick="start3DExperience()" class="bg-gradient-to-r from-pink-500 to-purple-600 hover:from-pink-600 hover:to-purple-700 text-white font-medium text-base sm:text-lg px-8 py-3.5 rounded-full transition-all duration-300 hover:scale-105 shadow-xl w-full flex items-center justify-center gap-2 cursor-pointer">
                     <span>MAKE A WISH 🎂✨</span>
@@ -90,7 +90,7 @@
         <div id="topBar" class="hidden pointer-events-auto fixed top-5 left-5 right-5 flex justify-between items-center z-40">
             <div class="glass-panel px-4 py-2 rounded-full text-xs sm:text-sm font-medium text-pink-200 flex items-center gap-2">
                 <i class="fas fa-sparkles text-amber-300"></i>
-                <span>GAI'S BIRTHDAY CAKE 3D</span>
+                <span>GAI'S BIRTHDAY</span>
             </div>
 
             <button id="musicBtn" onclick="toggleAudio()" class="glass-panel px-4 py-2 rounded-full text-xs sm:text-sm font-medium text-pink-200 hover:bg-pink-500/30 transition-all flex items-center gap-2 cursor-pointer">
@@ -169,7 +169,7 @@
         </div>
     </div>
 
-    <!-- Modal 2: Blow Candle & Make a Wish (แทนที่เวลา) -->
+    <!-- Modal 2: Blow Candle & Make a Wish -->
     <div id="modal-wish" class="modal-wrapper pointer-events-auto fixed inset-0 z-50 items-center justify-center p-4 bg-black/75 backdrop-blur-md hidden">
         <div class="glass-panel w-full max-w-md p-6 rounded-3xl relative text-center text-slate-100 shadow-2xl">
             <button onclick="closeModal('modal-wish')" class="absolute top-4 right-4 text-slate-400 hover:text-white w-8 h-8 flex items-center justify-center rounded-full bg-white/10 cursor-pointer">✕</button>
@@ -189,7 +189,7 @@
         </div>
     </div>
 
-    <!-- Modal 3: Surprise Gift Box (แทนที่การ์ดทำนาย) -->
+    <!-- Modal 3: Surprise Gift Box -->
     <div id="modal-gift" class="modal-wrapper pointer-events-auto fixed inset-0 z-50 items-center justify-center p-4 bg-black/75 backdrop-blur-md hidden">
         <div class="glass-panel w-full max-w-md p-6 rounded-3xl relative text-center text-slate-100 shadow-2xl">
             <button onclick="closeModal('modal-gift')" class="absolute top-4 right-4 text-slate-400 hover:text-white w-8 h-8 flex items-center justify-center rounded-full bg-white/10 cursor-pointer">✕</button>
@@ -240,12 +240,10 @@
     <audio id="bgMusic" loop src="Dandelions┃EPIC VERSION - Extended - Alex Owly.mp3"></audio>
 
     <script>
-        // THREE.JS 3D GALAXY & CAKE ENGINE
         let scene, camera, renderer, controls;
         let galaxyParticles, cakeParticles;
         let isAudioPlaying = false;
 
-        // ข้อมูลพิกัดไอคอนลอยหมุนรอบกาแล็กซี
         const orbitLabels = [
             { id: 'node-letter', radius: 15, angle: 0, speed: 0.005, y: 1 },
             { id: 'node-wish', radius: 15, angle: Math.PI * 0.5, speed: 0.005, y: -1 },
@@ -261,21 +259,17 @@
         function initThreeJS() {
             const container = document.getElementById('webgl-container');
 
-            // 1. Scene & Fog
             scene = new THREE.Scene();
             scene.fog = new THREE.FogExp2(0x05020a, 0.015);
 
-            // 2. Camera
             camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.1, 1000);
             camera.position.set(0, 12, 32);
 
-            // 3. Renderer
             renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
             renderer.setSize(window.innerWidth, window.innerHeight);
             renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
             container.appendChild(renderer.domElement);
 
-            // 4. Orbit Controls (ลากหมุนมุมกล้องได้ 360 องศา)
             controls = new THREE.OrbitControls(camera, renderer.domElement);
             controls.enableDamping = true;
             controls.dampingFactor = 0.05;
@@ -284,17 +278,12 @@
             controls.autoRotate = true;
             controls.autoRotateSpeed = 0.8;
 
-            // 5. สร้างกาแล็กซีพาร์ติเคิล 3D
             createGalaxy();
-
-            // 6. สร้างเค้กวันเกิด 3 มิติจากพาร์ติเคิล
             create3DCake();
 
-            // Resize Handler
             window.addEventListener('resize', onWindowResize);
         }
 
-        // ฟังก์ชันสร้างกาแล็กซีพาร์ติเคิล
         function createGalaxy() {
             const particleCount = 25000;
             const geometry = new THREE.BufferGeometry();
@@ -344,7 +333,6 @@
             scene.add(galaxyParticles);
         }
 
-        // ฟังก์ชันสร้างเค้กวันเกิด 3D
         function create3DCake() {
             const cakeParticleCount = 9000;
             const geometry = new THREE.BufferGeometry();
@@ -441,7 +429,6 @@
             return texture;
         }
 
-        // คำนวณตำแหน่ง 3D เป็นพิกัดหน้าจอ 2D
         function updateLabels() {
             orbitLabels.forEach(item => {
                 item.angle += item.speed;
@@ -491,7 +478,6 @@
             renderer.setSize(window.innerWidth, window.innerHeight);
         }
 
-        // ฟังก์ชันระบบตอบสนอง UI
         function start3DExperience() {
             const overlay = document.getElementById('startOverlay');
             overlay.style.opacity = '0';
@@ -554,7 +540,6 @@
             }
         }
 
-        // เอฟเฟกต์เป่าเทียนอธิษฐาน
         function blowCandleEffect() {
             document.getElementById('wish-success-msg').classList.remove('hidden');
             try {
@@ -569,12 +554,11 @@
             } catch(e) {}
         }
 
-        // เอฟเฟกต์สุ่มเปิดกล่องของขวัญ
         function openGift(num) {
             const gifts = [
-                "🧋 **คูปองเลี้ยงชาไข่มุก/น้ำหวาน 1 แก้ว!** (นำคูปองนี้ไปขึ้นเงินรางวัลได้เลย 😂)",
-                "🎟️️ **คูปองขออะไรก็ได้ 1 อย่าง!** (สิทธิ์พิเศษสำหรับเจ้าของวันเกิดโดยเฉพาะ)",
-                "❤️ **กล่องความรักและความหวังดี:** ขอให้ไกด์มีความสุข ยิ้มเยอะๆ ในทุกๆ วันนะ!"
+                "🧋 <b>คูปองเลี้ยงชาไข่มุก/น้ำหวาน 1 แก้ว!</b> (นำคูปองนี้ไปขึ้นเงินรางวัลได้เลย 😂)",
+                "🎟️ <b>คูปองขออะไรก็ได้ 1 อย่าง!</b> (สิทธิ์พิเศษสำหรับเจ้าของวันเกิดโดยเฉพาะ)",
+                "❤️ <b>กล่องความรักและความหวังดี:</b> ขอให้ไกด์มีความสุข ยิ้มเยอะๆ ในทุกๆ วันนะ!"
             ];
             const resultBox = document.getElementById('gift-result');
             resultBox.innerHTML = gifts[num - 1];
