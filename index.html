@@ -121,8 +121,11 @@
 
 <body class="relative text-slate-100 flex flex-col justify-between selection:bg-pink-500 selection:text-white">
 
-    <!-- แท็กเล่นไฟล์เพลง MP3 -->
+    <!-- แท็กเล่นไฟล์เพลงพื้นหลัง & เสียงเอฟเฟกต์ -->
     <audio id="bgMusic" loop src="Dandelions┃EPIC VERSION - Extended - Alex Owly.mp3"></audio>
+    <audio id="sfxClick" src="matthewvakaliuk73627-mouse-click-290204.mp3" preload="auto"></audio>
+    <audio id="sfxBlow" src="matthewvakaliuk73627-mouse-click-290204.mp3" preload="auto"></audio>
+    <audio id="sfxConfetti" src="matthewvakaliuk73627-mouse-click-290204.mp3" preload="auto"></audio>
 
     <canvas id="starsCanvas" class="stars-bg"></canvas>
 
@@ -140,10 +143,18 @@
         </div>
     </div>
 
-    <!-- Background Music Toggle Button -->
-    <div class="fixed top-5 right-5 z-40 flex items-center gap-2">
+    <!-- Navigation Top Bar: ปุ่มย้อนกลับ & ปุ่มเพลง -->
+    <div class="fixed top-5 left-5 right-5 z-40 flex justify-between items-center pointer-events-none">
+        <!-- ปุ่มย้อนกลับ (ซ่อนอยู่ถ้าอยู่หน้าแรก) -->
+        <button id="backBtn" onclick="goBack()"
+            class="hidden pointer-events-auto glass-card px-4 py-2 rounded-full text-xs sm:text-sm font-medium flex items-center gap-2 hover:bg-white/20 transition-all border border-white/20 shadow-lg text-pink-200">
+            <i class="fas fa-arrow-left"></i>
+            <span>ย้อนกลับ</span>
+        </button>
+
+        <!-- ปุ่มเปิด/ปิดเพลง -->
         <button id="musicToggleBtn" onclick="toggleAudio()"
-            class="glass-card px-4 py-2.5 rounded-full text-xs sm:text-sm font-medium flex items-center gap-2 hover:bg-white/20 transition-all border border-white/20 shadow-lg">
+            class="pointer-events-auto ml-auto glass-card px-4 py-2.5 rounded-full text-xs sm:text-sm font-medium flex items-center gap-2 hover:bg-white/20 transition-all border border-white/20 shadow-lg">
             <i id="musicIcon" class="fas fa-music text-pink-400"></i>
             <span id="musicText">เปิดเพลงบรรยากาศ 🎵</span>
         </button>
@@ -169,7 +180,7 @@
                 เนื่องในโอกาศวันเกิดครบรอบ18ปี หวังว่าจะชอบของขวัญเล็กๆน้อยๆชิ้นนี้นะ
             </p>
 
-            <button onclick="goToScene('scene-cake')"
+            <button onclick="playClickSFX(); goToScene('scene-cake')"
                 class="pulse-glow bg-gradient-to-r from-pink-500 via-rose-500 to-purple-600 hover:from-pink-600 hover:to-purple-700 text-white font-medium text-lg sm:text-xl px-8 py-4 rounded-full transition-all duration-300 hover:scale-105 flex items-center gap-3 shadow-xl">
                 <span>ไปอธิษฐานวันเกิดกัน</span>
                 <i class="fas fa-heart text-pink-200 animate-bounce"></i>
@@ -226,7 +237,7 @@
                 </div>
             </div>
 
-            <button id="nextToTimelineBtn" onclick="goToScene('scene-letter')"
+            <button id="nextToTimelineBtn" onclick="playClickSFX(); goToScene('scene-letter')"
                 class="d-none hidden mt-8 bg-white/10 hover:bg-white/20 text-white px-8 py-3 rounded-full transition-all border border-white/20 items-center gap-2">
                 <span>อ่านจดหมายพิเศษ 💌</span>
                 <i class="fas fa-arrow-right"></i>
@@ -282,7 +293,7 @@
                 </div>
 
                 <div class="mt-8 text-center pt-4 border-t border-white/10">
-                    <button onclick="goToScene('scene-future')"
+                    <button onclick="playClickSFX(); goToScene('scene-future')"
                         class="bg-gradient-to-r from-pink-500 to-rose-500 text-white font-medium px-8 py-3 rounded-full hover:scale-105 transition-all shadow-lg text-sm flex items-center gap-2 mx-auto">
                         <span>ของขวัญชิ้นสุดท้าย🎁</span>
                         <i class="fas fa-gift"></i>
@@ -322,7 +333,7 @@
                     <span>ลองกดดูสิ</span>
                 </button>
 
-                <button onclick="copyBirthdayWish()"
+                <button onclick="playClickSFX(); copyBirthdayWish()"
                     class="bg-white/10 hover:bg-white/20 text-white font-medium px-6 py-3.5 rounded-full transition-all border border-white/20 flex items-center gap-2">
                     <i class="fas fa-copy text-pink-300"></i>
                     <span id="copyBtnText">คัดลอกคำอวยพร</span>
@@ -330,16 +341,63 @@
             </div>
 
             <p class="text-xs text-slate-400 mt-8 font-light">
-                Happy Birthday ครับ! 🎂✨
+                ขอบคุณนะกายที่ทำให้โลกนี้น่าอยู่ขึ้นเสมอ Happy Birthday ครับ! 🎂✨
             </p>
         </section>
 
     </div>
 
+    <!-- Modal แจ้งเตือนเมื่อคัดลอกคำอวยพรสำเร็จ -->
+    <div id="copyModal" class="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm hidden transition-opacity duration-300">
+        <div class="glass-card p-6 sm:p-8 rounded-3xl text-center max-w-sm mx-4 border border-pink-400/50 shadow-2xl animate-fade-in">
+            <div class="w-16 h-16 bg-pink-500/20 text-pink-300 rounded-full flex items-center justify-center mx-auto mb-4 text-2xl">
+                <i class="fas fa-check-circle"></i>
+            </div>
+            <h3 class="text-xl font-bold text-pink-200 mb-2">คัดลอกคำอวยพรเรียบร้อย! ✨</h3>
+            <p class="text-xs text-slate-400 mb-3">คำอวยพรที่คุณได้รับคือ:</p>
+            
+            <!-- ข้อความคำอวยพรที่คัดลอก -->
+            <div id="modalWishText" class="bg-slate-900/80 p-4 rounded-xl text-sm text-pink-100 border border-white/10 mb-6 italic text-left leading-relaxed"></div>
+            
+            <button onclick="closeCopyModal()" class="bg-gradient-to-r from-pink-500 to-purple-600 text-white font-medium px-6 py-2.5 rounded-full text-sm hover:scale-105 transition-all shadow-lg w-full">
+                ตกลง 👍
+            </button>
+        </div>
+    </div>
+
     <script>
         let isPlayingAudio = false;
+        let sceneHistory = ['scene-entry']; // ตัวแปรเก็บประวัติการเปิดหน้า
+
+        // ฟังก์ชันเล่นเสียงเอฟเฟกต์คลิกทั่วไป
+        function playClickSFX() {
+            const clickSFX = document.getElementById('sfxClick');
+            if (clickSFX) {
+                clickSFX.currentTime = 0;
+                clickSFX.play().catch(() => {});
+            }
+        }
+
+        // ฟังก์ชันเล่นเสียงเป่าเทียน
+        function playBlowSFX() {
+            const blowSFX = document.getElementById('sfxBlow');
+            if (blowSFX) {
+                blowSFX.currentTime = 0;
+                blowSFX.play().catch(() => {});
+            }
+        }
+
+        // ฟังก์ชันเล่นเสียงพลุ Confetti
+        function playConfettiSFX() {
+            const confettiSFX = document.getElementById('sfxConfetti');
+            if (confettiSFX) {
+                confettiSFX.currentTime = 0;
+                confettiSFX.play().catch(() => {});
+            }
+        }
 
         function startExperience() {
+            playClickSFX();
             const audio = document.getElementById('bgMusic');
             const overlay = document.getElementById('startOverlay');
 
@@ -359,6 +417,7 @@
         }
 
         function toggleAudio() {
+            playClickSFX();
             const audio = document.getElementById('bgMusic');
 
             if (!isPlayingAudio) {
@@ -385,7 +444,8 @@
             }
         }
 
-        function goToScene(sceneId) {
+        // ฟังก์ชันเปลี่ยนหน้า
+        function goToScene(sceneId, isBack = false) {
             document.querySelectorAll('section').forEach(sec => {
                 sec.classList.add('d-none', 'hidden');
             });
@@ -394,9 +454,36 @@
             if (targetScene) {
                 targetScene.classList.remove('d-none', 'hidden');
             }
+
+            // บันทึกประวัติหน้าเพื่อใช้ในการย้อนกลับ
+            if (!isBack) {
+                if (sceneHistory[sceneHistory.length - 1] !== sceneId) {
+                    sceneHistory.push(sceneId);
+                }
+            }
+
+            // แสดง/ซ่อน ปุ่มย้อนกลับตามความเหมาะสม
+            const backBtn = document.getElementById('backBtn');
+            if (sceneHistory.length > 1) {
+                backBtn.classList.remove('hidden');
+            } else {
+                backBtn.classList.add('hidden');
+            }
+        }
+
+        // ฟังก์ชันย้อนกลับไปยังหน้าก่อนหน้า
+        function goBack() {
+            playClickSFX();
+            if (sceneHistory.length > 1) {
+                sceneHistory.pop(); // เอาหน้าปัจจุบันออก
+                const previousScene = sceneHistory[sceneHistory.length - 1]; // ดึงหน้าก่อนหน้า
+                goToScene(previousScene, true);
+            }
         }
 
         function blowCandles() {
+            playBlowSFX();
+            
             const flame = document.getElementById('flame1');
             const smoke = document.getElementById('smoke1');
             const blownMsg = document.getElementById('candleBlownMsg');
@@ -406,12 +493,15 @@
             flame.classList.add('out');
             smoke.classList.add('active');
 
-            confetti({
-                particleCount: 120,
-                spread: 80,
-                origin: { y: 0.6 },
-                colors: ['#ff758c', '#ff7eb3', '#f7d794', '#ffffff']
-            });
+            setTimeout(() => {
+                playConfettiSFX();
+                confetti({
+                    particleCount: 120,
+                    spread: 80,
+                    origin: { y: 0.6 },
+                    colors: ['#ff758c', '#ff7eb3', '#f7d794', '#ffffff']
+                });
+            }, 300);
 
             blowBtn.classList.add('hidden');
             blownMsg.classList.remove('hidden');
@@ -420,6 +510,9 @@
         }
 
         function openLetter() {
+            playClickSFX();
+            playConfettiSFX();
+
             const container = document.getElementById('envelopeContainer');
             const content = document.getElementById('letterContent');
 
@@ -435,6 +528,9 @@
         }
 
         function triggerHeartShower() {
+            playClickSFX();
+            playConfettiSFX();
+
             const duration = 3 * 1000;
             const animationEnd = Date.now() + duration;
 
@@ -461,8 +557,9 @@
             }());
         }
 
+        // ฟังก์ชันคัดลอกคำอวยพรพร้อมเปิด Modal แจ้งเตือนข้อความ
         function copyBirthdayWish() {
-            const wishText = "สุขสันต์วันเกิดไกด์! 🎂 ขอให้ปีนี้ไกด์มีความสุขมากๆ มีรอยยิ้มสดใสในทุกๆ วัน❤️";
+            const wishText = "สุขสันต์วันเกิดไกด์! 🎂 ขอให้ปีนี้ไกด์มีความสุขมากๆ มีรอยยิ้มสดใสในทุกๆ วัน❤️️";
 
             const tempInput = document.createElement("textarea");
             tempInput.value = wishText;
@@ -471,11 +568,14 @@
             document.execCommand("copy");
             document.body.removeChild(tempInput);
 
-            const copyBtnText = document.getElementById('copyBtnText');
-            copyBtnText.innerText = "คัดลอกคำอวยพรเรียบร้อย! ✨";
-            setTimeout(() => {
-                copyBtnText.innerText = "คัดลอกคำอวยพร";
-            }, 2500);
+            // แสดง Modal แสดงคำอวยพร
+            document.getElementById('modalWishText').innerText = `"${wishText}"`;
+            document.getElementById('copyModal').classList.remove('hidden');
+        }
+
+        function closeCopyModal() {
+            playClickSFX();
+            document.getElementById('copyModal').classList.add('hidden');
         }
 
         const canvas = document.getElementById('starsCanvas');
