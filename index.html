@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Happy Birthday To Mr. Nattakorn Dokmaiwai</title>
+    <title>Happy Birthday To GAI</title>
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- Google Fonts: Prompt & Mitr -->
@@ -38,7 +38,7 @@
     <style>
         body {
             font-family: 'Prompt', sans-serif;
-            background: linear-gradient(135deg, #0f172a 0%, #1e1136 50%, #120722 100%);
+            background: linear-gradient(135deg, #0f172a 0%, #2d1b4e 50%, #1a0b2e 100%);
             color: #f8fafc;
             overflow-x: hidden;
             min-height: 100vh;
@@ -54,6 +54,7 @@
             z-index: 0;
         }
 
+        /* Smooth Animation สำหรับการเปลี่ยนหน้า */
         .scene-transition {
             animation: smoothFadeIn 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
         }
@@ -69,29 +70,21 @@
             }
         }
 
+        /* Animation ลอยเอื่อยๆ สำหรับ GIF และรูปภาพ */
         @keyframes floatGentle {
             0%, 100% { transform: translateY(0px) rotate(0deg); }
-            50% { transform: translateY(-8px) rotate(2deg); }
+            50% { transform: translateY(-8px) rotate(1deg); }
         }
 
         .animate-float-gentle {
             animation: floatGentle 4s ease-in-out infinite;
         }
 
-        /* เอฟเฟกต์กระจกฝ้า Premium Glassmorphism */
-        .frosted-glass {
+        .glass-card {
             background: rgba(255, 255, 255, 0.07);
-            backdrop-filter: blur(18px);
-            -webkit-backdrop-filter: blur(18px);
-            border: 1px solid rgba(255, 255, 255, 0.18);
-            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.4), inset 0 0 15px rgba(255, 255, 255, 0.05);
-        }
-
-        /* เอฟเฟกต์เบลอสำหรับรูปเค้กพื้นหลัง */
-        .blurred-cake-bg {
-            filter: blur(7px) brightness(0.85);
-            opacity: 0.65;
-            transition: all 0.5s ease;
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.12);
         }
 
         .candle-flame {
@@ -126,15 +119,16 @@
             100% { opacity: 0; transform: translateY(-60px) scale(3); }
         }
 
-        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar { width: 8px; }
         ::-webkit-scrollbar-track { background: #0f172a; }
-        ::-webkit-scrollbar-thumb { background: #ff758c; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb { background: #3b0764; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #ff758c; }
     </style>
 </head>
 
-<body class="relative text-slate-100 flex flex-col justify-between selection:bg-pink-500 selection:text-white min-h-screen">
+<body class="relative text-slate-100 flex flex-col justify-between selection:bg-pink-500 selection:text-white">
 
-    <!-- Audio Elements -->
+    <!-- เสียงเพลง & เสียงเอฟเฟกต์ -->
     <audio id="bgMusic" loop src="Dandelions┃EPIC VERSION - Extended - Alex Owly.mp3"></audio>
     <audio id="sfxClick" src="matthewvakaliuk73627-mouse-click-290204.mp3" preload="auto"></audio>
     <audio id="sfxBlow" src="blow.mp3" preload="auto"></audio>
@@ -144,183 +138,163 @@
 
     <!-- ================= START OVERLAY ================= -->
     <div id="startOverlay" class="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/90 backdrop-blur-md transition-opacity duration-500">
-        <div class="frosted-glass p-6 sm:p-8 rounded-3xl text-center max-w-sm mx-4 shadow-2xl border border-pink-500/30">
-            <div class="w-24 h-24 mx-auto mb-3 animate-float-gentle">
-                <img src="https://media.giphy.com/media/l41K3o5TksKlcXSKs/giphy.gif" alt="Gift Box" class="w-full h-full object-contain">
+        <div class="glass-card p-8 sm:p-10 rounded-3xl text-center max-w-md mx-4 shadow-2xl border border-pink-500/30">
+            
+            <!-- 🖼️ [GIF 1] เปลี่ยนจากไอคอนเป็น GIF กล่องของขวัญ -->
+            <div class="w-28 h-28 mx-auto mb-4 animate-float-gentle">
+                <img src="gift-box.gif" alt="Gift Box" class="w-full h-full object-contain drop-shadow-[0_10px_15px_rgba(255,117,140,0.3)]" onerror="this.src='https://media.giphy.com/media/l41K3o5TksKlcXSKs/giphy.gif'">
             </div>
-            <h2 class="text-xl sm:text-2xl font-bold text-pink-200 mb-2">มีของขวัญส่งถึงคุณ ✨</h2>
-            <p class="text-slate-300 text-xs sm:text-sm mb-6 font-light">กดปุ่มด้านล่างเพื่อเข้าสู่การ์ดวันเกิดสุดพิเศษ</p>
-            <button onclick="startExperience()" class="bg-gradient-to-r from-pink-500 to-purple-600 hover:from-pink-600 hover:to-purple-700 text-white font-medium text-base px-6 py-3 rounded-full transition-all duration-300 hover:scale-105 shadow-xl w-full flex items-center justify-center gap-2">
+
+            <h2 class="text-2xl sm:text-3xl font-bold text-pink-200 mb-3">มีของขวัญส่งถึงคุณ ✨</h2>
+            <p class="text-slate-300 text-sm mb-8 font-light">กดปุ่มด้านล่างเพื่อเปิดการ์ดวันเกิดและเสียงเพลงบรรยากาศสุดพิเศษ</p>
+            <button onclick="startExperience()" class="bg-gradient-to-r from-pink-500 to-purple-600 hover:from-pink-600 hover:to-purple-700 text-white font-medium text-lg px-8 py-4 rounded-full transition-all duration-300 hover:scale-105 shadow-xl w-full flex items-center justify-center gap-2">
                 <span>เปิดการ์ดวันเกิด 🎁</span>
             </button>
         </div>
     </div>
 
-    <!-- Navigation Bar -->
-    <div class="fixed top-4 left-4 right-4 z-40 flex justify-between items-center pointer-events-none">
+    <!-- Navigation Top Bar -->
+    <div class="fixed top-5 left-5 right-5 z-40 flex justify-between items-center pointer-events-none">
         <button id="backBtn" onclick="goBack()"
-            class="hidden pointer-events-auto frosted-glass px-3.5 py-1.5 rounded-full text-xs font-medium flex items-center gap-2 hover:bg-white/20 transition-all text-pink-200">
+            class="hidden pointer-events-auto glass-card px-4 py-2 rounded-full text-xs sm:text-sm font-medium flex items-center gap-2 hover:bg-white/20 transition-all border border-white/20 shadow-lg text-pink-200">
             <i class="fas fa-arrow-left"></i>
             <span>ย้อนกลับ</span>
         </button>
 
         <button id="musicToggleBtn" onclick="toggleAudio()"
-            class="pointer-events-auto ml-auto frosted-glass px-3.5 py-1.5 rounded-full text-xs font-medium flex items-center gap-2 hover:bg-white/20 transition-all">
+            class="pointer-events-auto ml-auto glass-card px-4 py-2.5 rounded-full text-xs sm:text-sm font-medium flex items-center gap-2 hover:bg-white/20 transition-all border border-white/20 shadow-lg">
             <i id="musicIcon" class="fas fa-music text-pink-400"></i>
             <span id="musicText">เปิดเพลงบรรยากาศ 🎵</span>
         </button>
     </div>
 
     <!-- MAIN CONTAINER -->
-    <div class="container mx-auto px-4 py-8 max-w-3xl relative z-10 flex-grow flex flex-col justify-center items-center">
+    <div class="container mx-auto px-4 py-8 max-w-4xl relative z-10 flex-grow flex flex-col justify-center">
 
-        <!-- ================= SCENE 1: WELCOME ENTRY (มีกระจกฝ้าซ้อนเค้ก) ================= -->
-        <section id="scene-entry" class="scene-transition w-full flex flex-col items-center justify-center text-center relative py-6">
+        <!-- ================= SCENE 1: WELCOME ENTRY ================= -->
+        <section id="scene-entry"
+            class="scene-transition min-h-[85vh] flex flex-col items-center justify-center text-center py-10">
             
-            <!-- องค์ประกอบเค้กพิกเซลด้านหลังกระจก (เบลอเนียนไม่รกตา) -->
-            <div class="absolute inset-0 flex items-center justify-center pointer-events-none z-0">
-                <div class="w-72 h-72 sm:w-96 sm:h-96 blurred-cake-bg animate-float-gentle flex items-center justify-center">
-                    <img src="https://media.giphy.com/media/xT0XzCJbeA80JThE5y/giphy.gif" alt="Background Pixel Cake" class="w-full h-full object-contain">
-                </div>
+            <!-- 🖼️ [GIF 2] เพิ่ม GIF นกฮูก/หมี/แมว นั่งน่ารักๆ สำหรับคนนิ่งๆ -->
+            <div class="w-32 h-32 mb-4 animate-float-gentle">
+                <img src="welcome-character.gif" alt="Welcome Character" class="w-full h-full object-contain" onerror="this.src='https://media.giphy.com/media/26brv0psXYT569s3u/giphy.gif'">
             </div>
 
-            <!-- แผ่นกระจกฝ้า (Frosted Glass Panel) ครอบทับเนื้อหา -->
-            <div class="frosted-glass p-6 sm:p-10 rounded-[2.5rem] w-full max-w-xl shadow-2xl relative z-10 overflow-hidden flex flex-col items-center border border-white/20">
-                <div class="absolute inset-0 bg-gradient-to-br from-pink-500/10 via-transparent to-purple-500/10 pointer-events-none"></div>
-
-                <div class="relative z-10 w-full flex flex-col items-center">
-                    <!-- GIF ตกแต่งน่ารักด้านบน -->
-                    <div class="w-20 h-20 sm:w-24 sm:h-24 mb-2 animate-float-gentle">
-                        <img src="https://media.giphy.com/media/26brv0psXYT569s3u/giphy.gif" alt="Sparkle Owl GIF" class="w-full h-full object-contain">
-                    </div>
-
-                    <div class="inline-block px-4 py-1.5 rounded-full bg-white/10 border border-white/15 text-pink-200 text-xs sm:text-sm font-light mb-3 tracking-wide shadow-inner">
-                        ✨ A Very Special Day For Mr. Nattakorn Dokmaiwai ✨
-                    </div>
-
-                    <h1 class="text-3xl sm:text-5xl font-semibold mb-3 bg-clip-text text-transparent bg-gradient-to-r from-pink-300 via-rose-200 to-amber-200 leading-tight">
-                        Happy Birthday <br />
-                        <span class="font-bold text-pink-300 text-4xl sm:text-6xl drop-shadow-[0_4px_12px_rgba(255,117,140,0.5)]">"Mr. Nattakorn Dokmaiwai"</span>
-                    </h1>
-
-                    <p class="text-slate-200 text-xs sm:text-sm font-light max-w-md mb-6 leading-relaxed">
-                        Mr. Nattakorn Dokmaiwai <br />
-                        เนื่องในโอกาสวันเกิดครบรอบ 18 ปี หวังว่าจะชอบของขวัญเล็กๆ น้อยๆ ชิ้นนี้นะ
-                    </p>
-
-                    <!-- ปุ่มไปอธิษฐานวันเกิด -->
-                    <button onclick="playClickSFX(); goToScene('scene-cake')"
-                        class="bg-gradient-to-r from-pink-500 via-rose-500 to-purple-600 hover:from-pink-600 hover:to-purple-700 text-white font-medium text-sm sm:text-base px-8 py-3.5 rounded-full transition-all duration-300 hover:scale-105 flex items-center gap-2 shadow-xl cursor-pointer">
-                        <span>ไปอธิษฐานวันเกิดกัน</span>
-                        <i class="fas fa-heart text-pink-200 animate-bounce"></i>
-                    </button>
-                </div>
+            <div class="inline-block px-4 py-1.5 rounded-full glass-card text-pink-300 text-sm font-light mb-4 tracking-wide">
+                ✨ A Very Special Day For Mr. Nattakorn Dokmaiwai ✨
             </div>
+
+            <h1 class="text-4xl sm:text-6xl md:text-7xl font-semibold mb-4 bg-clip-text text-transparent bg-gradient-to-r from-pink-300 via-rose-200 to-amber-200 leading-tight">
+                Happy Birthday <br class="sm:hidden" /><br>
+                <span class="font-bold text-pink-300 text-5xl sm:text-7xl md:text-8xl drop-shadow-[0_5px_15px_rgba(255,117,140,0.4)]">"Mr. Nattakorn Dokmaiwai"</span>
+            </h1>
+
+            <p class="text-slate-300 text-base sm:text-xl font-light max-w-lg mb-10 leading-relaxed px-4">
+                Mr. Nattakorn Dokmaiwai <br />
+                เนื่องในโอกาสวันเกิดครบรอบ 18 ปี หวังว่าจะชอบของขวัญเล็กๆ น้อยๆ ชิ้นนี้นะ
+            </p>
+
+            <button onclick="playClickSFX(); goToScene('scene-cake')"
+                class="bg-gradient-to-r from-pink-500 via-rose-500 to-purple-600 hover:from-pink-600 hover:to-purple-700 text-white font-medium text-lg sm:text-xl px-8 py-4 rounded-full transition-all duration-300 hover:scale-105 flex items-center gap-3 shadow-xl">
+                <span>ไปอธิษฐานวันเกิดกัน</span>
+                <i class="fas fa-heart text-pink-200 animate-bounce"></i>
+            </button>
         </section>
 
-        <!-- ================= SCENE 2: CAKE & WISH (เพิ่ม GIF เฉลิมฉลอง) ================= -->
-        <section id="scene-cake" class="hidden scene-transition w-full flex flex-col items-center justify-center text-center">
-            <div class="frosted-glass p-6 sm:p-8 rounded-3xl w-full max-w-lg shadow-2xl relative overflow-hidden border border-white/20">
-                
-                <!-- GIF ตกแต่งซ้าย-ขวา -->
-                <div class="absolute top-3 left-3 w-12 h-12 pointer-events-none opacity-80">
-                    <img src="https://media.giphy.com/media/3o7TKoWXm3okO1kgHC/giphy.gif" alt="Confetti GIF" class="w-full h-full object-contain">
-                </div>
-                <div class="absolute top-3 right-3 w-12 h-12 pointer-events-none opacity-80">
-                    <img src="https://media.giphy.com/media/l0HlUxcWRsqROFY40/giphy.gif" alt="Party GIF" class="w-full h-full object-contain">
-                </div>
+        <!-- ================= SCENE 2: CAKE & WISH ================= -->
+        <section id="scene-cake"
+            class="hidden scene-transition min-h-[85vh] flex flex-col items-center justify-center text-center py-10">
+            <div class="glass-card p-6 sm:p-10 rounded-3xl w-full max-w-xl shadow-2xl relative overflow-hidden border border-white/20">
+                <h2 class="text-2xl sm:text-3xl font-semibold text-pink-200 mb-2">อธิษฐานแล้วเป่าเทียนกันนะ 🎂</h2>
+                <p class="text-xs sm:text-sm text-slate-300 mb-6 font-light">ขอให้ทุกความปรารถนากลายเป็นจริงในวันนี้นะครับ</p>
 
-                <h2 class="text-2xl sm:text-3xl font-semibold text-pink-200 mb-1">อธิษฐานแล้วเป่าเทียนกันนะ 🎂</h2>
-                <p class="text-xs sm:text-sm text-slate-300 mb-4 font-light">ขอให้ทุกความปรารถนากลายเป็นจริงในวันนี้นะครับ</p>
-
-                <!-- เค้กวันเกิด -->
-                <div class="relative w-60 h-52 mx-auto my-2 flex flex-col items-center justify-end">
+                <!-- 🖼️ [GIF 3 / CSS Cake] เค้กวันเกิดพร้อมเทียน -->
+                <div class="relative w-64 h-56 mx-auto my-4 flex flex-col items-center justify-end">
                     <div class="absolute -top-6 flex flex-col items-center z-20">
                         <div id="flame1" class="candle-flame mb-1"></div>
                         <div id="smoke1" class="smoke"></div>
                         <div class="w-3 h-12 bg-gradient-to-r from-pink-300 to-pink-400 rounded-t-sm shadow-md border-b border-pink-500"></div>
                     </div>
 
-                    <div class="w-36 h-14 bg-gradient-to-r from-pink-300 via-rose-200 to-pink-300 rounded-t-2xl shadow-inner relative flex justify-around items-center border-b-4 border-pink-400 z-10">
+                    <div class="w-40 h-16 bg-gradient-to-r from-pink-300 via-rose-200 to-pink-300 rounded-t-2xl shadow-inner relative flex justify-around items-center border-b-4 border-pink-400 z-10">
                         <div class="absolute -bottom-2 left-3 w-4 h-5 bg-white rounded-b-full"></div>
                         <div class="absolute -bottom-3 left-10 w-5 h-6 bg-white rounded-b-full"></div>
                         <div class="absolute -bottom-2 right-12 w-4 h-5 bg-white rounded-b-full"></div>
                         <div class="absolute -bottom-3 right-4 w-5 h-6 bg-white rounded-b-full"></div>
+                        <!-- แทนที่สตรอเบอร์รี่ด้วยรูป GIF เล็กๆ ได้ -->
                         <span class="text-xs">🍓</span>
                         <span class="text-xs">✨</span>
                         <span class="text-xs">🍓</span>
                     </div>
 
-                    <div class="w-48 h-14 bg-gradient-to-r from-purple-300 via-pink-200 to-purple-300 relative flex justify-center items-center shadow-md border-b-4 border-purple-400 z-5">
-                        <div class="text-[10px] sm:text-xs text-purple-700 font-medium tracking-widest bg-white/40 px-3 py-0.5 rounded-full">HAPPY BIRTHDAY GAI</div>
+                    <div class="w-52 h-16 bg-gradient-to-r from-purple-300 via-pink-200 to-purple-300 relative flex justify-center items-center shadow-md border-b-4 border-purple-400 z-5">
+                        <div class="text-xs text-purple-700 font-medium tracking-widest bg-white/40 px-3 py-0.5 rounded-full">HAPPY BIRTHDAY GAI</div>
                     </div>
 
-                    <div class="w-60 h-16 bg-gradient-to-r from-amber-100 via-amber-200 to-amber-100 rounded-b-2xl shadow-xl relative flex justify-around items-center border-t-2 border-amber-300">
+                    <div class="w-64 h-20 bg-gradient-to-r from-amber-100 via-amber-200 to-amber-100 rounded-b-2xl shadow-xl relative flex justify-around items-center border-t-2 border-amber-300">
                         <div class="w-full h-2 bg-pink-400/30 absolute top-3"></div>
                         <div class="w-full h-2 bg-pink-400/30 absolute bottom-3"></div>
                     </div>
 
-                    <div class="w-64 h-3 bg-slate-200 rounded-full shadow-2xl border-b-2 border-slate-400 -mb-1"></div>
+                    <div class="w-72 h-4 bg-slate-200 rounded-full shadow-2xl border-b-2 border-slate-400 -mb-2"></div>
                 </div>
 
-                <div class="mt-6 flex flex-col sm:flex-row gap-3 justify-center items-center">
+                <div class="mt-8 flex flex-col sm:flex-row gap-3 justify-center items-center">
                     <button id="blowBtn" onclick="blowCandles()"
-                        class="bg-gradient-to-r from-pink-500 to-rose-500 hover:from-pink-600 hover:to-rose-600 text-white font-medium px-6 py-2.5 rounded-full transition-all duration-300 hover:scale-105 shadow-lg flex items-center gap-2 text-sm sm:text-base cursor-pointer">
+                        class="bg-gradient-to-r from-pink-500 to-rose-500 hover:from-pink-600 hover:to-rose-600 text-white font-medium px-6 py-3 rounded-full transition-all duration-300 hover:scale-105 shadow-lg flex items-center gap-2">
                         <i class="fas fa-wind"></i>
                         <span>เป่าเทียน 💨</span>
                     </button>
                 </div>
 
-                <div id="candleBlownMsg" class="hidden mt-4 text-pink-300 font-medium animate-fade-in text-sm sm:text-base">
+                <div id="candleBlownMsg" class="hidden mt-6 text-pink-300 font-medium animate-fade-in">
                     🎉 สุขสันต์วันเกิดนะครับ! ❤️
                 </div>
             </div>
 
             <button id="nextToTimelineBtn" onclick="playClickSFX(); goToScene('scene-letter')"
-                class="hidden mt-6 bg-white/10 hover:bg-white/20 text-white px-7 py-2.5 rounded-full transition-all border border-white/20 items-center gap-2 text-sm cursor-pointer">
+                class="hidden mt-8 bg-white/10 hover:bg-white/20 text-white px-8 py-3 rounded-full transition-all border border-white/20 items-center gap-2">
                 <span>อ่านจดหมายพิเศษ 💌</span>
                 <i class="fas fa-arrow-right"></i>
             </button>
         </section>
 
-        <!-- ================= SCENE 3: HEARTFELT LETTER (เพิ่ม GIF ซองจดหมาย) ================= -->
-        <section id="scene-letter" class="hidden scene-transition w-full flex flex-col items-center justify-center">
-            <div class="text-center mb-4">
-                <h2 class="text-2xl sm:text-3xl font-semibold text-pink-200">จดหมายถึงเจ้าของวันเกิด 💌</h2>
+        <!-- ================= SCENE 3: HEARTFELT LETTER ================= -->
+        <section id="scene-letter"
+            class="hidden scene-transition min-h-[85vh] flex flex-col items-center justify-center py-10">
+            <div class="text-center mb-6">
+                <h2 class="text-3xl font-semibold text-pink-200">จดหมายถึงเจ้าของวันเกิด 💌</h2>
             </div>
 
-            <!-- Envelope State -->
-            <div id="envelopeContainer" class="w-full max-w-md cursor-pointer" onclick="openLetter()">
-                <div class="frosted-glass p-6 sm:p-8 rounded-3xl text-center border border-pink-400/30 shadow-2xl hover:border-pink-400/60 transition-all group">
-                    <!-- GIF ซองจดหมายขยับน่ารัก -->
-                    <div class="w-24 h-24 mx-auto mb-3 group-hover:scale-110 transition-transform">
-                        <img src="https://media.giphy.com/media/26vUxJ9me5E9553HQ/giphy.gif" alt="Envelope GIF" class="w-full h-full object-contain">
+            <div id="envelopeContainer" class="w-full max-w-xl cursor-pointer" onclick="openLetter()">
+                <div class="glass-card p-8 sm:p-12 rounded-3xl text-center border border-pink-400/30 shadow-2xl hover:border-pink-400/60 transition-all group">
+                    
+                    <!-- 🖼️ [GIF 4] GIF ซองจดหมายดุกดิ๊ก -->
+                    <div class="w-24 h-24 mx-auto mb-4 group-hover:scale-110 transition-transform">
+                        <img src="letter-envelope.gif" alt="Envelope GIF" class="w-full h-full object-contain" onerror="this.src='https://media.giphy.com/media/3o7TKoWXm3okO1kgHC/giphy.gif'">
                     </div>
 
-                    <h3 class="text-lg font-medium text-slate-200 mb-1">มีข้อความพิเศษอยากจะบอก...</h3>
-                    <p class="text-xs text-slate-400 font-light mb-5">กดที่ซองจดหมายเพื่อเปิดอ่านข้อความได้เลย</p>
-                    <span class="inline-block bg-pink-500 hover:bg-pink-600 text-white text-xs px-5 py-2 rounded-full transition-colors shadow-md">
+                    <h3 class="text-xl font-medium text-slate-200 mb-2">มีข้อความพิเศษอยากจะบอก...</h3>
+                    <p class="text-sm text-slate-400 font-light mb-6">กดที่ซองจดหมายเพื่ออ่านข้อความพิเศษได้เลย</p>
+                    <span class="inline-block bg-pink-500 hover:bg-pink-600 text-white text-xs px-5 py-2.5 rounded-full transition-colors shadow-md">
                         เปิดจดหมาย ✨
                     </span>
                 </div>
             </div>
 
-            <!-- Letter Opened State -->
-            <div id="letterContent" class="hidden w-full max-w-lg frosted-glass p-6 sm:p-8 rounded-3xl border border-pink-300/40 shadow-2xl relative overflow-hidden">
-                
-                <!-- GIF สติ๊กเกอร์แปะประดับมุม -->
-                <div class="absolute -top-1 -right-1 w-16 h-16 pointer-events-none">
-                    <img src="https://media.giphy.com/media/l41K3o5TksKlcXSKs/giphy.gif" alt="Heart Gift GIF" class="w-full h-full object-contain">
+            <div id="letterContent"
+                class="hidden w-full max-w-xl glass-card p-8 sm:p-10 rounded-3xl border border-pink-300/40 shadow-2xl relative overflow-hidden">
+                <div class="absolute -top-10 -right-10 w-32 h-32 bg-pink-500/10 rounded-full blur-2xl pointer-events-none"></div>
+
+                <div class="text-right text-xs text-pink-300/80 mb-4 font-light">14 พฤษภาคม 2026 🌸</div>
+
+                <!-- 🖼️ [รูปภาพประกอบในจดหมาย] -->
+                <div class="mb-6 overflow-hidden rounded-2xl border border-pink-300/30 shadow-lg max-h-64 animate-float-gentle">
+                    <img src="GAI (2).jpg" alt="รูปภาพประกอบจดหมาย" class="w-full h-full object-cover">
                 </div>
 
-                <div class="text-right text-xs text-pink-300/80 mb-3 font-light">14 พฤษภาคม 2026 🌸</div>
-
-                <div class="mb-4 overflow-hidden rounded-xl border border-pink-300/30 shadow-lg max-h-52 animate-float-gentle">
-                    <img src="GAI (2).jpg" alt="รูปภาพประกอบจดหมาย" class="w-full h-full object-cover" onerror="this.src='https://images.unsplash.com/photo-1513151233558-d860c5398176?w=500'">
-                </div>
-
-                <div class="space-y-3 text-slate-200 text-xs sm:text-sm leading-relaxed font-light">
-                    <p class="font-medium text-pink-200 text-base">ถึง คุณณัฐกรณ์ (ไกด์)...</p>
+                <div class="space-y-4 text-slate-200 text-sm sm:text-base leading-relaxed font-light">
+                    <p class="font-medium text-pink-200 text-lg">ถึง คุณณัฐกรณ์ (ไกด์)...</p>
 
                     <p>
                         สุขสันต์วันเกิดนะครับ! 🎉 ขอให้ปีนี้เป็นปีที่ใจดีกับไกด์มากๆ มีแต่รอยยิ้ม ความสุข สุขภาพแข็งแรง
@@ -331,14 +305,14 @@
 
                     <p>ขอให้ไกด์ เจอแต่เรื่องดีๆ โชคเข้าข้างไม่ว่าจะเรื่องอะไร แล้วก็หัดกินข้าวซะบ้างไอสัส หยอกๆ นะ ไม่รู้จะพิมพ์ไรดี 😂</p>
 
-                    <div class="pt-4 text-right font-mitr text-pink-300 font-medium text-xs sm:text-sm">
+                    <div class="pt-6 text-right font-mitr text-pink-300 font-medium">
                         - จากหมีกริซลีตัวนึงที่นั่งเอ๋อๆ อยู่ -
                     </div>
                 </div>
 
-                <div class="mt-6 text-center pt-3 border-t border-white/10">
+                <div class="mt-8 text-center pt-4 border-t border-white/10">
                     <button onclick="playClickSFX(); goToScene('scene-future')"
-                        class="bg-gradient-to-r from-pink-500 to-rose-500 text-white font-medium px-6 py-2.5 rounded-full hover:scale-105 transition-all shadow-lg text-xs sm:text-sm flex items-center gap-2 mx-auto cursor-pointer">
+                        class="bg-gradient-to-r from-pink-500 to-rose-500 text-white font-medium px-8 py-3 rounded-full hover:scale-105 transition-all shadow-lg text-sm flex items-center gap-2 mx-auto">
                         <span>ของขวัญชิ้นสุดท้าย 🎁</span>
                         <i class="fas fa-gift"></i>
                     </button>
@@ -346,65 +320,61 @@
             </div>
         </section>
 
-        <!-- ================= SCENE 4: POLAROID PHOTOBOOTH (เพิ่ม GIF วิ้งๆ) ================= -->
-        <section id="scene-future" class="hidden scene-transition w-full flex flex-col items-center justify-center text-center">
-            <div class="text-center mb-3">
-                <span class="text-[10px] font-light text-pink-300 uppercase tracking-widest block mb-0.5">Our Special Future</span>
-                <h2 class="text-2xl sm:text-3xl font-semibold bg-clip-text text-transparent bg-gradient-to-r from-pink-200 via-rose-200 to-purple-200">
+        <!-- ================= SCENE 4: POLAROID PHOTOBOOTH ================= -->
+        <section id="scene-future"
+            class="hidden scene-transition min-h-[85vh] flex flex-col items-center justify-center text-center py-10">
+            <div class="text-center mb-6">
+                <span class="text-xs font-light text-pink-300 uppercase tracking-widest block mb-1">Our Special Future</span>
+                <h2 class="text-3xl sm:text-4xl font-semibold bg-clip-text text-transparent bg-gradient-to-r from-pink-200 via-rose-200 to-purple-200">
                     Polaroid Moment ✨
                 </h2>
-                <p class="text-slate-300 text-xs mt-1">ภาพความทรงจำสำหรับวันเกิดปีนี้</p>
+                <p class="text-slate-300 text-sm mt-2">ภาพความทรงจำสำหรับวันเกิดปีนี้</p>
             </div>
 
-            <!-- Polaroid Card with Sparkle GIF Overlay -->
-            <div class="relative max-w-xs w-full">
-                <!-- GIF Sparkles ดุ๊กดิ๊กด้านหลังโพลารอยด์ -->
-                <div class="absolute -top-6 -right-6 w-16 h-16 pointer-events-none z-10">
-                    <img src="https://media.giphy.com/media/26brv0psXYT569s3u/giphy.gif" alt="Sparkle GIF" class="w-full h-full object-contain">
+            <!-- Polaroid Card -->
+            <div class="bg-white text-slate-800 p-4 pb-6 rounded-lg shadow-2xl max-w-xs sm:max-w-sm w-full transform rotate-1 hover:rotate-0 transition-transform duration-500 my-4 border border-slate-200">
+                
+                <!-- 🖼️ [รูปภาพโพลารอยด์] สามารถใส่เป็นรูปจริง หรือ GIF ความทรงจำขยับได้ -->
+                <div class="w-full h-64 bg-slate-900 rounded relative overflow-hidden">
+                    <img src="GAI.jpg" alt="รูปโพลารอยด์" class="w-full h-full object-cover">
                 </div>
 
-                <div class="bg-white text-slate-800 p-3 pb-5 rounded-lg shadow-2xl transform rotate-1 hover:rotate-0 transition-transform duration-500 my-2 border border-slate-200">
-                    <div class="w-full h-56 bg-slate-900 rounded relative overflow-hidden">
-                        <img src="GAI.jpg" alt="รูปโพลารอยด์" class="w-full h-full object-cover" onerror="this.src='https://images.unsplash.com/photo-1530103862676-de8c9debad1d?w=500'">
-                    </div>
-
-                    <div class="mt-3 text-center font-handwriting text-xl text-slate-700">
-                        May 14, 2026 • With You
-                    </div>
+                <div class="mt-4 text-center font-handwriting text-2xl text-slate-700">
+                    May 14, 2026 • With You
                 </div>
             </div>
 
-            <div class="mt-6 flex flex-col sm:flex-row gap-3 justify-center items-center">
+            <div class="mt-8 flex flex-col sm:flex-row gap-4 justify-center items-center">
                 <button onclick="triggerHeartShower()"
-                    class="bg-gradient-to-r from-pink-500 to-purple-600 hover:from-pink-600 hover:to-purple-700 text-white font-medium px-6 py-2.5 rounded-full transition-all duration-300 hover:scale-105 shadow-xl flex items-center gap-2 text-xs sm:text-sm cursor-pointer">
+                    class="bg-gradient-to-r from-pink-500 to-purple-600 hover:from-pink-600 hover:to-purple-700 text-white font-medium px-8 py-3.5 rounded-full transition-all duration-300 hover:scale-105 shadow-xl flex items-center gap-2">
                     <i class="fas fa-heart text-pink-200"></i>
                     <span>ลองกดดูสิ ❤️</span>
                 </button>
 
                 <button onclick="playClickSFX(); copyBirthdayWish()"
-                    class="bg-white/10 hover:bg-white/20 text-white font-medium px-5 py-2.5 rounded-full transition-all border border-white/20 flex items-center gap-2 text-xs sm:text-sm cursor-pointer">
+                    class="bg-white/10 hover:bg-white/20 text-white font-medium px-6 py-3.5 rounded-full transition-all border border-white/20 flex items-center gap-2">
                     <i class="fas fa-copy text-pink-300"></i>
                     <span id="copyBtnText">คัดลอกคำอวยพร</span>
                 </button>
             </div>
 
-            <p class="text-[11px] text-slate-400 mt-6 font-light">
+            <p class="text-xs text-slate-400 mt-8 font-light">
                 Happy Birthday ครับ! 🎂✨
             </p>
         </section>
 
     </div>
 
-    <!-- Modal Notification -->
+    <!-- Modal แจ้งเตือนเมื่อคัดลอกสำเร็จ -->
     <div id="copyModal" class="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm hidden transition-opacity duration-300">
-        <div class="frosted-glass p-6 rounded-3xl text-center max-w-xs mx-4 border border-pink-400/50 shadow-2xl">
-            <div class="w-12 h-12 bg-pink-500/20 text-pink-300 rounded-full flex items-center justify-center mx-auto mb-3 text-xl">
+        <div class="glass-card p-6 sm:p-8 rounded-3xl text-center max-w-sm mx-4 border border-pink-400/50 shadow-2xl">
+            <div class="w-16 h-16 bg-pink-500/20 text-pink-300 rounded-full flex items-center justify-center mx-auto mb-4 text-2xl">
                 <i class="fas fa-check-circle"></i>
             </div>
-            <h3 class="text-lg font-bold text-pink-200 mb-1">คัดลอกคำอวยพรเรียบร้อย! ✨</h3>
-            <p class="text-[11px] text-slate-400 mb-2">คำอวยพรที่คุณได้รับคือ:</p>
-            <div id="modalWishText" class="bg-slate-900/80 p-3 rounded-xl text-xs text-pink-100 border border-white/10 mb-5 italic text-left leading-relaxed"></div>
-            <button onclick="closeCopyModal()" class="bg-gradient-to-r from-pink-500 to-purple-600 text-white font-medium px-5 py-2 rounded-full text-xs hover:scale-105 transition-all shadow-lg w-full">
+            <h3 class="text-xl font-bold text-pink-200 mb-2">คัดลอกคำอวยพรเรียบร้อย! ✨</h3>
+            <p class="text-xs text-slate-400 mb-3">คำอวยพรที่คุณได้รับคือ:</p>
+            <div id="modalWishText" class="bg-slate-900/80 p-4 rounded-xl text-sm text-pink-100 border border-white/10 mb-6 italic text-left leading-relaxed"></div>
+            <button onclick="closeCopyModal()" class="bg-gradient-to-r from-pink-500 to-purple-600 text-white font-medium px-6 py-2.5 rounded-full text-sm hover:scale-105 transition-all shadow-lg w-full">
                 ตกลง 👍
             </button>
         </div>
@@ -480,6 +450,7 @@
             const targetScene = document.getElementById(sceneId);
             if (targetScene) {
                 targetScene.classList.remove('hidden');
+                // เรียกใช้อนิเมชันใหม่ทุกครั้งที่สลับหน้า
                 void targetScene.offsetWidth; 
                 targetScene.classList.add('scene-transition');
             }
