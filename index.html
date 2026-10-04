@@ -1,35 +1,85 @@
 <!DOCTYPE html>
 <html lang="th">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Happy Birthday To GAI - Special Birthday Journey</title>
-    <!-- Tailwind CSS & Google Fonts & FontAwesome -->
+    <title>Happy Birthday To GAI</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Mitr:wght@300;400;500;600&family=Prompt:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400&family=Sacramento&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    
-    <!-- Three.js 3D Engine & OrbitControls & Canvas Confetti -->
+    <!-- Canvas Confetti -->
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    <!-- Three.js + OrbitControls -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
 
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        roseGold: '#e8b4b8',
+                        softPink: '#fbe3e8',
+                        deepNavy: '#0f172a',
+                        dreamPurple: '#2d1b4e',
+                        warmGold: '#f6d365',
+                        accentPink: '#ff758c',
+                    },
+                    fontFamily: {
+                        prompt: ['Prompt', 'sans-serif'],
+                        mitr: ['Mitr', 'sans-serif'],
+                        handwriting: ['Sacramento', 'cursive'],
+                    }
+                }
+            }
+        }
+    </script>
     <style>
         body {
             font-family: 'Prompt', sans-serif;
-            background-color: #05020a;
-            color: #ffffff;
-            margin: 0;
+            background: linear-gradient(135deg, #0f172a 0%, #2d1b4e 50%, #1a0b2e 100%);
+            color: #f8fafc;
+            overflow-x: hidden;
+            min-height: 100vh;
+        }
+
+        body.galaxy-mode {
+            background: #05020a;
             overflow: hidden;
         }
 
-        #webgl-container {
+        .stars-bg {
             position: fixed;
             top: 0;
             left: 0;
-            width: 100vw;
-            height: 100vh;
-            z-index: 1;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .scene-transition {
+            animation: smoothFadeIn 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+
+        @keyframes smoothFadeIn {
+            0% { opacity: 0; transform: translateY(20px) scale(0.98); }
+            100% { opacity: 1; transform: translateY(0) scale(1); }
+        }
+
+        @keyframes floatGentle {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-8px) rotate(1deg); }
+        }
+
+        .animate-float-gentle { animation: floatGentle 4s ease-in-out infinite; }
+
+        .glass-card {
+            background: rgba(255, 255, 255, 0.07);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.12);
         }
 
         .glass-panel {
@@ -40,13 +90,48 @@
             box-shadow: 0 8px 32px 0 rgba(255, 117, 140, 0.25);
         }
 
-        .glass-card {
-            background: rgba(20, 12, 35, 0.75);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-            border: 1px solid rgba(255, 182, 193, 0.25);
-            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5), inset 0 0 15px rgba(255, 117, 140, 0.15);
+        .candle-flame {
+            width: 16px;
+            height: 26px;
+            background: linear-gradient(to top, #ff4e50, #f9d423);
+            border-radius: 50% 50% 20% 20%;
+            box-shadow: 0 0 20px #f9d423, 0 0 40px #ff4e50;
+            transition: all 0.5s ease;
         }
+
+        .candle-flame.out { opacity: 0; transform: scale(0.1); }
+
+        .smoke {
+            position: absolute;
+            width: 8px;
+            height: 20px;
+            background: rgba(200, 200, 200, 0.5);
+            border-radius: 50%;
+            filter: blur(4px);
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .smoke.active { animation: smokeRise 2s forwards; }
+
+        @keyframes smokeRise {
+            0% { opacity: 0.8; transform: translateY(0) scale(1); }
+            100% { opacity: 0; transform: translateY(-60px) scale(3); }
+        }
+
+        /* ===== Galaxy ===== */
+        #webgl-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            z-index: 1;
+            opacity: 0;
+            transition: opacity 1.2s ease;
+        }
+
+        #webgl-container.show { opacity: 1; }
 
         .floating-node {
             position: absolute;
@@ -68,153 +153,281 @@
             text-shadow: 0 0 10px rgba(255, 117, 140, 0.8), 0 0 20px rgba(232, 180, 184, 0.5);
         }
 
-        /* Slide Transition Animations */
-        .step-slide {
-            transition: opacity 0.5s ease, transform 0.5s ease;
-        }
-        .step-hidden {
-            opacity: 0;
-            pointer-events: none;
-            transform: scale(0.95) translateY(10px);
-            position: absolute;
-            inset: 0;
-        }
-        .step-active {
-            opacity: 1;
-            pointer-events: auto;
-            transform: scale(1) translateY(0);
-            position: relative;
-        }
+        #stage2d { transition: opacity 0.9s ease; }
 
-        /* Toast Message */
-        #toast {
-            transition: opacity 0.3s ease, transform 0.3s ease;
-        }
+        #ui-layer { transition: opacity 1.2s ease; }
+
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #0f172a; }
+        ::-webkit-scrollbar-thumb { background: #3b0764; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #ff758c; }
     </style>
 </head>
-<body class="relative select-none">
 
-    <!-- WebGL 3D Canvas Background -->
+<body class="relative text-slate-100 selection:bg-pink-500 selection:text-white">
+
+    <!-- เสียง -->
+    <audio id="bgMusic" loop src="Dandelions┃EPIC VERSION - Extended - Alex Owly.mp3"></audio>
+    <audio id="sfxClick" src="matthewvakaliuk73627-mouse-click-290204.mp3" preload="auto"></audio>
+    <audio id="sfxBlow" src="blow.mp3" preload="auto"></audio>
+    <audio id="sfxConfetti" src="confetti.mp3" preload="auto"></audio>
+
+    <canvas id="starsCanvas" class="stars-bg"></canvas>
+
+    <!-- 3D canvas (ใช้ตอนเข้ากาแล็กซี่) -->
     <div id="webgl-container"></div>
 
-    <!-- ========================================== -->
-    <!-- STAGE 1: STORY CARDS SEQUENCE (หน้าต่างการอวยพร) -->
-    <!-- ========================================== -->
-    <div id="story-container" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/70 backdrop-blur-md transition-all duration-700">
-        <div class="glass-card w-full max-w-lg p-6 sm:p-8 rounded-3xl relative overflow-hidden shadow-2xl">
-
-            <!-- STEP 0: หน้าเปิดเรื่อง -->
-            <div id="step-0" class="step-slide step-active text-center py-4">
-                <div class="relative w-24 h-24 mx-auto mb-6 flex items-center justify-center">
-                    <div class="absolute inset-0 rounded-full bg-pink-500/20 animate-ping"></div>
-                    <i class="fas fa-gift text-5xl text-pink-400 animate-bounce"></i>
-                </div>
-                <h1 class="text-3xl font-bold text-pink-200 mb-2 glow-text">A Special Day For You</h1>
-                <p class="text-slate-300 text-sm mb-8 font-light">มีของขวัญและความทรงจำพิเศษรออยู่ข้างในนะ ✨</p>
-                
-                <button onclick="nextStep(1)" class="bg-gradient-to-r from-pink-500 to-purple-600 hover:from-pink-600 hover:to-purple-700 text-white font-medium text-base px-8 py-3.5 rounded-full transition-all duration-300 hover:scale-105 shadow-xl w-full flex items-center justify-center gap-2 cursor-pointer">
-                    <span>เปิดดูของขวัญต่อไป ➡️</span>
-                </button>
+    <!-- ================= START OVERLAY ================= -->
+    <div id="startOverlay" class="fixed inset-0 z-[60] flex items-center justify-center bg-slate-950/90 backdrop-blur-md transition-opacity duration-500">
+        <div class="glass-card p-8 sm:p-10 rounded-3xl text-center max-w-md mx-4 shadow-2xl border border-pink-500/30">
+            <div class="w-28 h-28 mx-auto mb-4 animate-float-gentle">
+                <img src="gift-box.gif" alt="Gift Box" class="w-full h-full object-contain drop-shadow-[0_10px_15px_rgba(255,117,140,0.3)]" onerror="this.src='https://media.giphy.com/media/l41K3o5TksKlcXSKs/giphy.gif'">
             </div>
+            <h2 class="text-2xl sm:text-3xl font-bold text-pink-200 mb-3">มีของขวัญส่งถึงคุณ ✨</h2>
+            <p class="text-slate-300 text-sm mb-8 font-light">กดปุ่มด้านล่างเพื่อเปิดการ์ดวันเกิดและเสียงเพลงบรรยากาศสุดพิเศษ</p>
+            <button onclick="startExperience()" class="bg-gradient-to-r from-pink-500 to-purple-600 hover:from-pink-600 hover:to-purple-700 text-white font-medium text-lg px-8 py-4 rounded-full transition-all duration-300 hover:scale-105 shadow-xl w-full flex items-center justify-center gap-2">
+                <span>เปิดการ์ดวันเกิด 🎁</span>
+            </button>
+        </div>
+    </div>
 
-            <!-- STEP 1: หน้า Happy Birthday -->
-            <div id="step-1" class="step-slide step-hidden text-center py-2">
-                <div class="text-4xl mb-3">🎂✨</div>
-                <h2 class="text-2xl font-bold text-pink-200 mb-1 glow-text">Happy Birthday To GAI</h2>
-                <h3 class="text-lg font-medium text-purple-300 mb-4">Mr. Nattakorn Dokmaiwai</h3>
-                
-                <div class="my-4 overflow-hidden rounded-2xl border border-pink-400/30 shadow-lg">
-                    <img src="GAI (2).jpg" alt="Birthday" class="w-full h-48 object-cover" onerror="this.onerror=null; this.src='https://picsum.photos/400/250';">
+    <!-- ================================================= -->
+    <!-- STAGE 1 : ฉากการ์ด 2D (โค้ดแรก)                    -->
+    <!-- ================================================= -->
+    <div id="stage2d" class="relative z-10 min-h-screen flex flex-col justify-between">
+
+        <!-- Navigation Top Bar -->
+        <div class="fixed top-5 left-5 right-5 z-40 flex justify-between items-center pointer-events-none">
+            <button id="backBtn" onclick="goBack()"
+                class="hidden pointer-events-auto glass-card px-4 py-2 rounded-full text-xs sm:text-sm font-medium flex items-center gap-2 hover:bg-white/20 transition-all border border-white/20 shadow-lg text-pink-200">
+                <i class="fas fa-arrow-left"></i>
+                <span>ย้อนกลับ</span>
+            </button>
+
+            <button id="musicToggleBtn" onclick="toggleAudio()"
+                class="pointer-events-auto ml-auto glass-card px-4 py-2.5 rounded-full text-xs sm:text-sm font-medium flex items-center gap-2 hover:bg-white/20 transition-all border border-white/20 shadow-lg">
+                <i id="musicIcon" class="fas fa-music text-pink-400"></i>
+                <span id="musicText">เปิดเพลงบรรยากาศ 🎵</span>
+            </button>
+        </div>
+
+        <div class="container mx-auto px-4 py-8 max-w-4xl relative z-10 flex-grow flex flex-col justify-center">
+
+            <!-- SCENE 1 -->
+            <section id="scene-entry" class="scene-transition min-h-[85vh] flex flex-col items-center justify-center text-center py-10">
+                <div class="w-32 h-32 mb-4 animate-float-gentle">
+                    <img src="welcome-character.gif" alt="Welcome Character" class="w-full h-full object-contain" onerror="this.src='https://media.giphy.com/media/26brv0psXYT569s3u/giphy.gif'">
                 </div>
 
-                <p class="text-slate-200 text-xs sm:text-sm font-light leading-relaxed mb-6">
-                    ขอให้วันเกิดปีนี้เต็มไปด้วยความสุข รอยยิ้ม สุขภาพร่างกายแข็งแรง และสมหวังในทุกๆ ความตั้งใจเลยนะ! 🎉
+                <div class="inline-block px-4 py-1.5 rounded-full glass-card text-pink-300 text-sm font-light mb-4 tracking-wide">
+                    ✨ A Very Special Day For Mr. Nattakorn Dokmaiwai ✨
+                </div>
+
+                <h1 class="text-4xl sm:text-6xl md:text-7xl font-semibold mb-4 bg-clip-text text-transparent bg-gradient-to-r from-pink-300 via-rose-200 to-amber-200 leading-tight">
+                    Happy Birthday <br class="sm:hidden" /><br>
+                    <span class="font-bold text-pink-300 text-5xl sm:text-7xl md:text-8xl drop-shadow-[0_5px_15px_rgba(255,117,140,0.4)]">"Mr. Nattakorn Dokmaiwai"</span>
+                </h1>
+
+                <p class="text-slate-300 text-base sm:text-xl font-light max-w-lg mb-10 leading-relaxed px-4">
+                    Mr. Nattakorn Dokmaiwai <br />
+                    เนื่องในโอกาสวันเกิดครบรอบ 18 ปี หวังว่าจะชอบของขวัญเล็กๆ น้อยๆ ชิ้นนี้นะ
                 </p>
 
-                <div class="flex gap-3">
-                    <button onclick="nextStep(0)" class="bg-white/10 hover:bg-white/20 text-slate-300 font-medium text-sm px-5 py-3 rounded-full transition-all w-1/3 cursor-pointer">
-                        ย้อนกลับ
-                    </button>
-                    <button onclick="nextStep(2)" class="bg-gradient-to-r from-pink-500 to-purple-600 hover:from-pink-600 text-white font-medium text-sm px-6 py-3 rounded-full transition-all hover:scale-105 shadow-lg w-2/3 cursor-pointer">
-                        ต่อไป ➡️
-                    </button>
-                </div>
-            </div>
+                <button onclick="playClickSFX(); goToScene('scene-cake')"
+                    class="bg-gradient-to-r from-pink-500 via-rose-500 to-purple-600 hover:from-pink-600 hover:to-purple-700 text-white font-medium text-lg sm:text-xl px-8 py-4 rounded-full transition-all duration-300 hover:scale-105 flex items-center gap-3 shadow-xl">
+                    <span>ไปอธิษฐานวันเกิดกัน</span>
+                    <i class="fas fa-heart text-pink-200 animate-bounce"></i>
+                </button>
+            </section>
 
-            <!-- STEP 2: หน้าเรื่องราวตลอด 3 ปี -->
-            <div id="step-2" class="step-slide step-hidden text-center py-2">
-                <div class="text-4xl mb-3">💖✨</div>
-                <h2 class="text-xl font-bold text-purple-200 mb-3">ช่วงเวลาดีๆ ตลอด 3 ปี</h2>
-                
-                <div class="bg-slate-900/60 p-4 rounded-2xl border border-purple-400/30 text-left text-xs sm:text-sm text-slate-200 leading-relaxed font-light mb-6 space-y-2">
-                    <p>ขอบคุณสำหรับช่วงเวลา 3 ปีที่ผ่านมานะ ถือว่าเป็นช่วงเวลาที่สนุก สดใส และมีคุณค่ามากๆ 😊</p>
-                    <p>ขอให้ปีนี้เจอแต่เรื่องดีๆ โชคเข้าข้างในทุกเรื่องที่ทำ และอย่าลืมดูแลสุขภาพ หิวกินข้าวซะบ้างนะ! 😂</p>
-                </div>
+            <!-- SCENE 2 -->
+            <section id="scene-cake" class="hidden scene-transition min-h-[85vh] flex flex-col items-center justify-center text-center py-10">
+                <div class="glass-card p-6 sm:p-10 rounded-3xl w-full max-w-xl shadow-2xl relative overflow-hidden border border-white/20">
+                    <h2 class="text-2xl sm:text-3xl font-semibold text-pink-200 mb-2">อธิษฐานแล้วเป่าเทียนกันนะ 🎂</h2>
+                    <p class="text-xs sm:text-sm text-slate-300 mb-6 font-light">ขอให้ทุกความปรารถนากลายเป็นจริงในวันนี้นะครับ</p>
 
-                <div class="flex gap-3">
-                    <button onclick="nextStep(1)" class="bg-white/10 hover:bg-white/20 text-slate-300 font-medium text-sm px-5 py-3 rounded-full transition-all w-1/3 cursor-pointer">
-                        ย้อนกลับ
-                    </button>
-                    <button onclick="nextStep(3)" class="bg-gradient-to-r from-pink-500 to-purple-600 hover:from-pink-600 text-white font-medium text-sm px-6 py-3 rounded-full transition-all hover:scale-105 shadow-lg w-2/3 cursor-pointer">
-                        หน้าสุดท้าย 📸
-                    </button>
-                </div>
-            </div>
+                    <div class="relative w-64 h-56 mx-auto my-4 flex flex-col items-center justify-end">
+                        <div class="absolute -top-6 flex flex-col items-center z-20">
+                            <div id="flame1" class="candle-flame mb-1"></div>
+                            <div id="smoke1" class="smoke"></div>
+                            <div class="w-3 h-12 bg-gradient-to-r from-pink-300 to-pink-400 rounded-t-sm shadow-md border-b border-pink-500"></div>
+                        </div>
 
-            <!-- STEP 3: หน้าสุดท้าย Our Special Future Polaroid Moment -->
-            <div id="step-3" class="step-slide step-hidden text-center py-1">
-                <h2 class="text-xl font-bold text-pink-200 mb-1 glow-text">Our Special Future</h2>
-                <h3 class="text-sm font-semibold text-amber-300 mb-3 tracking-wide">Polaroid Moment ✨</h3>
-                <p class="text-xs text-slate-300 mb-3 font-light">ภาพความทรงจำสำหรับวันเกิดปีนี้</p>
+                        <div class="w-40 h-16 bg-gradient-to-r from-pink-300 via-rose-200 to-pink-300 rounded-t-2xl shadow-inner relative flex justify-around items-center border-b-4 border-pink-400 z-10">
+                            <div class="absolute -bottom-2 left-3 w-4 h-5 bg-white rounded-b-full"></div>
+                            <div class="absolute -bottom-3 left-10 w-5 h-6 bg-white rounded-b-full"></div>
+                            <div class="absolute -bottom-2 right-12 w-4 h-5 bg-white rounded-b-full"></div>
+                            <div class="absolute -bottom-3 right-4 w-5 h-6 bg-white rounded-b-full"></div>
+                            <span class="text-xs">🍓</span>
+                            <span class="text-xs">✨</span>
+                            <span class="text-xs">🍓</span>
+                        </div>
 
-                <!-- รูป Polaroid -->
-                <div class="bg-white p-3 rounded-xl shadow-2xl text-slate-800 transform hover:rotate-0 transition-transform duration-300 rotate-1 my-2 max-w-xs mx-auto">
-                    <img src="GAI.jpg" alt="Polaroid Memory" class="w-full h-44 object-cover rounded" onerror="this.onerror=null; this.src='https://picsum.photos/400/300';">
-                    <div class="mt-2 text-center text-xs font-semibold tracking-wider text-slate-700">
-                        HAPPY BIRTHDAY GAI ❤️
+                        <div class="w-52 h-16 bg-gradient-to-r from-purple-300 via-pink-200 to-purple-300 relative flex justify-center items-center shadow-md border-b-4 border-purple-400 z-5">
+                            <div class="text-xs text-purple-700 font-medium tracking-widest bg-white/40 px-3 py-0.5 rounded-full">HAPPY BIRTHDAY GAI</div>
+                        </div>
+
+                        <div class="w-64 h-20 bg-gradient-to-r from-amber-100 via-amber-200 to-amber-100 rounded-b-2xl shadow-xl relative flex justify-around items-center border-t-2 border-amber-300">
+                            <div class="w-full h-2 bg-pink-400/30 absolute top-3"></div>
+                            <div class="w-full h-2 bg-pink-400/30 absolute bottom-3"></div>
+                        </div>
+
+                        <div class="w-72 h-4 bg-slate-200 rounded-full shadow-2xl border-b-2 border-slate-400 -mb-2"></div>
+                    </div>
+
+                    <div class="mt-8 flex flex-col sm:flex-row gap-3 justify-center items-center">
+                        <button id="blowBtn" onclick="blowCandles()"
+                            class="bg-gradient-to-r from-pink-500 to-rose-500 hover:from-pink-600 hover:to-rose-600 text-white font-medium px-6 py-3 rounded-full transition-all duration-300 hover:scale-105 shadow-lg flex items-center gap-2">
+                            <i class="fas fa-wind"></i>
+                            <span>เป่าเทียน 💨</span>
+                        </button>
+                    </div>
+
+                    <div id="candleBlownMsg" class="hidden mt-6 text-pink-300 font-medium">
+                        🎉 สุขสันต์วันเกิดนะครับ! ❤️
                     </div>
                 </div>
 
-                <!-- ข้อความคำอวยพรซ่อนไว้สำหรับกดคัดลอก -->
-                <div id="wish-text" class="hidden">
-สุขสันต์วันเกิดนะไกด์! 🎉 
-ขอให้ปีนี้เป็นปีที่ดี มีแต่ความสุข รอยยิ้ม สุขภาพแข็งแรง ขอบคุณสำหรับ 3 ปีที่ผ่านมานะ! 💖
+                <button id="nextToTimelineBtn" onclick="playClickSFX(); goToScene('scene-letter')"
+                    class="hidden mt-8 bg-white/10 hover:bg-white/20 text-white px-8 py-3 rounded-full transition-all border border-white/20 items-center gap-2">
+                    <span>อ่านจดหมายพิเศษ 💌</span>
+                    <i class="fas fa-arrow-right"></i>
+                </button>
+            </section>
+
+            <!-- SCENE 3 -->
+            <section id="scene-letter" class="hidden scene-transition min-h-[85vh] flex flex-col items-center justify-center py-10">
+                <div class="text-center mb-6">
+                    <h2 class="text-3xl font-semibold text-pink-200">จดหมายถึงเจ้าของวันเกิด 💌</h2>
                 </div>
 
-                <div class="mt-5 flex flex-col gap-2">
-                    <button onclick="copyWishAndGoToGalaxy()" class="bg-gradient-to-r from-amber-500 via-pink-500 to-purple-600 hover:from-amber-600 hover:to-purple-700 text-white font-medium text-sm px-6 py-3.5 rounded-full transition-all duration-300 hover:scale-105 shadow-xl flex items-center justify-center gap-2 cursor-pointer">
-                        <i class="fas fa-copy"></i>
-                        <span>คัดลอกคำอวยพร & ไปยังจักรวาล 3D 🌌✨</span>
+                <div id="envelopeContainer" class="w-full max-w-xl cursor-pointer" onclick="openLetter()">
+                    <div class="glass-card p-8 sm:p-12 rounded-3xl text-center border border-pink-400/30 shadow-2xl hover:border-pink-400/60 transition-all group">
+                        <div class="w-24 h-24 mx-auto mb-4 group-hover:scale-110 transition-transform">
+                            <img src="letter-envelope.gif" alt="Envelope GIF" class="w-full h-full object-contain" onerror="this.src='https://media.giphy.com/media/3o7TKoWXm3okO1kgHC/giphy.gif'">
+                        </div>
+                        <h3 class="text-xl font-medium text-slate-200 mb-2">มีข้อความพิเศษอยากจะบอก...</h3>
+                        <p class="text-sm text-slate-400 font-light mb-6">กดที่ซองจดหมายเพื่ออ่านข้อความพิเศษได้เลย</p>
+                        <span class="inline-block bg-pink-500 hover:bg-pink-600 text-white text-xs px-5 py-2.5 rounded-full transition-colors shadow-md">
+                            เปิดจดหมาย ✨
+                        </span>
+                    </div>
+                </div>
+
+                <div id="letterContent" class="hidden w-full max-w-xl glass-card p-8 sm:p-10 rounded-3xl border border-pink-300/40 shadow-2xl relative overflow-hidden">
+                    <div class="absolute -top-10 -right-10 w-32 h-32 bg-pink-500/10 rounded-full blur-2xl pointer-events-none"></div>
+
+                    <div class="text-right text-xs text-pink-300/80 mb-4 font-light">14 พฤษภาคม 2026 🌸</div>
+
+                    <div class="mb-6 overflow-hidden rounded-2xl border border-pink-300/30 shadow-lg max-h-64 animate-float-gentle">
+                        <img src="GAI (2).jpg" alt="รูปภาพประกอบจดหมาย" class="w-full h-full object-cover">
+                    </div>
+
+                    <div class="space-y-4 text-slate-200 text-sm sm:text-base leading-relaxed font-light">
+                        <p class="font-medium text-pink-200 text-lg">ถึง คุณณัฐกรณ์ (ไกด์)...</p>
+
+                        <p>
+                            สุขสันต์วันเกิดนะครับ! 🎉 ขอให้ปีนี้เป็นปีที่ใจดีกับไกด์มากๆ มีแต่รอยยิ้ม ความสุข สุขภาพแข็งแรง
+                            และสมหวังในทุกๆ เรื่องที่ตั้งใจไว้นะ
+                        </p>
+
+                        <p>อยากขอขอบคุณไกด์สำหรับช่วงเวลา 3 ปีที่ผ่านมา ถือว่าเป็นช่วงเวลาที่สนุกมากๆ</p>
+
+                        <p>ขอให้ไกด์ เจอแต่เรื่องดีๆ โชคเข้าข้างไม่ว่าจะเรื่องอะไร แล้วก็หัดกินข้าวซะบ้างไอสัส หยอกๆ นะ ไม่รู้จะพิมพ์ไรดี 😂</p>
+
+                        <div class="pt-6 text-right font-mitr text-pink-300 font-medium">
+                            - จากหมีกริซลีตัวนึงที่นั่งเอ๋อๆ อยู่ -
+                        </div>
+                    </div>
+
+                    <div class="mt-8 text-center pt-4 border-t border-white/10">
+                        <button onclick="playClickSFX(); goToScene('scene-future')"
+                            class="bg-gradient-to-r from-pink-500 to-rose-500 text-white font-medium px-8 py-3 rounded-full hover:scale-105 transition-all shadow-lg text-sm flex items-center gap-2 mx-auto">
+                            <span>ของขวัญชิ้นสุดท้าย 🎁</span>
+                            <i class="fas fa-gift"></i>
+                        </button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- SCENE 4 -->
+            <section id="scene-future" class="hidden scene-transition min-h-[85vh] flex flex-col items-center justify-center text-center py-10">
+                <div class="text-center mb-6">
+                    <span class="text-xs font-light text-pink-300 uppercase tracking-widest block mb-1">Our Special Future</span>
+                    <h2 class="text-3xl sm:text-4xl font-semibold bg-clip-text text-transparent bg-gradient-to-r from-pink-200 via-rose-200 to-purple-200">
+                        Polaroid Moment ✨
+                    </h2>
+                    <p class="text-slate-300 text-sm mt-2">ภาพความทรงจำสำหรับวันเกิดปีนี้</p>
+                </div>
+
+                <div class="bg-white text-slate-800 p-4 pb-6 rounded-lg shadow-2xl max-w-xs sm:max-w-sm w-full transform rotate-1 hover:rotate-0 transition-transform duration-500 my-4 border border-slate-200">
+                    <div class="w-full h-64 bg-slate-900 rounded relative overflow-hidden">
+                        <img src="GAI.jpg" alt="รูปโพลารอยด์" class="w-full h-full object-cover">
+                    </div>
+                    <div class="mt-4 text-center font-handwriting text-2xl text-slate-700">
+                        May 14, 2026 • With You
+                    </div>
+                </div>
+
+                <div class="mt-8 flex flex-col sm:flex-row gap-4 justify-center items-center">
+                    <button onclick="triggerHeartShower()"
+                        class="bg-gradient-to-r from-pink-500 to-purple-600 hover:from-pink-600 hover:to-purple-700 text-white font-medium px-8 py-3.5 rounded-full transition-all duration-300 hover:scale-105 shadow-xl flex items-center gap-2">
+                        <i class="fas fa-heart text-pink-200"></i>
+                        <span>ลองกดดูสิ ❤️</span>
                     </button>
-                    
-                    <button onclick="nextStep(2)" class="text-xs text-slate-400 hover:text-white py-1">
-                        ย้อนกลับไปอ่านหน้าก่อนหน้า
+
+                    <button onclick="playClickSFX(); copyBirthdayWish()"
+                        class="bg-white/10 hover:bg-white/20 text-white font-medium px-6 py-3.5 rounded-full transition-all border border-white/20 flex items-center gap-2">
+                        <i class="fas fa-copy text-pink-300"></i>
+                        <span id="copyBtnText">คัดลอกคำอวยพร</span>
                     </button>
                 </div>
-            </div>
+
+                <!-- ปุ่มไปกาแล็กซี่ -->
+                <button onclick="enterGalaxy()"
+                    class="mt-6 bg-gradient-to-r from-amber-500 via-pink-500 to-purple-600 hover:from-amber-600 hover:to-purple-700 text-white font-medium text-base sm:text-lg px-8 py-4 rounded-full transition-all duration-300 hover:scale-105 shadow-xl flex items-center gap-2">
+                    <span>ไปยังจักรวาลวันเกิด 🌌✨</span>
+                    <i class="fas fa-arrow-right"></i>
+                </button>
+
+                <p class="text-xs text-slate-400 mt-8 font-light">Happy Birthday ครับ! 🎂✨</p>
+            </section>
 
         </div>
     </div>
 
-    <!-- ========================================== -->
-    <!-- STAGE 2: 3D GALAXY OVERLAY UI -->
-    <!-- ========================================== -->
-    <div id="ui-layer" class="relative z-20 w-full h-screen pointer-events-none opacity-0 transition-opacity duration-1000">
+    <!-- Modal คัดลอกคำอวยพร -->
+    <div id="copyModal" class="fixed inset-0 z-[55] flex items-center justify-center bg-black/60 backdrop-blur-sm hidden transition-opacity duration-300">
+        <div class="glass-card p-6 sm:p-8 rounded-3xl text-center max-w-sm mx-4 border border-pink-400/50 shadow-2xl">
+            <div class="w-16 h-16 bg-pink-500/20 text-pink-300 rounded-full flex items-center justify-center mx-auto mb-4 text-2xl">
+                <i class="fas fa-check-circle"></i>
+            </div>
+            <h3 class="text-xl font-bold text-pink-200 mb-2">คัดลอกคำอวยพรเรียบร้อย! ✨</h3>
+            <p class="text-xs text-slate-400 mb-3">คำอวยพรที่คุณได้รับคือ:</p>
+            <div id="modalWishText" class="bg-slate-900/80 p-4 rounded-xl text-sm text-pink-100 border border-white/10 mb-6 italic text-left leading-relaxed"></div>
+            <button onclick="closeCopyModal()" class="bg-gradient-to-r from-pink-500 to-purple-600 text-white font-medium px-6 py-2.5 rounded-full text-sm hover:scale-105 transition-all shadow-lg w-full">
+                ตกลง 👍
+            </button>
+        </div>
+    </div>
 
-        <!-- แถบเมนูด้านบน -->
+    <!-- ================================================= -->
+    <!-- STAGE 2 : กาแล็กซี่ 3D (โค้ดสอง)                    -->
+    <!-- ================================================= -->
+    <div id="ui-layer" class="hidden fixed inset-0 z-20 w-full h-screen pointer-events-none opacity-0">
+
         <div id="topBar" class="pointer-events-auto fixed top-5 left-5 right-5 flex justify-between items-center z-40">
             <div class="glass-panel px-4 py-2 rounded-full text-xs sm:text-sm font-medium text-pink-200 flex items-center gap-2">
-                <i class="fas fa-sparkles text-amber-300"></i>
+                <i class="fas fa-star text-amber-300"></i>
                 <span>GAI'S BIRTHDAY GALAXY</span>
             </div>
 
-            <button id="musicBtn" onclick="toggleAudio()" class="glass-panel px-4 py-2 rounded-full text-xs sm:text-sm font-medium text-pink-200 hover:bg-pink-500/30 transition-all flex items-center gap-2 cursor-pointer">
-                <i id="musicIcon" class="fas fa-music text-pink-400"></i>
-                <span id="musicText">เปิดเพลง 🎵</span>
+            <button onclick="toggleAudio()" class="glass-panel px-4 py-2 rounded-full text-xs sm:text-sm font-medium text-pink-200 hover:bg-pink-500/30 transition-all flex items-center gap-2 cursor-pointer">
+                <i id="musicIcon2" class="fas fa-music text-pink-400"></i>
+                <span id="musicText2">เปิดเพลง 🎵</span>
             </button>
         </div>
 
-        <!-- ไอคอนลอยหมุนวนในอวกาศ 3D (3D Orbit Labels) -->
         <div id="labels-container" class="pointer-events-auto">
             <div id="node-letter" onclick="openModal('modal-letter')" class="floating-node glass-panel px-3.5 py-2 rounded-full text-xs text-pink-200 flex items-center gap-2 border border-pink-400/50">
                 <span>จดหมายถึงเจ้าของวันเกิด 💌</span>
@@ -234,226 +447,352 @@
             <div id="node-tag4" class="floating-node text-[10px] text-rose-300/80 font-mono tracking-widest pointer-events-none">ONLY U</div>
         </div>
 
-        <!-- แถบเมนูด้านล่าง -->
         <div id="bottomBar" class="pointer-events-auto fixed bottom-6 left-1/2 -translate-x-1/2 flex items-center gap-2 sm:gap-3 z-40 bg-slate-950/80 backdrop-blur-md p-2 rounded-full border border-pink-500/40 shadow-2xl">
             <button onclick="openModal('modal-letter')" class="glass-panel px-4 py-2.5 rounded-full text-xs font-medium text-pink-200 hover:bg-pink-500/30 transition-all flex items-center gap-1.5 cursor-pointer">
-                <i class="fas fa-envelope"></i>
-                <span>จดหมาย</span>
+                <i class="fas fa-envelope"></i><span>จดหมาย</span>
             </button>
             <button onclick="openModal('modal-wish')" class="glass-panel px-4 py-2.5 rounded-full text-xs font-medium text-amber-200 hover:bg-amber-500/30 transition-all flex items-center gap-1.5 cursor-pointer">
-                <i class="fas fa-cake-candles"></i>
-                <span>เป่าเทียน</span>
+                <i class="fas fa-cake-candles"></i><span>เป่าเทียน</span>
             </button>
             <button onclick="openModal('modal-gift')" class="glass-panel px-4 py-2.5 rounded-full text-xs font-medium text-purple-200 hover:bg-purple-500/30 transition-all flex items-center gap-1.5 cursor-pointer">
-                <i class="fas fa-gift"></i>
-                <span>ของขวัญ</span>
+                <i class="fas fa-gift"></i><span>ของขวัญ</span>
             </button>
             <button onclick="openModal('modal-gallery')" class="glass-panel px-4 py-2.5 rounded-full text-xs font-medium text-rose-200 hover:bg-rose-500/30 transition-all flex items-center gap-1.5 cursor-pointer">
-                <i class="fas fa-images"></i>
-                <span>รูปถ่าย</span>
+                <i class="fas fa-images"></i><span>รูปถ่าย</span>
             </button>
         </div>
-
     </div>
 
-    <!-- MODAL POPUPS (ป๊อปอัปต่างๆ บนหน้า 3D) -->
-    <!-- Modal 1: Letter -->
-    <div id="modal-letter" class="modal-wrapper pointer-events-auto fixed inset-0 z-50 items-center justify-center p-4 bg-black/75 backdrop-blur-md hidden">
+    <!-- MODALS ของกาแล็กซี่ -->
+    <div id="modal-letter" class="modal-wrapper fixed inset-0 z-50 items-center justify-center p-4 bg-black/75 backdrop-blur-md hidden">
         <div class="glass-panel w-full max-w-md p-6 sm:p-8 rounded-3xl relative text-slate-100 max-h-[85vh] overflow-y-auto shadow-2xl">
             <button onclick="closeModal('modal-letter')" class="absolute top-4 right-4 text-slate-400 hover:text-white w-8 h-8 flex items-center justify-center rounded-full bg-white/10 cursor-pointer">✕</button>
-            
             <div class="text-center mb-4">
                 <span class="text-2xl">💌</span>
                 <h3 class="text-xl font-bold text-pink-200 mt-1">จดหมายถึงเจ้าของวันเกิด</h3>
                 <p class="text-xs text-pink-300/70">14 พฤษภาคม • Special Day</p>
             </div>
-
             <div class="mb-4 overflow-hidden rounded-xl border border-pink-400/30">
                 <img src="GAI (2).jpg" alt="Photo" class="w-full h-48 object-cover" onerror="this.onerror=null; this.src='https://picsum.photos/400/250';">
             </div>
-
             <div class="space-y-3 text-xs sm:text-sm text-slate-200 leading-relaxed font-light">
                 <p class="font-medium text-pink-300 text-base">ถึง คุณณัฐกรณ์ (ไกด์)...</p>
                 <p>สุขสันต์วันเกิดนะครับ! 🎉 ขอให้ปีนี้เป็นปีที่ใจดีกับไกด์มากๆ มีแต่รอยยิ้ม ความสุข สุขภาพแข็งแรง และสมหวังในทุกๆ เรื่องที่ตั้งใจไว้นะ</p>
                 <p>อยากขอขอบคุณไกด์สำหรับช่วงเวลา 3 ปีที่ผ่านมา ถือว่าเป็นช่วงเวลาที่สนุกและมีคุณค่ามากๆ</p>
                 <p>ขอให้เจอแต่เรื่องดีๆ โชคเข้าข้างไม่ว่าจะทำอะไร แล้วก็หัดกินข้าวซะบ้างนะ! 😂</p>
-                <div class="pt-4 text-right text-pink-300 font-medium text-xs">
-                    - จากหมีกริซลีตัวนึงที่นั่งเอ๋อๆ อยู่ -
-                </div>
+                <div class="pt-4 text-right text-pink-300 font-medium text-xs">- จากหมีกริซลีตัวนึงที่นั่งเอ๋อๆ อยู่ -</div>
             </div>
         </div>
     </div>
 
-    <!-- Modal 2: Blow Candle & Make a Wish -->
-    <div id="modal-wish" class="modal-wrapper pointer-events-auto fixed inset-0 z-50 items-center justify-center p-4 bg-black/75 backdrop-blur-md hidden">
+    <div id="modal-wish" class="modal-wrapper fixed inset-0 z-50 items-center justify-center p-4 bg-black/75 backdrop-blur-md hidden">
         <div class="glass-panel w-full max-w-md p-6 rounded-3xl relative text-center text-slate-100 shadow-2xl">
             <button onclick="closeModal('modal-wish')" class="absolute top-4 right-4 text-slate-400 hover:text-white w-8 h-8 flex items-center justify-center rounded-full bg-white/10 cursor-pointer">✕</button>
-            
-            <span class="text-4xl animate-bounce inline-block my-2">🕯️️</span>
+            <span class="text-4xl animate-bounce inline-block my-2">🕯️</span>
             <h3 class="text-xl font-bold text-amber-200 mt-1">อธิษฐานและเป่าเทียนวันเกิด</h3>
             <p class="text-xs text-slate-300 mb-6 font-light">ตั้งจิตอธิษฐานในใจ แล้วกดปุ่มเป่าเทียนได้เลยนะ ✨</p>
-
             <button onclick="blowCandleEffect()" class="bg-gradient-to-r from-amber-500 to-pink-500 hover:from-amber-600 hover:to-pink-600 text-white font-medium text-sm px-6 py-3 rounded-full transition-all duration-300 hover:scale-105 shadow-lg w-full mb-4 cursor-pointer flex items-center justify-center gap-2">
-                <i class="fas fa-wind"></i>
-                <span>เป่าเทียนวันเกิด 🎂💨</span>
+                <i class="fas fa-wind"></i><span>เป่าเทียนวันเกิด 🎂💨</span>
             </button>
-
-            <div id="wish-success-msg" class="hidden bg-amber-900/40 p-4 rounded-2xl border border-amber-400/50 text-xs text-amber-200 leading-relaxed animate-fade-in">
-                🎉 ขอให้คำอธิษฐานของไกด์เป็นจริงทุกประการ! มีแต่ความสุข รอยยิ้ม และความโชคดีตลอดทั้งปีนะ! ✨❤️️
+            <div id="wish-success-msg" class="hidden bg-amber-900/40 p-4 rounded-2xl border border-amber-400/50 text-xs text-amber-200 leading-relaxed">
+                🎉 ขอให้คำอธิษฐานของไกด์เป็นจริงทุกประการ! มีแต่ความสุข รอยยิ้ม และความโชคดีตลอดทั้งปีนะ! ✨❤️
             </div>
         </div>
     </div>
 
-    <!-- Modal 3: Surprise Gift Box -->
-    <div id="modal-gift" class="modal-wrapper pointer-events-auto fixed inset-0 z-50 items-center justify-center p-4 bg-black/75 backdrop-blur-md hidden">
+    <div id="modal-gift" class="modal-wrapper fixed inset-0 z-50 items-center justify-center p-4 bg-black/75 backdrop-blur-md hidden">
         <div class="glass-panel w-full max-w-md p-6 rounded-3xl relative text-center text-slate-100 shadow-2xl">
             <button onclick="closeModal('modal-gift')" class="absolute top-4 right-4 text-slate-400 hover:text-white w-8 h-8 flex items-center justify-center rounded-full bg-white/10 cursor-pointer">✕</button>
-
             <span class="text-3xl">🎁</span>
             <h3 class="text-xl font-bold text-purple-200 mt-2">กล่องของขวัญพิเศษ</h3>
             <p class="text-xs text-slate-300 mb-6 font-light">เลือกเปิดกล่องของขวัญ 1 ใบ เพื่อรับคูปองความสุข</p>
-
             <div class="grid grid-cols-3 gap-3 mb-6">
                 <button onclick="openGift(1)" class="p-4 rounded-2xl bg-gradient-to-br from-purple-800 to-pink-900 border border-purple-400/40 hover:scale-105 transition-transform text-center cursor-pointer shadow-lg">
-                    <span class="text-2xl block mb-1">🧋</span>
-                    <span class="text-[10px] text-purple-200 font-medium">กล่องที่ 1</span>
+                    <span class="text-2xl block mb-1">🧋</span><span class="text-[10px] text-purple-200 font-medium">กล่องที่ 1</span>
                 </button>
                 <button onclick="openGift(2)" class="p-4 rounded-2xl bg-gradient-to-br from-purple-800 to-pink-900 border border-purple-400/40 hover:scale-105 transition-transform text-center cursor-pointer shadow-lg">
-                    <span class="text-2xl block mb-1">🎟️</span>
-                    <span class="text-[10px] text-purple-200 font-medium">กล่องที่ 2</span>
+                    <span class="text-2xl block mb-1">🎟️</span><span class="text-[10px] text-purple-200 font-medium">กล่องที่ 2</span>
                 </button>
                 <button onclick="openGift(3)" class="p-4 rounded-2xl bg-gradient-to-br from-purple-800 to-pink-900 border border-purple-400/40 hover:scale-105 transition-transform text-center cursor-pointer shadow-lg">
-                    <span class="text-2xl block mb-1">❤️</span>
-                    <span class="text-[10px] text-purple-200 font-medium">กล่องที่ 3</span>
+                    <span class="text-2xl block mb-1">❤️</span><span class="text-[10px] text-purple-200 font-medium">กล่องที่ 3</span>
                 </button>
             </div>
-
-            <div id="gift-result" class="hidden bg-purple-950/80 p-4 rounded-2xl border border-purple-400/50 text-xs text-purple-200 leading-relaxed font-light">
-            </div>
+            <div id="gift-result" class="hidden bg-purple-950/80 p-4 rounded-2xl border border-purple-400/50 text-xs text-purple-200 leading-relaxed font-light"></div>
         </div>
     </div>
 
-    <!-- Modal 4: Photo Gallery -->
-    <div id="modal-gallery" class="modal-wrapper pointer-events-auto fixed inset-0 z-50 items-center justify-center p-4 bg-black/75 backdrop-blur-md hidden">
+    <div id="modal-gallery" class="modal-wrapper fixed inset-0 z-50 items-center justify-center p-4 bg-black/75 backdrop-blur-md hidden">
         <div class="glass-panel w-full max-w-md p-6 rounded-3xl relative text-center text-slate-100 shadow-2xl">
             <button onclick="closeModal('modal-gallery')" class="absolute top-4 right-4 text-slate-400 hover:text-white w-8 h-8 flex items-center justify-center rounded-full bg-white/10 cursor-pointer">✕</button>
-
             <span class="text-3xl">📸</span>
             <h3 class="text-xl font-bold text-rose-200 mt-2">Our Special Future</h3>
             <p class="text-xs text-slate-300 mb-4 font-light">Polaroid Moment ✨</p>
-
             <div class="bg-white p-3 rounded-xl shadow-2xl text-slate-800 transform hover:rotate-0 transition-transform duration-300 rotate-1 my-2">
                 <img src="GAI.jpg" alt="Polaroid" class="w-full h-56 object-cover rounded" onerror="this.onerror=null; this.src='https://picsum.photos/400/300';">
-                <div class="mt-3 text-center text-sm font-semibold tracking-wider text-slate-700">
-                    HAPPY BIRTHDAY GAI ❤️
-                </div>
+                <div class="mt-3 text-center text-sm font-semibold tracking-wider text-slate-700">HAPPY BIRTHDAY GAI ❤️</div>
             </div>
         </div>
     </div>
 
-    <!-- Toast แจ้งเตือนคัดลอก -->
-    <div id="toast" class="fixed top-8 left-1/2 -translate-x-1/2 z-50 bg-pink-500 text-white px-6 py-2.5 rounded-full text-xs font-medium shadow-2xl opacity-0 pointer-events-none flex items-center gap-2">
-        <i class="fas fa-check-circle"></i>
-        <span>คัดลอกคำอวยพรเรียบร้อยแล้ว! ✨</span>
-    </div>
-
-    <!-- Background Audio -->
-    <audio id="bgMusic" loop src="Dandelions┃EPIC VERSION - Extended - Alex Owly.mp3"></audio>
-
     <script>
+        let isPlayingAudio = false;
+        let sceneHistory = ['scene-entry'];
+        let inGalaxy = false;
+
+        /* ---------- เสียง ---------- */
+        function playSfx(id) {
+            const el = document.getElementById(id);
+            if (el) { el.currentTime = 0; el.play().catch(() => {}); }
+        }
+        function playClickSFX() { playSfx('sfxClick'); }
+        function playBlowSFX() { playSfx('sfxBlow'); }
+        function playConfettiSFX() { playSfx('sfxConfetti'); }
+
+        function startExperience() {
+            playClickSFX();
+            const audio = document.getElementById('bgMusic');
+            const overlay = document.getElementById('startOverlay');
+            overlay.style.opacity = '0';
+            setTimeout(() => { overlay.style.display = 'none'; }, 500);
+            if (audio) {
+                audio.play().then(() => {
+                    isPlayingAudio = true;
+                    updateMusicUI(true);
+                }).catch(err => console.log("Audio play failed: ", err));
+            }
+        }
+
+        function toggleAudio() {
+            playClickSFX();
+            const audio = document.getElementById('bgMusic');
+            if (!audio) return;
+            if (!isPlayingAudio) {
+                audio.play().catch(() => {});
+                isPlayingAudio = true;
+            } else {
+                audio.pause();
+                isPlayingAudio = false;
+            }
+            updateMusicUI(isPlayingAudio);
+        }
+
+        function updateMusicUI(playing) {
+            const iconCls = playing ? "fas fa-pause text-pink-400" : "fas fa-music text-pink-400";
+            document.getElementById('musicIcon').className = iconCls;
+            document.getElementById('musicIcon2').className = iconCls;
+            document.getElementById('musicText').innerText = playing ? "พักเสียงเพลง 🎵" : "เปิดเพลงบรรยากาศ 🎵";
+            document.getElementById('musicText2').innerText = playing ? "พักเสียง 🎵" : "เปิดเพลง 🎵";
+        }
+
+        /* ---------- ฉาก 2D ---------- */
+        function goToScene(sceneId, isBack = false) {
+            document.querySelectorAll('section').forEach(sec => {
+                sec.classList.add('hidden');
+                sec.classList.remove('scene-transition');
+            });
+
+            const targetScene = document.getElementById(sceneId);
+            if (targetScene) {
+                targetScene.classList.remove('hidden');
+                void targetScene.offsetWidth;
+                targetScene.classList.add('scene-transition');
+            }
+
+            if (!isBack && sceneHistory[sceneHistory.length - 1] !== sceneId) {
+                sceneHistory.push(sceneId);
+            }
+
+            const backBtn = document.getElementById('backBtn');
+            if (sceneHistory.length > 1) backBtn.classList.remove('hidden');
+            else backBtn.classList.add('hidden');
+        }
+
+        function goBack() {
+            playClickSFX();
+            if (sceneHistory.length > 1) {
+                sceneHistory.pop();
+                goToScene(sceneHistory[sceneHistory.length - 1], true);
+            }
+        }
+
+        function blowCandles() {
+            playBlowSFX();
+            const flame = document.getElementById('flame1');
+            const smoke = document.getElementById('smoke1');
+            const blownMsg = document.getElementById('candleBlownMsg');
+            const nextBtn = document.getElementById('nextToTimelineBtn');
+            const blowBtn = document.getElementById('blowBtn');
+
+            flame.classList.add('out');
+            smoke.classList.add('active');
+
+            setTimeout(() => {
+                playConfettiSFX();
+                confetti({
+                    particleCount: 120,
+                    spread: 80,
+                    origin: { y: 0.6 },
+                    colors: ['#ff758c', '#ff7eb3', '#f7d794', '#ffffff']
+                });
+            }, 300);
+
+            blowBtn.classList.add('hidden');
+            blownMsg.classList.remove('hidden');
+            nextBtn.classList.remove('hidden');
+            nextBtn.classList.add('flex');
+        }
+
+        function openLetter() {
+            playClickSFX();
+            playConfettiSFX();
+            document.getElementById('envelopeContainer').classList.add('hidden');
+            document.getElementById('letterContent').classList.remove('hidden');
+            confetti({ particleCount: 50, spread: 60, origin: { y: 0.5 }, colors: ['#ff758c', '#e8b4b8'] });
+        }
+
+        function triggerHeartShower() {
+            playClickSFX();
+            playConfettiSFX();
+            const animationEnd = Date.now() + 3000;
+            (function frame() {
+                if (animationEnd - Date.now() <= 0) return;
+                confetti({ particleCount: 3, angle: 60, spread: 55, origin: { x: 0 }, colors: ['#ff758c', '#ff4e50', '#ffffff'] });
+                confetti({ particleCount: 3, angle: 120, spread: 55, origin: { x: 1 }, colors: ['#ff758c', '#f9d423', '#e8b4b8'] });
+                requestAnimationFrame(frame);
+            }());
+        }
+
+        function copyBirthdayWish() {
+            const wishText = "สุขสันต์วันเกิดไกด์! 🎂 ขอให้ปีนี้ไกด์มีความสุขมากๆ มีรอยยิ้มสดใสในทุกๆ วัน❤";
+            const done = () => {
+                document.getElementById('modalWishText').innerText = `"${wishText}"`;
+                document.getElementById('copyModal').classList.remove('hidden');
+            };
+            if (navigator.clipboard && navigator.clipboard.writeText) {
+                navigator.clipboard.writeText(wishText).then(done).catch(() => { fallbackCopy(wishText); done(); });
+            } else {
+                fallbackCopy(wishText); done();
+            }
+        }
+
+        function fallbackCopy(text) {
+            const t = document.createElement("textarea");
+            t.value = text;
+            document.body.appendChild(t);
+            t.select();
+            try { document.execCommand("copy"); } catch (e) {}
+            document.body.removeChild(t);
+        }
+
+        function closeCopyModal() {
+            playClickSFX();
+            document.getElementById('copyModal').classList.add('hidden');
+        }
+
+        /* ---------- ดาวพื้นหลัง (2D) ---------- */
+        const canvas = document.getElementById('starsCanvas');
+        const ctx = canvas.getContext('2d');
+        let stars = [];
+
+        function resizeCanvas() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+            initStars();
+        }
+
+        function initStars() {
+            stars = [];
+            const count = Math.floor((canvas.width * canvas.height) / 8000);
+            for (let i = 0; i < count; i++) {
+                stars.push({
+                    x: Math.random() * canvas.width,
+                    y: Math.random() * canvas.height,
+                    radius: Math.random() * 1.5 + 0.5,
+                    alpha: Math.random(),
+                    speed: Math.random() * 0.015 + 0.005
+                });
+            }
+        }
+
+        function drawStars() {
+            if (inGalaxy) return; // หยุดวาดเมื่ออยู่ในกาแล็กซี่
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            stars.forEach(star => {
+                star.alpha += star.speed;
+                if (star.alpha > 1 || star.alpha < 0) star.speed = -star.speed;
+                ctx.beginPath();
+                ctx.arc(star.x, star.y, star.radius, 0, Math.PI * 2);
+                ctx.fillStyle = `rgba(255, 235, 240, ${Math.abs(star.alpha)})`;
+                ctx.fill();
+            });
+            requestAnimationFrame(drawStars);
+        }
+
+        /* ---------- เปลี่ยนเข้ากาแล็กซี่ ---------- */
+        function enterGalaxy() {
+            if (inGalaxy) return;
+            playClickSFX();
+            playConfettiSFX();
+            inGalaxy = true;
+
+            confetti({
+                particleCount: 160,
+                spread: 100,
+                origin: { y: 0.6 },
+                colors: ['#ff758c', '#a855f7', '#f6d365', '#fbbf24']
+            });
+
+            // เริ่มเพลงถ้ายังไม่เล่น
+            const music = document.getElementById('bgMusic');
+            if (music && !isPlayingAudio) {
+                music.play().then(() => { isPlayingAudio = true; updateMusicUI(true); }).catch(() => {});
+            }
+
+            // สร้างฉาก 3D
+            initThreeJS();
+            animate();
+
+            // เฟด 2D ออก
+            const stage2d = document.getElementById('stage2d');
+            stage2d.style.opacity = '0';
+            stage2d.style.pointerEvents = 'none';
+
+            setTimeout(() => {
+                stage2d.style.display = 'none';
+                canvas.style.display = 'none';
+                document.body.classList.add('galaxy-mode');
+                window.scrollTo(0, 0);
+
+                document.getElementById('webgl-container').classList.add('show');
+
+                const ui = document.getElementById('ui-layer');
+                ui.classList.remove('hidden');
+                void ui.offsetWidth;
+                ui.style.opacity = '1';
+
+                updateMusicUI(isPlayingAudio);
+            }, 900);
+        }
+
+        /* ---------- THREE.JS GALAXY ---------- */
         let scene, camera, renderer, controls;
         let galaxyParticles, cakeParticles;
-        let isAudioPlaying = false;
-        let currentStep = 0;
+        let threeReady = false;
 
         const orbitLabels = [
             { id: 'node-letter', radius: 15, angle: 0, speed: 0.005, y: 1 },
             { id: 'node-wish', radius: 15, angle: Math.PI * 0.5, speed: 0.005, y: -1 },
             { id: 'node-gift', radius: 15, angle: Math.PI, speed: 0.005, y: 1 },
             { id: 'node-gallery', radius: 15, angle: Math.PI * 1.5, speed: 0.005, y: -1 },
-            
             { id: 'node-tag1', radius: 22, angle: 0.8, speed: 0.003, y: 3 },
             { id: 'node-tag2', radius: 20, angle: 2.3, speed: 0.003, y: -2 },
             { id: 'node-tag3', radius: 25, angle: 3.8, speed: 0.003, y: 2 },
             { id: 'node-tag4', radius: 18, angle: 5.1, speed: 0.003, y: -3 }
         ];
 
-        // เปลี่ยนหน้าของการ์ดเรื่องราว (Stage 1 Flow)
-        function nextStep(stepNum) {
-            document.querySelectorAll('.step-slide').forEach(el => {
-                el.classList.remove('step-active');
-                el.classList.add('step-hidden');
-            });
-
-            const nextEl = document.getElementById(`step-${stepNum}`);
-            if (nextEl) {
-                nextEl.classList.remove('step-hidden');
-                nextEl.classList.add('step-active');
-            }
-            currentStep = stepNum;
-        }
-
-        // กดปุ่มคัดลอกคำอวยพรแล้วเปลี่ยนเข้าสู่ Galaxy (Stage 2)
-        function copyWishAndGoToGalaxy() {
-            // 1. คัดลอกคำอวยพร
-            const wishText = document.getElementById('wish-text').innerText.trim();
-            navigator.clipboard.writeText(wishText).then(() => {
-                showToast("คัดลอกคำอวยพรเรียบร้อยแล้ว! ✨");
-            }).catch(() => {
-                showToast("คัดลอกเรียบร้อยแล้ว! ✨");
-            });
-
-            // 2. แสดง พลุกระดาษ (Confetti)
-            try {
-                if (typeof confetti === 'function') {
-                    confetti({
-                        particleCount: 150,
-                        spread: 100,
-                        origin: { y: 0.6 },
-                        colors: ['#ff758c', '#a855f7', '#f6d365', '#fbbf24']
-                    });
-                }
-            } catch(e) {}
-
-            // 3. จางหน้าการ์ด และเปิด UI กาแล็คซี่
-            setTimeout(() => {
-                const storyContainer = document.getElementById('story-container');
-                storyContainer.style.opacity = '0';
-                storyContainer.style.pointerEvents = 'none';
-
-                setTimeout(() => {
-                    storyContainer.style.display = 'none';
-                    const uiLayer = document.getElementById('ui-layer');
-                    uiLayer.classList.remove('opacity-0');
-                    uiLayer.classList.add('opacity-100');
-                }, 700);
-
-                // เล่นเพลงบรรเลง
-                const music = document.getElementById('bgMusic');
-                if (music) {
-                    music.play().then(() => {
-                        isAudioPlaying = true;
-                        document.getElementById('musicText').innerText = "พักเสียง 🎵";
-                    }).catch(() => {});
-                }
-            }, 600);
-        }
-
-        function showToast(msg) {
-            const toast = document.getElementById('toast');
-            toast.querySelector('span').innerText = msg;
-            toast.classList.remove('opacity-0', 'pointer-events-none');
-            toast.classList.add('opacity-100');
-            setTimeout(() => {
-                toast.classList.remove('opacity-100');
-                toast.classList.add('opacity-0', 'pointer-events-none');
-            }, 2500);
-        }
-
-        // ==========================================
-        // THREE.JS 3D ENGINE & SCENE CREATION
-        // ==========================================
         function initThreeJS() {
+            if (threeReady) return;
+            threeReady = true;
             const container = document.getElementById('webgl-container');
 
             scene = new THREE.Scene();
@@ -481,15 +820,30 @@
             window.addEventListener('resize', onWindowResize);
         }
 
+        function createParticleTexture() {
+            const c = document.createElement('canvas');
+            c.width = 32; c.height = 32;
+            const cx = c.getContext('2d');
+            const g = cx.createRadialGradient(16, 16, 0, 16, 16, 16);
+            g.addColorStop(0, 'rgba(255,255,255,1)');
+            g.addColorStop(0.3, 'rgba(255,117,140,0.8)');
+            g.addColorStop(1, 'rgba(0,0,0,0)');
+            cx.fillStyle = g;
+            cx.beginPath();
+            cx.arc(16, 16, 16, 0, Math.PI * 2);
+            cx.fill();
+            const tex = new THREE.Texture(c);
+            tex.needsUpdate = true;
+            return tex;
+        }
+
         function createGalaxy() {
             const particleCount = 25000;
             const geometry = new THREE.BufferGeometry();
             const positions = new Float32Array(particleCount * 3);
             const colors = new Float32Array(particleCount * 3);
-
             const colorInside = new THREE.Color(0xff758c);
             const colorOutside = new THREE.Color(0x3b0764);
-
             const branches = 4;
             const radius = 28;
 
@@ -498,7 +852,6 @@
                 const r = Math.pow(Math.random(), 2) * radius;
                 const branchAngle = ((i % branches) / branches) * Math.PI * 2;
                 const spinAngle = r * 0.4;
-
                 const randomX = (Math.random() - 0.5) * (r * 0.15);
                 const randomY = (Math.random() - 0.5) * (r * 0.15);
                 const randomZ = (Math.random() - 0.5) * (r * 0.15);
@@ -507,10 +860,10 @@
                 positions[i3 + 1] = randomY - 4;
                 positions[i3 + 2] = Math.sin(branchAngle + spinAngle) * r + randomZ;
 
-                const mixedColor = colorInside.clone().lerp(colorOutside, r / radius);
-                colors[i3] = mixedColor.r;
-                colors[i3 + 1] = mixedColor.g;
-                colors[i3 + 2] = mixedColor.b;
+                const mixed = colorInside.clone().lerp(colorOutside, r / radius);
+                colors[i3] = mixed.r;
+                colors[i3 + 1] = mixed.g;
+                colors[i3 + 2] = mixed.b;
             }
 
             geometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
@@ -531,50 +884,48 @@
         }
 
         function create3DCake() {
-            const cakeParticleCount = 9000;
+            const count = 9000;
             const geometry = new THREE.BufferGeometry();
-            const positions = new Float32Array(cakeParticleCount * 3);
-            const colors = new Float32Array(cakeParticleCount * 3);
+            const positions = new Float32Array(count * 3);
+            const colors = new Float32Array(count * 3);
 
             const pinkColor = new THREE.Color(0xff758c);
             const creamColor = new THREE.Color(0xfff1f2);
             const goldColor = new THREE.Color(0xfbbf24);
             const flameColor = new THREE.Color(0xef4444);
 
-            for (let i = 0; i < cakeParticleCount; i++) {
+            for (let i = 0; i < count; i++) {
                 const i3 = i * 3;
-                let x, y, z;
-                let col;
+                let x, y, z, col;
+                const p = Math.random();
 
-                const randPart = Math.random();
-
-                if (randPart < 0.45) {
+                if (p < 0.45) {
                     const r = Math.sqrt(Math.random()) * 6;
-                    const theta = Math.random() * Math.PI * 2;
-                    x = r * Math.cos(theta);
+                    const th = Math.random() * Math.PI * 2;
+                    x = r * Math.cos(th);
                     y = Math.random() * 2.2 - 2;
-                    z = r * Math.sin(theta);
+                    z = r * Math.sin(th);
                     col = (r > 5.4 || Math.abs(y - 0.1) < 0.2) ? creamColor : pinkColor;
-                } else if (randPart < 0.80) {
+                } else if (p < 0.80) {
                     const r = Math.sqrt(Math.random()) * 3.8;
-                    const theta = Math.random() * Math.PI * 2;
-                    x = r * Math.cos(theta);
+                    const th = Math.random() * Math.PI * 2;
+                    x = r * Math.cos(th);
                     y = 0.2 + Math.random() * 2.0;
-                    z = r * Math.sin(theta);
+                    z = r * Math.sin(th);
                     col = (r > 3.3 || Math.abs(y - 2.1) < 0.2) ? creamColor : pinkColor;
-                } else if (randPart < 0.92) {
+                } else if (p < 0.92) {
                     const r = Math.random() * 0.35;
-                    const theta = Math.random() * Math.PI * 2;
-                    x = r * Math.cos(theta);
+                    const th = Math.random() * Math.PI * 2;
+                    x = r * Math.cos(th);
                     y = 2.2 + Math.random() * 2.5;
-                    z = r * Math.sin(theta);
+                    z = r * Math.sin(th);
                     col = goldColor;
                 } else {
                     const r = Math.pow(Math.random(), 2) * 0.7;
-                    const theta = Math.random() * Math.PI * 2;
-                    x = r * Math.cos(theta);
+                    const th = Math.random() * Math.PI * 2;
+                    x = r * Math.cos(th);
                     y = 4.7 + Math.random() * 1.2;
-                    z = r * Math.sin(theta);
+                    z = r * Math.sin(th);
                     col = Math.random() > 0.4 ? flameColor : goldColor;
                 }
 
@@ -582,7 +933,6 @@
                 positions[i3] = x + noise;
                 positions[i3 + 1] = y + noise;
                 positions[i3 + 2] = z + noise;
-
                 colors[i3] = col.r;
                 colors[i3 + 1] = col.g;
                 colors[i3 + 2] = col.b;
@@ -605,35 +955,14 @@
             scene.add(cakeParticles);
         }
 
-        function createParticleTexture() {
-            const canvas = document.createElement('canvas');
-            canvas.width = 32;
-            canvas.height = 32;
-            const ctx = canvas.getContext('2d');
-
-            const gradient = ctx.createRadialGradient(16, 16, 0, 16, 16, 16);
-            gradient.addColorStop(0, 'rgba(255,255,255,1)');
-            gradient.addColorStop(0.3, 'rgba(255,117,140,0.8)');
-            gradient.addColorStop(1, 'rgba(0,0,0,0)');
-
-            ctx.fillStyle = gradient;
-            ctx.beginPath();
-            ctx.arc(16, 16, 16, 0, Math.PI * 2);
-            ctx.fill();
-
-            const texture = new THREE.Texture(canvas);
-            texture.needsUpdate = true;
-            return texture;
-        }
-
         function updateLabels() {
             orbitLabels.forEach(item => {
                 item.angle += item.speed;
-                const x = Math.cos(item.angle) * item.radius;
-                const z = Math.sin(item.angle) * item.radius;
-                const y = item.y;
-
-                const vector = new THREE.Vector3(x, y, z);
+                const vector = new THREE.Vector3(
+                    Math.cos(item.angle) * item.radius,
+                    item.y,
+                    Math.sin(item.angle) * item.radius
+                );
                 vector.project(camera);
 
                 const screenX = (vector.x * 0.5 + 0.5) * window.innerWidth;
@@ -645,7 +974,7 @@
                         el.style.left = `${screenX}px`;
                         el.style.top = `${screenY}px`;
                         el.style.opacity = '1';
-                        el.style.pointerEvents = 'auto';
+                        el.style.pointerEvents = el.classList.contains('pointer-events-none') ? 'none' : 'auto';
                     } else {
                         el.style.opacity = '0';
                         el.style.pointerEvents = 'none';
@@ -656,14 +985,11 @@
 
         function animate() {
             requestAnimationFrame(animate);
-
             if (galaxyParticles) galaxyParticles.rotation.y += 0.0015;
             if (cakeParticles) {
                 cakeParticles.rotation.y += 0.003;
-                const time = Date.now() * 0.003;
-                cakeParticles.scale.setScalar(1 + Math.sin(time) * 0.03);
+                cakeParticles.scale.setScalar(1 + Math.sin(Date.now() * 0.003) * 0.03);
             }
-
             controls.update();
             updateLabels();
             renderer.render(scene, camera);
@@ -675,75 +1001,46 @@
             renderer.setSize(window.innerWidth, window.innerHeight);
         }
 
-        function toggleAudio() {
-            const music = document.getElementById('bgMusic');
-            if (!music) return;
-            if (isAudioPlaying) {
-                music.pause();
-                isAudioPlaying = false;
-                document.getElementById('musicText').innerText = "เปิดเพลง 🎵";
-            } else {
-                music.play();
-                isAudioPlaying = true;
-                document.getElementById('musicText').innerText = "พักเสียง 🎵";
-            }
-        }
-
+        /* ---------- Modals ของกาแล็กซี่ ---------- */
         function openModal(id) {
+            playClickSFX();
             const el = document.getElementById(id);
-            if (el) {
-                el.classList.remove('hidden');
-                el.classList.add('flex');
-            }
+            if (el) { el.classList.remove('hidden'); el.classList.add('flex'); }
         }
 
         function closeModal(id) {
             const el = document.getElementById(id);
-            if (el) {
-                el.classList.add('hidden');
-                el.classList.remove('flex');
-            }
+            if (el) { el.classList.add('hidden'); el.classList.remove('flex'); }
         }
 
         function blowCandleEffect() {
+            playBlowSFX();
             document.getElementById('wish-success-msg').classList.remove('hidden');
-            try {
-                if (typeof confetti === 'function') {
-                    confetti({
-                        particleCount: 150,
-                        spread: 100,
-                        origin: { y: 0.5 },
-                        colors: ['#fbbf24', '#ff758c', '#38bdf8', '#a855f7']
-                    });
-                }
-            } catch(e) {}
+            setTimeout(() => {
+                playConfettiSFX();
+                confetti({ particleCount: 150, spread: 100, origin: { y: 0.5 }, colors: ['#fbbf24', '#ff758c', '#38bdf8', '#a855f7'] });
+            }, 300);
         }
 
         function openGift(num) {
+            playConfettiSFX();
             const gifts = [
                 "🧋 <b>คูปองเลี้ยงชาไข่มุก/น้ำหวาน 1 แก้ว!</b> (นำคูปองนี้ไปขึ้นเงินรางวัลได้เลย 😂)",
                 "🎟️ <b>คูปองขออะไรก็ได้ 1 อย่าง!</b> (สิทธิ์พิเศษสำหรับเจ้าของวันเกิดโดยเฉพาะ)",
                 "❤️ <b>กล่องความรักและความหวังดี:</b> ขอให้ไกด์มีความสุข ยิ้มเยอะๆ ในทุกๆ วันนะ!"
             ];
-            const resultBox = document.getElementById('gift-result');
-            resultBox.innerHTML = gifts[num - 1];
-            resultBox.classList.remove('hidden');
-
-            try {
-                if (typeof confetti === 'function') {
-                    confetti({
-                        particleCount: 80,
-                        spread: 60,
-                        origin: { y: 0.6 }
-                    });
-                }
-            } catch(e) {}
+            const box = document.getElementById('gift-result');
+            box.innerHTML = gifts[num - 1];
+            box.classList.remove('hidden');
+            confetti({ particleCount: 80, spread: 60, origin: { y: 0.6 } });
         }
 
+        window.addEventListener('resize', resizeCanvas);
         window.onload = function () {
-            initThreeJS();
-            animate();
+            resizeCanvas();
+            drawStars();
         };
     </script>
 </body>
+
 </html>
