@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Secret</title>
+    <title>Secret for Mr. Nattakorn</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link
         href="https://fonts.googleapis.com/css2?family=Mitr:wght@300;400;500;600&family=Prompt:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400&family=Sacramento&display=swap"
@@ -46,7 +46,16 @@
             min-height: 100vh;
         }
 
-        /* 3D Canvas ประจำฉากหลังตลอดทั้งเว็บ */
+        #sparkle-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            z-index: 99;
+            pointer-events: none;
+        }
+
         #webgl-container {
             position: fixed;
             top: 0;
@@ -55,7 +64,7 @@
             height: 100vh;
             z-index: 0;
             pointer-events: none;
-            transition: opacity 1s ease;
+            transition: opacity 1.5s ease;
         }
 
         #webgl-container.interactive {
@@ -94,7 +103,6 @@
             animation: floatGentle 4s ease-in-out infinite;
         }
 
-        /* สไตล์การ์ดใสแบบโฮโลแกรมอวกาศ */
         .glass-card {
             background: rgba(15, 10, 25, 0.55);
             backdrop-filter: blur(16px);
@@ -158,7 +166,7 @@
             z-index: 30;
             pointer-events: auto !important;
             cursor: pointer;
-            transition: transform 0.2s ease, filter 0.2s ease, opacity 0.3s ease;
+            transition: transform 0.2s ease, filter 0.2s ease, opacity 0.4s ease;
             white-space: nowrap;
             user-select: none;
         }
@@ -172,12 +180,22 @@
             text-shadow: 0 0 10px rgba(255, 117, 140, 0.8), 0 0 20px rgba(232, 180, 184, 0.5);
         }
 
-        #stage2d {
-            transition: opacity 0.9s ease;
+        /* Typewriter Cursor */
+        .typing-cursor::after {
+            content: '|';
+            animation: blink 0.7s infinite;
+            color: #ff758c;
+            font-weight: bold;
+            margin-left: 2px;
         }
 
-        #ui-layer {
-            transition: opacity 1.2s ease;
+        @keyframes blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0; }
+        }
+
+        #stage2d, #ui-layer {
+            transition: opacity 1.5s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
         ::-webkit-scrollbar {
@@ -201,16 +219,19 @@
 
 <body class="relative text-slate-100 selection:bg-pink-500 selection:text-white">
 
+    <!-- Canvas สำหรับเอฟเฟกต์ละอองดาวตามเมาส์ -->
+    <canvas id="sparkle-canvas"></canvas>
+
     <!-- เสียง -->
     <audio id="bgMusic" loop src="Dandelions┃EPIC VERSION - Extended - Alex Owly.mp3"></audio>
     <audio id="galaxyMusic" loop src="galaxy-theme.mp3"></audio>
     <audio id="sfxBlow" src="blow.mp3" preload="auto"></audio>
     <audio id="sfxConfetti" src="confetti.mp3" preload="auto"></audio>
 
-    <!-- 3D WebGL Canvas (ใช้ร่วมกันทั้งเว็บ) -->
+    <!-- 3D WebGL Canvas -->
     <div id="webgl-container"></div>
 
-    <!-- ================= START OVERLAY ================= -->
+    <!-- START OVERLAY -->
     <div id="startOverlay"
         class="pointer-events-auto fixed inset-0 z-50 flex items-center justify-center bg-slate-950/80 backdrop-blur-md transition-opacity duration-500">
         <div class="glass-panel p-8 sm:p-10 rounded-3xl text-center max-w-md mx-4 shadow-2xl">
@@ -229,12 +250,9 @@
         </div>
     </div>
 
-    <!-- ================================================= -->
-    <!-- STAGE 1 : ฉากการ์ด 2D โฮโลแกรม                    -->
-    <!-- ================================================= -->
+    <!-- STAGE 1 : 2D CARD -->
     <div id="stage2d" class="relative z-10 min-h-screen flex flex-col justify-between">
 
-        <!-- Navigation Top Bar -->
         <div class="fixed top-5 left-5 right-5 z-40 flex justify-between items-center pointer-events-none">
             <button id="backBtn" onclick="goBack()"
                 class="hidden pointer-events-auto glass-card px-4 py-2 rounded-full text-xs sm:text-sm font-medium flex items-center gap-2 hover:bg-white/20 transition-all border border-white/20 shadow-lg text-pink-200">
@@ -386,26 +404,12 @@
                         <img src="GAI (2).jpg" alt="รูปภาพประกอบจดหมาย" class="w-full h-full object-cover">
                     </div>
 
-                    <div class="space-y-4 text-slate-200 text-sm sm:text-base leading-relaxed font-light">
-                        <p class="font-medium text-pink-200 text-lg">ถึง คุณณัฐกรณ์ (ไกด์)...</p>
-
-                        <p>
-                            สุขสันต์วันเกิดนะครับ! 🎉 ขอให้ปีนี้เป็นปีที่ใจดีกับไกด์มากๆ มีแต่รอยยิ้ม ความสุข
-                            สุขภาพแข็งแรง
-                            และสมหวังในทุกๆ เรื่องที่ตั้งใจไว้นะ
-                        </p>
-
-                        <p>อยากขอขอบคุณไกด์สำหรับช่วงเวลา 3 ปีที่ผ่านมา ถือว่าเป็นช่วงเวลาที่สนุกมากๆ</p>
-
-                        <p>ขอให้ไกด์ เจอแต่เรื่องดีๆ โชคเข้าข้างไม่ว่าจะเรื่องอะไร แล้วก็หัดกินข้าวซะบ้างไอสัส หยอกๆ นะ
-                            ไม่รู้จะพิมพ์ไรดี 😂</p>
-
-                        <div class="pt-6 text-right font-mitr text-pink-300 font-medium">
-                            - จากหมีกริซลีตัวนึงที่นั่งเอ๋อๆ อยู่ -
-                        </div>
+                    <!-- Typewriter Text Box -->
+                    <div id="typewriterBox"
+                        class="space-y-4 text-slate-200 text-sm sm:text-base leading-relaxed font-light typing-cursor">
                     </div>
 
-                    <div class="mt-8 text-center pt-4 border-t border-white/10">
+                    <div id="letterFooterBtn" class="hidden mt-8 text-center pt-4 border-t border-white/10">
                         <button onclick="goToScene('scene-future')"
                             class="bg-gradient-to-r from-pink-500 to-rose-500 text-white font-medium px-8 py-3 rounded-full hover:scale-105 transition-all shadow-lg text-sm flex items-center gap-2 mx-auto">
                             <span>ของขวัญชิ้นสุดท้าย 🎁</span>
@@ -415,7 +419,7 @@
                 </div>
             </section>
 
-            <!-- SCENE 4 -->
+            <!-- SCENE 4 : POLAROID CAROUSEL -->
             <section id="scene-future"
                 class="hidden scene-transition min-h-[85vh] flex flex-col items-center justify-center text-center py-10">
                 <div class="text-center mb-6">
@@ -423,19 +427,30 @@
                         Future</span>
                     <h2
                         class="text-3xl sm:text-4xl font-semibold bg-clip-text text-transparent bg-gradient-to-r from-pink-200 via-rose-200 to-purple-200">
-                        Polaroid Moment ✨
+                        Polaroid Memories ✨
                     </h2>
-                    <p class="text-slate-300 text-sm mt-2">ภาพความทรงจำสำหรับวันเกิดปีนี้</p>
+                    <p class="text-slate-300 text-sm mt-2">กดปุ่มเลื่อนดูภาพความทรงจำได้เลยนะ</p>
                 </div>
 
-                <div
-                    class="bg-white text-slate-800 p-4 pb-6 rounded-lg shadow-2xl max-w-xs sm:max-w-sm w-full transform rotate-1 hover:rotate-0 transition-transform duration-500 my-4 border border-slate-200">
-                    <div class="w-full h-64 bg-slate-900 rounded relative overflow-hidden">
-                        <img src="GAI.jpg" alt="รูปโพลารอยด์" class="w-full h-full object-cover">
+                <!-- POLAROID CAROUSEL CONTAINER -->
+                <div class="relative max-w-xs sm:max-w-sm w-full my-4">
+                    <div
+                        class="bg-white text-slate-800 p-4 pb-6 rounded-lg shadow-2xl w-full transform rotate-1 hover:rotate-0 transition-transform duration-500 border border-slate-200">
+                        <div class="w-full h-64 bg-slate-900 rounded relative overflow-hidden">
+                            <img id="polaroidImg" src="GAI.jpg" alt="รูปโพลารอยด์" class="w-full h-full object-cover transition-opacity duration-300">
+                        </div>
+                        <div id="polaroidCaption" class="mt-4 text-center font-handwriting text-2xl text-slate-700 h-8">
+                            May 14, 2026 • With You
+                        </div>
                     </div>
-                    <div class="mt-4 text-center font-handwriting text-2xl text-slate-700">
-                        May 14, 2026 • With You
-                    </div>
+
+                    <!-- ปุ่มเลื่อนรูป Carousel -->
+                    <button onclick="prevPhoto()" class="absolute left-2 top-1/2 -translate-y-1/2 bg-slate-900/70 hover:bg-pink-500 text-white w-9 h-9 rounded-full flex items-center justify-center border border-white/20 transition-colors shadow-lg z-10">
+                        <i class="fas fa-chevron-left text-xs"></i>
+                    </button>
+                    <button onclick="nextPhoto()" class="absolute right-2 top-1/2 -translate-y-1/2 bg-slate-900/70 hover:bg-pink-500 text-white w-9 h-9 rounded-full flex items-center justify-center border border-white/20 transition-colors shadow-lg z-10">
+                        <i class="fas fa-chevron-right text-xs"></i>
+                    </button>
                 </div>
 
                 <div class="mt-8 flex flex-col sm:flex-row gap-4 justify-center items-center">
@@ -452,7 +467,6 @@
                     </button>
                 </div>
 
-                <!-- ปุ่มไปกาแล็กซี่ -->
                 <button onclick="enterGalaxy()"
                     class="mt-6 bg-gradient-to-r from-amber-500 via-pink-500 to-purple-600 hover:from-amber-600 hover:to-purple-700 text-white font-medium text-base sm:text-lg px-8 py-4 rounded-full transition-all duration-300 hover:scale-105 shadow-xl flex items-center gap-2">
                     <span>ไปยังจักรวาลวันเกิด 🌌✨</span>
@@ -485,9 +499,7 @@
         </div>
     </div>
 
-    <!-- ================================================= -->
-    <!-- STAGE 2 : กาแล็กซี่ 3D UI Overlay                     -->
-    <!-- ================================================= -->
+    <!-- STAGE 2 : 3D GALAXY OVERLAY -->
     <div id="ui-layer" class="hidden fixed inset-0 z-20 w-full h-screen pointer-events-none opacity-0">
 
         <div id="topBar" class="pointer-events-auto fixed top-5 left-5 right-5 flex justify-between items-center z-40">
@@ -521,6 +533,13 @@
                 class="floating-node glass-panel px-3.5 py-2 rounded-full text-xs text-rose-200 flex items-center gap-2 border border-rose-400/50">
                 <span>รูปถ่ายความทรงจำ 📸</span>
             </div>
+
+            <!-- EASTER EGG NODE (ดาวดวงพิเศษ) -->
+            <div id="node-easter-egg" onclick="openModal('modal-secret')"
+                class="floating-node glass-panel px-3.5 py-2 rounded-full text-xs text-amber-300 flex items-center gap-2 border border-amber-300/80 shadow-[0_0_15px_rgba(245,158,11,0.6)] animate-pulse">
+                <span>⭐ ดาวดวงพิเศษของไกด์</span>
+            </div>
+
             <div id="node-tag1"
                 class="floating-node text-[10px] text-pink-300/80 font-mono tracking-widest pointer-events-none">HAPPY
                 BIRTHDAY</div>
@@ -556,7 +575,7 @@
         </div>
     </div>
 
-    <!-- MODALS ของกาแล็กซี่ -->
+    <!-- MODALS -->
     <div id="modal-letter"
         class="modal-wrapper fixed inset-0 z-50 items-center justify-center p-4 bg-black/75 backdrop-blur-md hidden">
         <div
@@ -572,14 +591,8 @@
                 <img src="GAI3.jpg" alt="Photo" class="w-full h-48 object-cover"
                     onerror="this.onerror=null; this.src='https://picsum.photos/400/250';">
             </div>
-            <div class="space-y-3 text-xs sm:text-sm text-slate-200 leading-relaxed font-light">
-                <p class="font-medium text-pink-300 text-base">ถึง คุณณัฐกรณ์ (ไกด์)...</p>
-                <p>สุขสันต์วันเกิดนะครับ! 🎉 ขอให้ปีนี้เป็นปีที่ใจดีกับไกด์มากๆ มีแต่รอยยิ้ม ความสุข สุขภาพแข็งแรง
-                    และสมหวังในทุกๆ เรื่องที่ตั้งใจไว้นะ</p>
-                <p>อยากขอขอบคุณไกด์สำหรับช่วงเวลา 3 ปีที่ผ่านมา ถือว่าเป็นช่วงเวลาที่สนุกและมีคุณค่ามากๆ</p>
-                <p>ขอให้เจอแต่เรื่องดีๆ โชคเข้าข้างไม่ว่าจะทำอะไร แล้วก็หัดกินข้าวซะบ้างนะ! 😂</p>
-                <div class="pt-4 text-right text-pink-300 font-medium text-xs">- จากหมีกริซลีตัวนึงที่นั่งเอ๋อๆ อยู่ -
-                </div>
+            <div id="modalTypewriterBox"
+                class="space-y-3 text-xs sm:text-sm text-slate-200 leading-relaxed font-light typing-cursor">
             </div>
         </div>
     </div>
@@ -624,7 +637,7 @@
                 </button>
                 <button onclick="openGift(3)"
                     class="p-4 rounded-2xl bg-gradient-to-br from-purple-800 to-pink-900 border border-purple-400/40 hover:scale-105 transition-transform text-center cursor-pointer shadow-lg">
-                    <span class="text-2xl block mb-1">❤️️</span><span
+                    <span class="text-2xl block mb-1">❤</span><span
                         class="text-[10px] text-purple-200 font-medium">กล่องที่ 3</span>
                 </button>
             </div>
@@ -634,20 +647,50 @@
         </div>
     </div>
 
+    <!-- MODAL GALLERY (POLAROID SLIDER) -->
     <div id="modal-gallery"
         class="modal-wrapper fixed inset-0 z-50 items-center justify-center p-4 bg-black/75 backdrop-blur-md hidden">
         <div class="glass-panel w-full max-w-md p-6 rounded-3xl relative text-center text-slate-100 shadow-2xl">
             <button onclick="closeModal('modal-gallery')"
                 class="absolute top-4 right-4 text-slate-400 hover:text-white w-8 h-8 flex items-center justify-center rounded-full bg-white/10 cursor-pointer">✕</button>
             <span class="text-3xl">📸</span>
-            <h3 class="text-xl font-bold text-rose-200 mt-2">Our Special Future</h3>
-            <p class="text-xs text-slate-300 mb-4 font-light">Polaroid Moment ✨</p>
-            <div
-                class="bg-white p-3 rounded-xl shadow-2xl text-slate-800 transform hover:rotate-0 transition-transform duration-300 rotate-1 my-2">
-                <img src="GAI.jpg" alt="Polaroid" class="w-full h-56 object-cover rounded"
-                    onerror="this.onerror=null; this.src='https://picsum.photos/400/300';">
-                <div class="mt-3 text-center text-sm font-semibold tracking-wider text-slate-700">HAPPY BIRTHDAY GAI ❤️
+            <h3 class="text-xl font-bold text-rose-200 mt-2">Our Special Memories</h3>
+            <p class="text-xs text-slate-300 mb-4 font-light">กดเปลี่ยนรูปภาพเพื่อดูความทรงจำ ✨</p>
+            
+            <div class="relative w-full my-2">
+                <div class="bg-white p-3 rounded-xl shadow-2xl text-slate-800 transform rotate-1 border border-slate-200">
+                    <div class="w-full h-56 bg-slate-900 rounded relative overflow-hidden">
+                        <img id="modalPolaroidImg" src="GAI.jpg" alt="Polaroid" class="w-full h-full object-cover transition-opacity duration-300">
+                    </div>
+                    <div id="modalPolaroidCaption" class="mt-3 text-center text-sm font-handwriting text-2xl text-slate-700 h-8">
+                        HAPPY BIRTHDAY GAI ❤️
+                    </div>
                 </div>
+                <button onclick="prevModalPhoto()" class="absolute left-1 top-1/2 -translate-y-1/2 bg-slate-900/80 hover:bg-rose-500 text-white w-8 h-8 rounded-full flex items-center justify-center border border-white/20 transition-colors z-10">
+                    <i class="fas fa-chevron-left text-xs"></i>
+                </button>
+                <button onclick="nextModalPhoto()" class="absolute right-1 top-1/2 -translate-y-1/2 bg-slate-900/80 hover:bg-rose-500 text-white w-8 h-8 rounded-full flex items-center justify-center border border-white/20 transition-colors z-10">
+                    <i class="fas fa-chevron-right text-xs"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- EASTER EGG MODAL (ดาวดวงพิเศษ) -->
+    <div id="modal-secret"
+        class="modal-wrapper fixed inset-0 z-50 items-center justify-center p-4 bg-black/80 backdrop-blur-md hidden">
+        <div class="glass-panel w-full max-w-md p-8 rounded-3xl relative text-center text-slate-100 shadow-2xl border border-amber-400/60">
+            <button onclick="closeModal('modal-secret')"
+                class="absolute top-4 right-4 text-slate-400 hover:text-white w-8 h-8 flex items-center justify-center rounded-full bg-white/10 cursor-pointer">✕</button>
+            <div class="w-16 h-16 bg-amber-500/20 text-amber-300 rounded-full flex items-center justify-center mx-auto mb-4 text-3xl animate-bounce">
+                ⭐
+            </div>
+            <h3 class="text-2xl font-bold text-amber-200 mb-2 glow-text">ยินดีด้วย! คุณค้นพบข้อความลับ ✨</h3>
+            <p class="text-xs text-slate-300 mb-6 font-light">ดาวดวงนี้ซ่อนข้อความพิเศษถึงไกด์ไว้โดยเฉพาะเลยนะ</p>
+            <div class="bg-amber-950/50 p-5 rounded-2xl border border-amber-400/30 text-xs sm:text-sm text-amber-100 leading-relaxed font-light text-left space-y-2 mb-4">
+                <p>✨ <b>ถึงไกด์:</b> ขอบคุณมากๆ นะที่ก้าวเข้ามาเป็นเรื่องราวดีๆ ตลอดช่วงเวลา 3 ปีที่ผ่านมา</p>
+                <p>ไม่ว่าจะเจอเรื่องยากแค่ไหน ขอให้รู้ไว้ว่าแกเก่งมากแล้ว และอยากให้แกใจดีกับตัวเองเยอะๆ นะ!</p>
+                <p class="text-right text-amber-300 font-semibold pt-2">- Your Special Friend 💖 -</p>
             </div>
         </div>
     </div>
@@ -657,6 +700,122 @@
         let sceneHistory = ['scene-entry'];
         let inGalaxy = false;
         let isWarping = false;
+
+        /* ---------- ข้อมูลสไลด์โพลารอยด์ ---------- */
+        const photoList = [
+            { src: 'GAI.jpg', caption: 'May 14, 2026 • With You ❤️' },
+            { src: 'GAI (2).jpg', caption: '3 Years of Special Memories ✨' },
+            { src: 'GAI3.jpg', caption: 'Happy Birthday Always 🌸' }
+        ];
+        let currentPhotoIndex = 0;
+        let currentModalPhotoIndex = 0;
+
+        function updatePolaroidUI() {
+            const img = document.getElementById('polaroidImg');
+            const cap = document.getElementById('polaroidCaption');
+            if(img && cap) {
+                img.style.opacity = '0';
+                setTimeout(() => {
+                    img.src = photoList[currentPhotoIndex].src;
+                    cap.innerText = photoList[currentPhotoIndex].caption;
+                    img.style.opacity = '1';
+                }, 150);
+            }
+        }
+
+        function nextPhoto() {
+            currentPhotoIndex = (currentPhotoIndex + 1) % photoList.length;
+            updatePolaroidUI();
+        }
+
+        function prevPhoto() {
+            currentPhotoIndex = (currentPhotoIndex - 1 + photoList.length) % photoList.length;
+            updatePolaroidUI();
+        }
+
+        function updateModalPolaroidUI() {
+            const img = document.getElementById('modalPolaroidImg');
+            const cap = document.getElementById('modalPolaroidCaption');
+            if(img && cap) {
+                img.style.opacity = '0';
+                setTimeout(() => {
+                    img.src = photoList[currentModalPhotoIndex].src;
+                    cap.innerText = photoList[currentModalPhotoIndex].caption;
+                    img.style.opacity = '1';
+                }, 150);
+            }
+        }
+
+        function nextModalPhoto() {
+            currentModalPhotoIndex = (currentModalPhotoIndex + 1) % photoList.length;
+            updateModalPolaroidUI();
+        }
+
+        function prevModalPhoto() {
+            currentModalPhotoIndex = (currentModalPhotoIndex - 1 + photoList.length) % photoList.length;
+            updateModalPolaroidUI();
+        }
+
+        /* ---------- ระบบ Stardust Sparkle Cursor Trail ---------- */
+        const sparkleCanvas = document.getElementById('sparkle-canvas');
+        const ctx = sparkleCanvas.getContext('2d');
+        let sparkles = [];
+
+        function resizeSparkleCanvas() {
+            sparkleCanvas.width = window.innerWidth;
+            sparkleCanvas.height = window.innerHeight;
+        }
+        window.addEventListener('resize', resizeSparkleCanvas);
+        resizeSparkleCanvas();
+
+        window.addEventListener('mousemove', (e) => {
+            if (Math.random() < 0.4) {
+                sparkles.push({
+                    x: e.clientX,
+                    y: e.clientY,
+                    size: Math.random() * 3 + 1,
+                    color: ['#ff758c', '#f6d365', '#ffffff', '#e8b4b8'][Math.floor(Math.random() * 4)],
+                    vx: (Math.random() - 0.5) * 1.2,
+                    vy: Math.random() * 1 + 0.5,
+                    alpha: 1
+                });
+            }
+        });
+
+        function animateSparkles() {
+            ctx.clearRect(0, 0, sparkleCanvas.width, sparkleCanvas.height);
+            for (let i = 0; i < sparkles.length; i++) {
+                let p = sparkles[i];
+                p.x += p.vx;
+                p.y += p.vy;
+                p.alpha -= 0.02;
+
+                if (p.alpha <= 0) {
+                    sparkles.splice(i, 1);
+                    i--;
+                    continue;
+                }
+
+                ctx.save();
+                ctx.globalAlpha = p.alpha;
+                ctx.fillStyle = p.color;
+                ctx.beginPath();
+                ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+                ctx.fill();
+                ctx.restore();
+            }
+            requestAnimationFrame(animateSparkles);
+        }
+        animateSparkles();
+
+        /* ---------- ข้อความจดหมาย ---------- */
+        const letterParagraphs = [
+            '<p class="font-medium text-pink-200 text-lg">ถึง คุณณัฐกรณ์ (ไกด์)...</p>',
+            '<p>สุขสันต์วันเกิดนะครับ! 🎉 ขอให้ปีนี้เป็นปีที่ใจดีกับไกด์มากๆ มีแต่รอยยิ้ม ความสุข สุขภาพแข็งแรง และสมหวังในทุกๆ เรื่องที่ตั้งใจไว้นะ</p>',
+            '<p>อยากขอขอบคุณไกด์สำหรับช่วงเวลา 3 ปีที่ผ่านมา ถือว่าเป็นช่วงเวลาที่สนุกมากๆ</p>',
+            '<p>ขอให้ไกด์ เจอแต่เรื่องดีๆ โชคเข้าข้างไม่ว่าจะเรื่องอะไร แล้วก็หัดกินข้าวซะบ้างไอสัส หยอกๆ นะ ไม่รู้จะพิมพ์ไรดี 😂</p>',
+            '<div class="pt-6 text-right font-mitr text-pink-300 font-medium">- จากหมีกริซลีตัวนึงที่นั่งเอ๋อๆ อยู่ -</div>'
+        ];
 
         /* ---------- จัดการเสียง ---------- */
         function getActiveAudio() {
@@ -672,7 +831,6 @@
         function playConfettiSFX() { playSfx('sfxConfetti'); }
 
         function startExperience() {
-            // เริ่มต้นระบบ 3D ทันทีตั้งแต่นาทีแรก
             initThreeJS();
             animate();
 
@@ -767,11 +925,71 @@
             nextBtn.classList.add('flex');
         }
 
+        /* ---------- ระบบ TYPEWRITER EFFECT ---------- */
+        let typewriterTimer = null;
+
+        function runTypewriter(targetElementId, htmlArray, onComplete = null) {
+            const container = document.getElementById(targetElementId);
+            container.innerHTML = '';
+            container.classList.add('typing-cursor');
+
+            if (typewriterTimer) clearInterval(typewriterTimer);
+
+            let pIndex = 0;
+            let charIndex = 0;
+            let currentTempContainer = document.createElement('div');
+
+            function parseHTMLParagraphs(rawHtmlArray) {
+                return rawHtmlArray.map(str => {
+                    const temp = document.createElement('div');
+                    temp.innerHTML = str;
+                    return {
+                        tag: temp.firstElementChild.tagName.toLowerCase(),
+                        className: temp.firstElementChild.className,
+                        text: temp.firstElementChild.innerText
+                    };
+                });
+            }
+
+            const parsedData = parseHTMLParagraphs(htmlArray);
+
+            typewriterTimer = setInterval(() => {
+                if (pIndex >= parsedData.length) {
+                    clearInterval(typewriterTimer);
+                    container.classList.remove('typing-cursor');
+                    if (onComplete) onComplete();
+                    return;
+                }
+
+                const currentP = parsedData[pIndex];
+                
+                if (charIndex === 0) {
+                    currentTempContainer = document.createElement(currentP.tag);
+                    if (currentP.className) currentTempContainer.className = currentP.className;
+                    container.appendChild(currentTempContainer);
+                }
+
+                currentTempContainer.innerText = currentP.text.substring(0, charIndex + 1);
+                charIndex++;
+
+                if (charIndex >= currentP.text.length) {
+                    pIndex++;
+                    charIndex = 0;
+                }
+            }, 38);
+        }
+
         function openLetter() {
             playConfettiSFX();
             document.getElementById('envelopeContainer').classList.add('hidden');
             document.getElementById('letterContent').classList.remove('hidden');
             confetti({ particleCount: 50, spread: 60, origin: { y: 0.5 }, colors: ['#ff758c', '#e8b4b8'] });
+
+            runTypewriter('typewriterBox', letterParagraphs, () => {
+                const btn = document.getElementById('letterFooterBtn');
+                btn.classList.remove('hidden');
+                btn.classList.add('scene-transition');
+            });
         }
 
         function triggerHeartShower() {
@@ -811,12 +1029,11 @@
             document.getElementById('copyModal').classList.add('hidden');
         }
 
-        /* ---------- เอฟเฟกต์สลับมิติอวกาศ (3D Hyperspace Warp) ---------- */
+        /* ---------- แอนิเมชันวาร์ปเข้า 3D GALAXY ---------- */
         function enterGalaxy() {
             if (inGalaxy) return;
             playConfettiSFX();
 
-            // หยุดเพลงแรก
             const bgMusic = document.getElementById('bgMusic');
             if (bgMusic) {
                 bgMusic.pause();
@@ -824,7 +1041,7 @@
             }
 
             inGalaxy = true;
-            isWarping = true; // เปิดใช้แอนิเมชันพุ่งวาร์ป
+            isWarping = true;
 
             confetti({
                 particleCount: 160,
@@ -833,7 +1050,6 @@
                 colors: ['#ff758c', '#a855f7', '#f6d365', '#fbbf24']
             });
 
-            // สลับเล่นเพลงกาแล็กซี่
             const galaxyMusic = document.getElementById('galaxyMusic');
             if (galaxyMusic) {
                 galaxyMusic.play().then(() => {
@@ -845,45 +1061,53 @@
                 });
             }
 
-            // เฟดหน้าการ์ด 2D ออก
             const stage2d = document.getElementById('stage2d');
             stage2d.style.opacity = '0';
             stage2d.style.pointerEvents = 'none';
 
-            // ซูมกล้องเข้าหากาแล็กซี่
-            let warpProgress = 0;
+            let startTime = null;
+            const duration = 2500;
             const startZ = camera.position.z;
             const targetZ = 32;
 
-            const warpInterval = setInterval(() => {
-                warpProgress += 0.05;
-                if (warpProgress <= 1) {
-                    camera.position.z = startZ - Math.sin(warpProgress * Math.PI) * 20;
-                    if (galaxyParticles) galaxyParticles.rotation.y += 0.05;
+            function animateWarp(timestamp) {
+                if (!startTime) startTime = timestamp;
+                const elapsed = timestamp - startTime;
+                const progress = Math.min(elapsed / duration, 1);
+
+                const easeProgress = progress < 0.5
+                    ? 4 * progress * progress * progress
+                    : 1 - Math.pow(-2 * progress + 2, 3) / 2;
+
+                camera.position.z = startZ - Math.sin(easeProgress * Math.PI) * 22;
+
+                const warpSpin = Math.sin(easeProgress * Math.PI) * 0.035 + 0.002;
+                if (galaxyParticles) galaxyParticles.rotation.y += warpSpin;
+
+                if (progress < 1) {
+                    requestAnimationFrame(animateWarp);
                 } else {
-                    clearInterval(warpInterval);
                     camera.position.z = targetZ;
                     isWarping = false;
+                    stage2d.style.display = 'none';
+                    window.scrollTo(0, 0);
+
+                    const container = document.getElementById('webgl-container');
+                    container.classList.add('interactive');
+
+                    const ui = document.getElementById('ui-layer');
+                    ui.classList.remove('hidden');
+                    void ui.offsetWidth;
+                    ui.style.opacity = '1';
+
+                    updateMusicUI(isPlayingAudio);
                 }
-            }, 16);
+            }
 
-            setTimeout(() => {
-                stage2d.style.display = 'none';
-                window.scrollTo(0, 0);
-
-                const container = document.getElementById('webgl-container');
-                container.classList.add('interactive');
-
-                const ui = document.getElementById('ui-layer');
-                ui.classList.remove('hidden');
-                void ui.offsetWidth;
-                ui.style.opacity = '1';
-
-                updateMusicUI(isPlayingAudio);
-            }, 900);
+            requestAnimationFrame(animateWarp);
         }
 
-        /* ---------- THREE.JS GALAXY (ฉากหลังหลัก) ---------- */
+        /* ---------- THREE.JS GALAXY & EASTER EGG STAR ---------- */
         let scene, camera, renderer, controls;
         let galaxyParticles, cakeParticles;
         let threeReady = false;
@@ -893,6 +1117,7 @@
             { id: 'node-wish', radius: 15, angle: Math.PI * 0.5, speed: 0.005, y: -1 },
             { id: 'node-gift', radius: 15, angle: Math.PI, speed: 0.005, y: 1 },
             { id: 'node-gallery', radius: 15, angle: Math.PI * 1.5, speed: 0.005, y: -1 },
+            { id: 'node-easter-egg', radius: 19, angle: Math.PI * 0.8, speed: 0.004, y: 4 }, // Easter Egg Star Position
             { id: 'node-tag1', radius: 22, angle: 0.8, speed: 0.003, y: 3 },
             { id: 'node-tag2', radius: 20, angle: 2.3, speed: 0.003, y: -2 },
             { id: 'node-tag3', radius: 25, angle: 3.8, speed: 0.003, y: 2 },
@@ -908,7 +1133,7 @@
             scene.fog = new THREE.FogExp2(0x05020a, 0.012);
 
             camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.1, 1000);
-            camera.position.set(0, 10, 48); // เริ่มต้นระยะกล้องให้มองเห็นอวกาศกว้างๆ
+            camera.position.set(0, 10, 48);
 
             renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
             renderer.setSize(window.innerWidth, window.innerHeight);
@@ -1096,13 +1321,14 @@
         function animate() {
             requestAnimationFrame(animate);
 
-            const rotSpeed = isWarping ? 0.015 : 0.0015;
-            if (galaxyParticles) galaxyParticles.rotation.y += rotSpeed;
+            if (!isWarping && galaxyParticles) {
+                galaxyParticles.rotation.y += 0.0015;
+            }
             if (cakeParticles) {
                 cakeParticles.rotation.y += 0.003;
                 cakeParticles.scale.setScalar(1 + Math.sin(Date.now() * 0.003) * 0.03);
             }
-            
+
             controls.update();
             updateLabels();
             renderer.render(scene, camera);
@@ -1114,10 +1340,16 @@
             renderer.setSize(window.innerWidth, window.innerHeight);
         }
 
-        /* ---------- Modals ของกาแล็กซี่ ---------- */
+        /* ---------- Modals ---------- */
         function openModal(id) {
             const el = document.getElementById(id);
-            if (el) { el.classList.remove('hidden'); el.classList.add('flex'); }
+            if (el) { 
+                el.classList.remove('hidden'); 
+                el.classList.add('flex'); 
+                if (id === 'modal-letter') {
+                    runTypewriter('modalTypewriterBox', letterParagraphs);
+                }
+            }
         }
 
         function closeModal(id) {
