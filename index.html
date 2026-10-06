@@ -190,11 +190,19 @@
         }
 
         @keyframes blink {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0; }
+
+            0%,
+            100% {
+                opacity: 1;
+            }
+
+            50% {
+                opacity: 0;
+            }
         }
 
-        #stage2d, #ui-layer {
+        #stage2d,
+        #ui-layer {
             transition: opacity 1.5s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
@@ -379,7 +387,8 @@
                     <div
                         class="glass-card p-8 sm:p-12 rounded-3xl text-center border border-pink-400/30 shadow-2xl hover:border-pink-400/60 transition-all group">
                         <div class="w-24 h-24 mx-auto mb-4 group-hover:scale-110 transition-transform">
-                            <img src="tonton-friends-tonton.webp" alt="Envelope GIF" class="w-full h-full object-contain"
+                            <img src="tonton-friends-tonton.webp" alt="Envelope GIF"
+                                class="w-full h-full object-contain"
                                 onerror="this.src='https://media.giphy.com/media/3o7TKoWXm3okO1kgHC/giphy.gif'">
                         </div>
                         <h3 class="text-xl font-medium text-slate-200 mb-2">มีข้อความพิเศษอยากจะบอก...</h3>
@@ -437,7 +446,8 @@
                     <div
                         class="bg-white text-slate-800 p-4 pb-6 rounded-lg shadow-2xl w-full transform rotate-1 hover:rotate-0 transition-transform duration-500 border border-slate-200">
                         <div class="w-full h-64 bg-slate-900 rounded relative overflow-hidden">
-                            <img id="polaroidImg" src="GAI.jpg" alt="รูปโพลารอยด์" class="w-full h-full object-cover transition-opacity duration-300">
+                            <img id="polaroidImg" src="GAI.jpg" alt="รูปโพลารอยด์"
+                                class="w-full h-full object-cover transition-opacity duration-300">
                         </div>
                         <div id="polaroidCaption" class="mt-4 text-center font-handwriting text-2xl text-slate-700 h-8">
                             May 14, 2026 • With You
@@ -532,17 +542,25 @@
                 <span>⭐ ดาวดวงพิเศษของไกด์</span>
             </div>
 
-            <div id="node-tag1"
-                class="floating-node text-[10px] text-pink-300/80 font-mono tracking-widest pointer-events-none">HAPPY
-                BIRTHDAY</div>
-            <div id="node-tag2"
-                class="floating-node text-[10px] text-purple-300/80 font-mono tracking-widest pointer-events-none">
-                ALWAYS U</div>
-            <div id="node-tag3"
-                class="floating-node text-[10px] text-amber-200/80 font-mono tracking-widest pointer-events-none">MAKE A
-                WISH 🎂</div>
-            <div id="node-tag4"
-                class="floating-node text-[10px] text-rose-300/80 font-mono tracking-widest pointer-events-none">ONLY U
+            <!-- แท็กภาพ GIF ลอยในจักรวาล 3D -->
+            <div id="node-tag1" class="floating-node pointer-events-none">
+                <img src="peach-and-goma-peach-goma.webp" alt="GIF 1"
+                    class="w-12 h-12 sm:w-16 sm:h-16 object-contain drop-shadow-[0_0_12px_rgba(255,117,140,0.8)]">
+            </div>
+
+            <div id="node-tag2" class="floating-node pointer-events-none">
+                <img src="peach-goma (1).webp" alt="GIF 2"
+                    class="w-12 h-12 sm:w-16 sm:h-16 object-contain drop-shadow-[0_0_12px_rgba(168,85,247,0.8)]">
+            </div>
+
+            <div id="node-tag3" class="floating-node pointer-events-none">
+                <img src="peach-goma.webp" alt="GIF 3"
+                    class="w-12 h-12 sm:w-16 sm:h-16 object-contain drop-shadow-[0_0_12px_rgba(251,191,36,0.8)]">
+            </div>
+
+            <div id="node-tag4" class="floating-node pointer-events-none">
+                <img src="happy-birthday-peach-cat.webp" alt="GIF 4"
+                    class="w-12 h-12 sm:w-16 sm:h-16 object-contain drop-shadow-[0_0_12px_rgba(244,63,94,0.8)]">
             </div>
         </div>
 
@@ -648,13 +666,16 @@
             <span class="text-3xl">📸</span>
             <h3 class="text-xl font-bold text-rose-200 mt-2">Our Special Memories</h3>
             <p class="text-xs text-slate-300 mb-4 font-light">กดเปลี่ยนรูปภาพเพื่อดูความทรงจำ ✨</p>
-            
+
             <div class="relative w-full my-2">
-                <div class="bg-white p-3 rounded-xl shadow-2xl text-slate-800 transform rotate-1 border border-slate-200">
+                <div
+                    class="bg-white p-3 rounded-xl shadow-2xl text-slate-800 transform rotate-1 border border-slate-200">
                     <div class="w-full h-56 bg-slate-900 rounded relative overflow-hidden">
-                        <img id="modalPolaroidImg" src="GAI.jpg" alt="Polaroid" class="w-full h-full object-cover transition-opacity duration-300">
+                        <img id="modalPolaroidImg" src="GAI.jpg" alt="Polaroid"
+                            class="w-full h-full object-cover transition-opacity duration-300">
                     </div>
-                    <div id="modalPolaroidCaption" class="mt-3 text-center text-sm font-handwriting text-2xl text-slate-700 h-8">
+                    <div id="modalPolaroidCaption"
+                        class="mt-3 text-center text-sm font-handwriting text-2xl text-slate-700 h-8">
                         HAPPY BIRTHDAY GAI ❤️
                     </div>
                 </div>
@@ -665,15 +686,18 @@
     <!-- EASTER EGG MODAL (ดาวดวงพิเศษ) -->
     <div id="modal-secret"
         class="modal-wrapper fixed inset-0 z-50 items-center justify-center p-4 bg-black/80 backdrop-blur-md hidden">
-        <div class="glass-panel w-full max-w-md p-8 rounded-3xl relative text-center text-slate-100 shadow-2xl border border-amber-400/60">
+        <div
+            class="glass-panel w-full max-w-md p-8 rounded-3xl relative text-center text-slate-100 shadow-2xl border border-amber-400/60">
             <button onclick="closeModal('modal-secret')"
                 class="absolute top-4 right-4 text-slate-400 hover:text-white w-8 h-8 flex items-center justify-center rounded-full bg-white/10 cursor-pointer">✕</button>
-            <div class="w-16 h-16 bg-amber-500/20 text-amber-300 rounded-full flex items-center justify-center mx-auto mb-4 text-3xl animate-bounce">
+            <div
+                class="w-16 h-16 bg-amber-500/20 text-amber-300 rounded-full flex items-center justify-center mx-auto mb-4 text-3xl animate-bounce">
                 ⭐
             </div>
             <h3 class="text-2xl font-bold text-amber-200 mb-2 glow-text">ยินดีด้วย! คุณค้นพบข้อความลับ ✨</h3>
             <p class="text-xs text-slate-300 mb-6 font-light">ดาวดวงนี้ซ่อนข้อความพิเศษถึงไกด์ไว้โดยเฉพาะเลยนะ</p>
-            <div class="bg-amber-950/50 p-5 rounded-2xl border border-amber-400/30 text-xs sm:text-sm text-amber-100 leading-relaxed font-light text-left space-y-2 mb-4">
+            <div
+                class="bg-amber-950/50 p-5 rounded-2xl border border-amber-400/30 text-xs sm:text-sm text-amber-100 leading-relaxed font-light text-left space-y-2 mb-4">
                 <p>✨ <b>ถึงไกด์:</b> ขอบคุณมากๆ นะที่ก้าวเข้ามาเป็นเรื่องราวดีๆ ตลอดช่วงเวลา 3 ปีที่ผ่านมา</p>
                 <p>ไม่ว่าจะเจอเรื่องยากแค่ไหน ขอให้รู้ไว้ว่าแกเก่งมากแล้ว และอยากให้แกใจดีกับตัวเองเยอะๆ นะ!</p>
                 <p class="text-right text-amber-300 font-semibold pt-2">- Your Special Friend 💖 -</p>
@@ -699,7 +723,7 @@
         function updatePolaroidUI() {
             const img = document.getElementById('polaroidImg');
             const cap = document.getElementById('polaroidCaption');
-            if(img && cap) {
+            if (img && cap) {
                 img.style.opacity = '0';
                 setTimeout(() => {
                     img.src = photoList[currentPhotoIndex].src;
@@ -722,7 +746,7 @@
         function updateModalPolaroidUI() {
             const img = document.getElementById('modalPolaroidImg');
             const cap = document.getElementById('modalPolaroidCaption');
-            if(img && cap) {
+            if (img && cap) {
                 img.style.opacity = '0';
                 setTimeout(() => {
                     img.src = photoList[currentModalPhotoIndex].src;
@@ -812,7 +836,7 @@
             const el = document.getElementById(id);
             if (el) { el.currentTime = 0; el.play().catch(() => { }); }
         }
-        
+
         function playBlowSFX() { playSfx('sfxBlow'); }
         function playConfettiSFX() { playSfx('sfxConfetti'); }
 
@@ -948,7 +972,7 @@
                 }
 
                 const currentP = parsedData[pIndex];
-                
+
                 if (charIndex === 0) {
                     currentTempContainer = document.createElement(currentP.tag);
                     if (currentP.className) currentTempContainer.className = currentP.className;
@@ -1329,9 +1353,9 @@
         /* ---------- Modals ---------- */
         function openModal(id) {
             const el = document.getElementById(id);
-            if (el) { 
-                el.classList.remove('hidden'); 
-                el.classList.add('flex'); 
+            if (el) {
+                el.classList.remove('hidden');
+                el.classList.add('flex');
                 if (id === 'modal-letter') {
                     runTypewriter('modalTypewriterBox', letterParagraphs);
                 }
